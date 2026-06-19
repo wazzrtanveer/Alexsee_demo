@@ -10,47 +10,100 @@ const sizes = {
 };
 
 const { w, h } = sizes[size] || sizes.md;
-const darkColor = "#0A0A0A";
+
+// Target site colors: Dark Slate Blue #1E2D3D and Ivory #F5F2ED
+const darkColor = "#1E2D3D";
 const lightColor = "#F5F2ED";
+const accentDarkColor = "#0A0A0A";
 
 const mainColor = inverse ? lightColor : darkColor;
-const accentColor = inverse ? darkColor : lightColor;
+const accentColor = inverse ? accentDarkColor : lightColor;
+
 // Detect override positioning
 const hasAlign = className.includes('items-') || className.includes('text-') || className.includes('justify-');
 const defaultFlexClasses = hasAlign ? '' : 'items-center justify-center text-center';
 ---
 <div class={`flex flex-col select-none ${defaultFlexClasses} ${className}`}>
-  <svg
-    viewBox="0 0 240 128"
-    width={w}
-    height={h}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    class="transition-transform duration-500 hover:scale-[1.03]"
-  >
-    {/* Eyeglasses Frame Outline */}
-    <path
-      d="M120,32 C104,30 84,21 54,21 C24,21 16,27 10,29 C7,30 5,32 5,36 C5,54 13,81 48,81 C72,81 88,67 106,53 C112,48 116,42 120,42 C124,42 128,48 134,53 C152,67 168,81 192,81 C227,81 235,54 235,36 C235,32 233,30 230,29 C224,27 216,21 186,21 C156,21 136,30 120,32 Z"
-      fill={mainColor}
-    />
-    {/* Left lens detailing (Letter A) */}
-    <path
-      d="M38,71 L60,33 L82,71"
-      stroke={accentColor}
-      stroke-width="8.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    {/* Right lens detailing (Letter S) */}
-    <path
-      d="M194,38 C192,31 178,31 168,36 C158,41 160,51 174,55 C188,59 196,64 194,72 C192,80 178,82 166,74"
-      stroke={accentColor}
-      stroke-width="8.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-  {showText && (
+  {size === "target" ? (
+    <svg
+      viewBox="0 0 500 280"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="transition-transform duration-500 hover:scale-[1.03]"
+      aria-label="AlexSEE Logo"
+      style={{
+        width: "clamp(7.2rem, 11vw, 11.5rem)",
+        height: "auto",
+        display: "block"
+      }}
+    >
+      <path
+        d="M250,87 C234,85 214,76 184,76 C154,76 146,82 140,84 C137,85 135,87 135,91 C135,109 143,136 178,136 C202,136 218,122 236,108 C242,103 246,97 250,97 C254,97 258,103 264,108 C282,122 298,136 322,136 C357,136 365,109 365,91 C365,87 363,85 360,84 C354,82 346,76 316,76 C286,76 266,85 250,87 Z"
+        fill={mainColor}
+      />
+      <path
+        d="M164,129 L190,83 L216,129"
+        stroke={accentColor}
+        stroke-width="11"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M326,91 C324,82 306,82 296,89 C284,96 288,107 306,111 C324,115 330,121 328,130 C326,139 308,140 294,131"
+        stroke={accentColor}
+        stroke-width="11"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      {showText && (
+        <text
+          x="250"
+          y="215"
+          font-family="System-UI, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif"
+          font-size="42"
+          font-weight="300"
+          letter-spacing="18"
+          fill={mainColor}
+          text-anchor="middle"
+          dx="9"
+        >
+          ALEXSEE
+        </text>
+      )}
+    </svg>
+  ) : (
+    <svg
+      viewBox="0 0 240 128"
+      width={w}
+      height={h}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="transition-transform duration-500 hover:scale-[1.03]"
+    >
+      {/* Eyeglasses Frame Outline */}
+      <path
+        d="M120,32 C104,30 84,21 54,21 C24,21 16,27 10,29 C7,30 5,32 5,36 C5,54 13,81 48,81 C72,81 88,67 106,53 C112,48 116,42 120,42 C124,42 128,48 134,53 C152,67 168,81 192,81 C227,81 235,54 235,36 C235,32 233,30 230,29 C224,27 216,21 186,21 C156,21 136,30 120,32 Z"
+        fill={mainColor}
+      />
+      {/* Left lens detailing (Letter A) */}
+      <path
+        d="M38,71 L60,33 L82,71"
+        stroke={accentColor}
+        stroke-width="8.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      {/* Right lens detailing (Letter S) */}
+      <path
+        d="M194,38 C192,31 178,31 168,36 C158,41 160,51 174,55 C188,59 196,64 194,72 C192,80 178,82 166,74"
+        stroke={accentColor}
+        stroke-width="8.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  )}
+  {size !== "target" && showText && (
     <div 
       class={`flex items-center font-sans tracking-[0.45em] mt-2 pl-[0.45em] ${hasAlign ? 'justify-start text-left' : 'justify-center text-center'}`}
       style={{ 
