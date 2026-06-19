@@ -154,6 +154,7 @@ const isBoutiqueActive = isActive('/boutique');
 
 <script>
   function setupHeader() {
+    const header = document.getElementById('app-main-header');
     const hamburgerBtn = document.getElementById('header-hamburger-toggle');
     const overlay = document.getElementById('fullscreen-menu-overlay');
     const textSpan = document.getElementById('hamburger-text');
@@ -167,6 +168,7 @@ const isBoutiqueActive = isActive('/boutique');
     const toggleMenu = () => {
       isOpen = !isOpen;
       if (isOpen) {
+        header?.classList.add('menu-open');
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         setTimeout(() => {
@@ -177,6 +179,7 @@ const isBoutiqueActive = isActive('/boutique');
         iconMenu?.classList.replace('block', 'hidden');
         iconClose?.classList.replace('hidden', 'block');
       } else {
+        header?.classList.remove('menu-open');
         overlay.classList.add('opacity-0');
         document.body.style.overflow = '';
         setTimeout(() => {
@@ -294,5 +297,22 @@ const isBoutiqueActive = isActive('/boutique');
     opacity: 0;
     transform: scale(0.95);
     filter: blur(5px);
+  }
+
+  /* Menu Open Header Styles to completely hide header details */
+  #app-main-header.menu-open {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  #app-main-header.menu-open #header-logo-btn,
+  #app-main-header.menu-open #header-desktop-nav {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #header-logo-btn,
+  #header-desktop-nav {
+    transition: opacity 0.3s ease-in-out;
   }
 </style>
