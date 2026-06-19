@@ -5,80 +5,80 @@ import Logo from './Logo.astro';
 <div
   id="preloader"
   class="fixed inset-0 z-[9999] bg-optical-black text-ivory flex flex-col items-center justify-center overflow-hidden transition-opacity duration-600 ease-in-out"
+  style="display: none;"
 >
-  {/* Skip button */}
+  <!-- Skip button -->
   <button
     id="preloader-skip"
-    class="absolute top-8 right-8 font-mono text-[10px] tracking-[0.25em] text-stone-grey hover:text-ivory transition-colors duration-300 z-10 focus:outline-none"
+    class="absolute top-8 right-8 font-mono text-[10px] uppercase tracking-widest text-stone-grey hover:text-ivory transition-colors duration-300 z-10 focus:outline-none pointer-events-auto"
   >
     [ Passer l'introduction / Skip ]
   </button>
 
-  {/* Animated lens circle */}
-  <div
-    id="preloader-lens-1"
-    class="absolute rounded-full border border-cobalt/40 mix-blend-screen pointer-events-none w-[480px] h-[480px] scale-[0.6] opacity-0 transition-all duration-[1.8s] ease-out"
-  ></div>
-
-  {/* Second decorative ring */}
-  <div
-    id="preloader-lens-2"
-    class="absolute rounded-full border border-cobalt/20 pointer-events-none w-[600px] h-[600px] scale-[0.7] opacity-0 transition-all duration-[1.8s] delay-200 ease-out"
-  ></div>
-
-  {/* Logo container */}
-  <div
-    id="preloader-logo"
-    class="mb-8 opacity-0 translate-y-3 transition-all duration-[0.8s] delay-300 ease-out"
-  >
-    <Logo size="lg" inverse={true} showText={true} />
-  </div>
-
-  {/* Tagline */}
-  <p
-    id="preloader-tagline"
-    class="font-mono tracking-[0.25em] text-stone-grey text-[10px] uppercase text-center mb-10 opacity-0 translate-y-2 transition-all duration-[0.8s] delay-500 ease-out"
-  >
-    Le regard comme expression personnelle — Paris XX
-  </p>
-
-  {/* Cobalt dot + label */}
-  <div
-    id="preloader-dot-label"
-    class="flex items-center gap-2 opacity-0 transition-opacity duration-600 delay-800"
-  >
-    <span class="w-1.5 h-1.5 rounded-full bg-cobalt inline-block animate-pulse"></span>
-    <span class="font-mono text-[9px] tracking-[0.3em] text-stone-grey uppercase">
-      Opticien Créateur Paris 20
-    </span>
-  </div>
-
-  {/* Loading bar */}
-  <div class="absolute bottom-12 flex flex-col items-center gap-2">
+  <!-- Relative container for elements -->
+  <div class="relative flex flex-col items-center">
+    <!-- Animated lens circle -->
     <div
-      class="relative overflow-hidden w-32 h-[1px] bg-stone-grey/20"
+      id="preloader-lens"
+      class="absolute rounded-full w-96 h-96 border border-cobalt mix-blend-screen pointer-events-none animate-lens-in"
+    ></div>
+
+    <!-- Tagline (Slogan) - Placed ABOVE the logo container in original -->
+    <p
+      id="preloader-tagline"
+      class="font-mono tracking-[0.25em] text-stone-grey text-[10px] uppercase text-center mb-6 animate-slogan-in"
     >
-      <div
-        id="preloader-progress"
-        class="absolute top-0 left-0 h-full bg-cobalt w-0 transition-all duration-[1.8s] delay-200 ease-in-out"
-      ></div>
+      Le regard comme expression personnelle — Paris XX
+    </p>
+
+    <!-- Logo container -->
+    <div
+      id="preloader-logo"
+      class="flex flex-col items-center justify-center relative z-10 mt-4 animate-logo-in"
+    >
+      <Logo size="lg" inverse={true} showText={true} />
     </div>
-    <span class="font-mono text-[8px] tracking-[0.3em] text-stone-grey/40 uppercase">
-      Chargement
-    </span>
+
+    <!-- Bottom Badge -->
+    <div
+      id="preloader-badge"
+      class="mt-10 flex items-center gap-2 animate-badge-in"
+    >
+      <span class="w-1.5 h-1.5 rounded-full bg-cobalt inline-block animate-pulse"></span>
+      <span class="font-mono text-[9px] uppercase tracking-wider text-stone-grey">
+        Opticien Créateur Paris 20
+      </span>
+    </div>
+  </div>
+
+  <!-- Loading Bar Track -->
+  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-stone-grey/20 overflow-hidden">
+    <!-- Loading Bar Indicator (Undetermined sliding bar) -->
+    <div
+      id="preloader-progress"
+      class="absolute top-0 bottom-0 w-16 bg-cobalt animate-loading-slide"
+    ></div>
   </div>
 </div>
+
+<script is:inline>
+  // Block rendering of other elements by instantly displaying the preloader on first land / refresh
+  (function() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!window.__preloaderPlayed && !prefersReducedMotion) {
+      const preloader = document.getElementById('preloader');
+      if (preloader) {
+        preloader.style.display = 'flex';
+      }
+      document.body.classList.add('preloader-active');
+    }
+  })();
+</script>
 
 <script>
   function runPreloader() {
     const preloader = document.getElementById('preloader');
     const skipBtn = document.getElementById('preloader-skip');
-    const progress = document.getElementById('preloader-progress');
-    const lens1 = document.getElementById('preloader-lens-1');
-    const lens2 = document.getElementById('preloader-lens-2');
-    const logo = document.getElementById('preloader-logo');
-    const tagline = document.getElementById('preloader-tagline');
-    const label = document.getElementById('preloader-dot-label');
 
     if (!preloader) return;
 
@@ -99,30 +99,6 @@ import Logo from './Logo.astro';
     // Set page to non-scrollable during load
     document.body.classList.add('preloader-active');
 
-    // Trigger animations via styles
-    setTimeout(() => {
-      if (progress) progress.style.width = '100%';
-      if (lens1) {
-        lens1.style.transform = 'scale(1)';
-        lens1.style.opacity = '0.15';
-      }
-      if (lens2) {
-        lens2.style.transform = 'scale(1)';
-        lens2.style.opacity = '0.07';
-      }
-      if (logo) {
-        logo.style.transform = 'translateY(0)';
-        logo.style.opacity = '1';
-      }
-      if (tagline) {
-        tagline.style.transform = 'translateY(0)';
-        tagline.style.opacity = '1';
-      }
-      if (label) {
-        label.style.opacity = '1';
-      }
-    }, 50);
-
     const finish = () => {
       preloader.style.opacity = '0';
       window['__preloaderPlayed'] = true;
@@ -132,7 +108,7 @@ import Logo from './Logo.astro';
       }, 600);
     };
 
-    // Auto-dissolve timer (2.1s duration + fade)
+    // Auto-dissolve timer
     const mainTimer = setTimeout(finish, 2100);
 
     if (skipBtn) {
@@ -141,14 +117,17 @@ import Logo from './Logo.astro';
         finish();
       });
     }
+
+    return () => {
+      clearTimeout(mainTimer);
+    };
   }
 
   // Run on page load
+  let cleanup;
   document.addEventListener('astro:page-load', () => {
-    // Only run if preloader element is on page (typically only home page)
-    if (document.getElementById('preloader')) {
-      runPreloader();
-    }
+    if (cleanup) cleanup();
+    cleanup = runPreloader();
   });
 </script>
 
@@ -160,5 +139,92 @@ import Logo from './Logo.astro';
   }
   body.preloader-active #preloader {
     pointer-events: auto;
+  }
+
+  /* Tagline (Slogan) fade-in */
+  .animate-slogan-in {
+    animation: slogan-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    opacity: 0;
+  }
+  @keyframes slogan-in {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0.6;
+    }
+  }
+
+  /* Lens circle scale/opacity/blur keyframes matching original Framer Motion curves */
+  .animate-lens-in {
+    animation: lens-in 1.8s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes lens-in {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+      filter: blur(15px);
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.4;
+      filter: blur(4px);
+    }
+    100% {
+      transform: scale(1.0);
+      opacity: 0.15;
+      filter: blur(20px);
+    }
+  }
+
+  /* Logo container fade-in */
+  .animate-logo-in {
+    animation: logo-in 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes logo-in {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Bottom badge fade-in */
+  .animate-badge-in {
+    animation: badge-in 0.5s ease-out 0.8s forwards;
+    opacity: 0;
+  }
+  @keyframes badge-in {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Loading bar sliding indicator track */
+  .animate-loading-slide {
+    animation: loading-slide 1.8s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  @keyframes loading-slide {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 </style>
