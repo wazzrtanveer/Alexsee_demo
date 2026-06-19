@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, PAGE_BOUTIQUE_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { settings as mockSettings, boutiqueImages as mockBoutiqueImages } from '../data/mockData.js';
 
 let settings = mockSettings;
 let boutiqueImages = mockBoutiqueImages;
+let pageBoutique = null;
 
 try {
   const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
@@ -15,7 +16,24 @@ try {
 } catch (e) {
   console.error("Error fetching settings from Sanity, using mock data:", e);
 }
+
+try {
+  const sanityPageBoutique = await sanityClient.fetch(PAGE_BOUTIQUE_QUERY);
+  if (sanityPageBoutique) {
+    pageBoutique = sanityPageBoutique;
+  }
+} catch (e) {
+  console.error("Error fetching pageBoutique from Sanity:", e);
+}
+
+const boutiquePage = pageBoutique || {
+  title: "L’Atelier Paris 20e",
+  subtext: "Une escale optique intime située rue d’Avron. Venez prendre le temps de dialoguer autour de vos mesures et choisir des montures sous une lumière naturelle.",
+  metroTitle: "Ligne 9 ou Ligne 2",
+  metroDetails: "Station Buzenval (L9) à 3 min à pied.\nStation Avron (M2) à 6 min à pied."
+};
 ---
+
 
 <Layout
   title="La Boutique — AlexSEE Opticien Paris 20e"
@@ -27,9 +45,9 @@ try {
     <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
       <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block">[ 04 / L’Expérience Physique ]</span>
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">{settings.boutiquePageTitle || "L’Atelier Paris 20e"}</h1>
-        <p class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
-          {settings.boutiquePageSubtext || "Une escale optique intime située rue d’Avron. Venez prendre le temps de dialoguer autour de vos mesures et choisir des montures sous une lumière naturelle."}
+        <h1 data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'title' }) : undefined} class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">{boutiquePage.title}</h1>
+        <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'subtext' }) : undefined} class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
+          {boutiquePage.subtext}
         </p>
       </div>
     </div>
@@ -103,13 +121,13 @@ try {
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 Transports Métro
               </span>
-              <p class="text-sm font-semibold text-optical-black">{settings.boutiqueMetroTitle || "Ligne 9 ou Ligne 2"}</p>
-              <p class="text-sm text-stone-grey leading-relaxed">
-                {settings.boutiqueMetroDetails ? (
-                  settings.boutiqueMetroDetails.includes('\n') ? (
-                    <Fragment set:html={settings.boutiqueMetroDetails.replace('\n', '<br />')} />
+              <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'metroTitle' }) : undefined} class="text-sm font-semibold text-optical-black">{boutiquePage.metroTitle}</p>
+              <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'metroDetails' }) : undefined} class="text-sm text-stone-grey leading-relaxed">
+                {boutiquePage.metroDetails ? (
+                  boutiquePage.metroDetails.includes('\n') ? (
+                    <Fragment set:html={boutiquePage.metroDetails.replace('\n', '<br />')} />
                   ) : (
-                    settings.boutiqueMetroDetails
+                    boutiquePage.metroDetails
                   )
                 ) : (
                   <>

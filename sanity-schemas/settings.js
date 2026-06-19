@@ -5,7 +5,6 @@ export default {
   type: 'document',
   icon: () => '⚙️',
   // Singleton — only one document should exist
-  __experimental_actions: ['update', 'publish'],
   fields: [
     {
       name: 'name',

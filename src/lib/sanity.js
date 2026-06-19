@@ -141,3 +141,64 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   contactFormSubtitle,
   contactFormButtonText
 }`;
+
+export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
+  _id,
+  _type,
+  heroHeadline,
+  heroSubtext,
+  heroImage,
+  philosophyQuote,
+  philosophySubtext,
+  philosophyLinkText,
+  featuredTitle,
+  featuredLinkText,
+  manifestoHeadline,
+  manifestoSubtext,
+  servicesTitle,
+  servicesSubtext,
+  boutiqueTitle,
+  boutiqueSubtext,
+  boutiqueImage,
+  ctaTitle,
+  ctaSubtext,
+  ctaButton1Text,
+  ctaButton2Text,
+  footerDescription
+}`;
+
+export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
+  _id,
+  _type,
+  title,
+  subtext
+}`;
+
+export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {
+  _id,
+  _type,
+  title,
+  subtext,
+  metroTitle,
+  metroDetails
+}`;
+
+export const PAGE_SERVICES_QUERY = `*[_type == "pageServices"][0] {
+  _id,
+  _type,
+  title,
+  subtext,
+  noteTitle,
+  noteSubtext
+}`;
+
+export const PAGE_CONTACT_QUERY = `*[_type == "pageContact"][0] {
+  _id,
+  _type,
+  title,
+  subtext,
+  contactSubtext,
+  accessSubtext,
+  formButtonText
+}`;
+

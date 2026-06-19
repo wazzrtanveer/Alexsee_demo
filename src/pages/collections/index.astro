@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sanityClient, FRAMES_QUERY, urlFor, dataAttribute, cleanStega } from '../../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, PAGE_COLLECTIONS_QUERY, urlFor, dataAttribute, cleanStega } from '../../lib/sanity.js';
 import { frames as mockFrames } from '../../data/mockData.js';
 
 let frames = [];
+let pageCollections = null;
 
 try {
   const sanityFrames = await sanityClient.fetch(FRAMES_QUERY);
@@ -17,8 +18,23 @@ try {
   frames = mockFrames;
 }
 
+try {
+  const sanityPageCollections = await sanityClient.fetch(PAGE_COLLECTIONS_QUERY);
+  if (sanityPageCollections) {
+    pageCollections = sanityPageCollections;
+  }
+} catch (e) {
+  console.error("Error fetching pageCollections from Sanity:", e);
+}
+
+const collectionsPage = pageCollections || {
+  title: "Le Catalogue",
+  subtext: "Une sélection rigoureuse de montures de créateurs haut de gamme. Chaque pièce est choisie pour l'excellence de son façonnage et sa force graphique."
+};
+
 const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'Nouveautés'];
 ---
+
 
 <Layout
   title="Le Catalogue — AlexSEE Opticien Paris 20e"
@@ -37,9 +53,9 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
         <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey">[ Collection Lookbook ]</span>
       </div>
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">Le Catalogue</h1>
-        <p class="font-sans text-stone-grey text-sm max-w-md leading-relaxed">
-          Une sélection rigoureuse de montures de créateurs haut de gamme. Chaque pièce est choisie pour l'excellence de son façonnage et sa force graphique.
+        <h1 data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'title' }) : undefined} class="text-4xl md:text-6xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">{collectionsPage.title}</h1>
+        <p data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'subtext' }) : undefined} class="font-sans text-stone-grey text-sm max-w-md leading-relaxed">
+          {collectionsPage.subtext}
         </p>
       </div>
     </div>

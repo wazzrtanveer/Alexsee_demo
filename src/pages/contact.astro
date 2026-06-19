@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SETTINGS_QUERY, dataAttribute, cleanStega } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, PAGE_CONTACT_QUERY, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { settings as mockSettings } from '../data/mockData.js';
 
 let settings = mockSettings;
+let pageContact = null;
 
 try {
   const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
@@ -14,8 +15,26 @@ try {
   console.error("Error fetching settings from Sanity, using mock data:", e);
 }
 
+try {
+  const sanityPageContact = await sanityClient.fetch(PAGE_CONTACT_QUERY);
+  if (sanityPageContact) {
+    pageContact = sanityPageContact;
+  }
+} catch (e) {
+  console.error("Error fetching pageContact from Sanity:", e);
+}
+
+const contactPage = pageContact || {
+  title: "Prendre Rendez-vous",
+  subtext: "Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive.",
+  contactSubtext: "Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien.",
+  accessSubtext: "Situé à l’angle de la rue d’Avron, proche Buzenval. Stationnement possible dans les rues adjacentes.",
+  formButtonText: "Réserver mon créneau à l’atelier"
+};
+
 const requestedFrame = Astro.url.searchParams.get('frame') || '';
 ---
+
 
 <Layout
   title="Prendre Rendez-vous — AlexSEE Paris 20e"
@@ -81,11 +100,11 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
           [ 05 / Planification & RDV ]
         </span>
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
-            {settings.contactPageTitle || "Prendre Rendez-vous"}
+          <h1 data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'title' }) : undefined} class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
+            {contactPage.title}
           </h1>
-          <p class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
-            {settings.contactPageSubtext || "Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive."}
+          <p data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'subtext' }) : undefined} class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
+            {contactPage.subtext}
           </p>
         </div>
       </div>
@@ -226,7 +245,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               class="w-full bg-optical-black hover:bg-cobalt text-ivory text-center py-4 font-mono font-semibold tracking-widest text-xs uppercase transition-colors duration-300 shadow-md flex items-center justify-center gap-2.5"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span>{settings.contactFormButtonText || "Réserver mon créneau à l’atelier"}</span>
+              <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'formButtonText' }) : undefined}>{contactPage.formButtonText}</span>
             </button>
           </form>
         </div>
@@ -238,8 +257,8 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
             <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[#7B7973] block">
               [ Contact Alternatif ]
             </span>
-            <p class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
-              {settings.contactPageContactSubtext || "Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien."}
+            <p data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'contactSubtext' }) : undefined} class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
+              {contactPage.contactSubtext}
             </p>
             <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined} class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
               <div class="flex justify-between items-center py-1">
@@ -262,13 +281,13 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
           </div>
 
           <!-- Card 2: Access & location -->
-          <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined} class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
+          <div data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'accessSubtext' }) : undefined} class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
             <span class="font-mono text-[9px] uppercase text-stone-grey tracking-widest flex items-center gap-1.5">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               Accès & Localisation
             </span>
             <p class="font-sans text-xs text-stone-grey leading-relaxed">
-              {settings.contactPageAccessSubtext || "Situé à l’angle de la rue d’Avron, proche Buzenval. Stationnement possible dans les rues adjacentes."}
+              {contactPage.accessSubtext}
             </p>
           </div>
         </div>

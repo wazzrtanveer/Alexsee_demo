@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
-import { sanityClient, FRAMES_QUERY, SERVICES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, SERVICES_QUERY, SETTINGS_QUERY, PAGE_HOME_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { frames as mockFrames, services as mockServices, settings as mockSettings } from '../data/mockData.js';
 
 let frames = [];
 let services = [];
 let settings = mockSettings;
+let pageHome = null;
 
 try {
   const sanityFrames = await sanityClient.fetch(FRAMES_QUERY);
@@ -41,8 +42,19 @@ try {
   console.error("Error fetching settings from Sanity, using mock data:", e);
 }
 
+try {
+  const sanityPageHome = await sanityClient.fetch(PAGE_HOME_QUERY);
+  if (sanityPageHome) {
+    pageHome = sanityPageHome;
+  }
+} catch (e) {
+  console.error("Error fetching pageHome from Sanity:", e);
+}
+
+const home = pageHome || settings;
 const featuredFrames = frames.filter(f => f.isFeatured);
 ---
+
 
 <Layout
   title="AlexSEE — Opticien Créateur Paris 20e"
@@ -55,7 +67,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
     <div class="absolute bottom-[20%] right-[-50px] w-[300px] h-[300px] bg-stone-grey rounded-full blur-[150px] opacity-[0.05] pointer-events-none"></div>
 
     <!-- ── Hero ── -->
-    <section id="hero-section" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'heroHeadline' }) : undefined} class="relative min-h-[90vh] flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-12 overflow-hidden border-b border-stone-grey/10">
+    <section id="hero-section" class="relative min-h-[90vh] flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-12 overflow-hidden border-b border-stone-grey/10">
       <div class="absolute top-1/4 right-1/4 w-[50vw] h-[50vw] rounded-full bg-cobalt/5 blur-[120px] pointer-events-none"></div>
       <div class="absolute inset-y-0 left-1/3 w-[1px] bg-stone-light/40 pointer-events-none hidden lg:block"></div>
       <div class="absolute inset-y-0 left-2/3 w-[1px] bg-stone-light/40 pointer-events-none hidden lg:block"></div>
@@ -74,17 +86,17 @@ const featuredFrames = frames.filter(f => f.isFeatured);
               <span class="w-2 h-2 bg-cobalt rounded-full animate-pulse"></span>
               <p class="font-mono text-[10px] tracking-widest text-cobalt uppercase font-bold">Boutique indépendante de créateurs</p>
             </div>
-            <h1 class="text-[64px] lg:text-[100px] xl:text-[112px] font-normal leading-[0.85] tracking-tight text-optical-black mb-10" style="font-family: var(--font-display);">
-              {settings.heroHeadline ? (
-                settings.heroHeadline.includes('\n') ? (
-                  settings.heroHeadline.split('\n').map((line, idx) => (
+            <h1 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroHeadline' }) : undefined} class="text-[64px] lg:text-[100px] xl:text-[112px] font-normal leading-[0.85] tracking-tight text-optical-black mb-10" style="font-family: var(--font-display);">
+              {home.heroHeadline ? (
+                home.heroHeadline.includes('\n') ? (
+                  home.heroHeadline.split('\n').map((line, idx) => (
                     <>
                       {line}
-                      {idx < settings.heroHeadline.split('\n').length - 1 && <br />}
+                      {idx < home.heroHeadline.split('\n').length - 1 && <br />}
                     </>
                   ))
                 ) : (
-                  settings.heroHeadline
+                  home.heroHeadline
                 )
               ) : (
                 <>
@@ -93,8 +105,8 @@ const featuredFrames = frames.filter(f => f.isFeatured);
                 </>
               )}
             </h1>
-            <p class="font-sans text-optical-black/90 text-lg xl:text-xl font-light mb-10 max-w-xl leading-relaxed">
-              {settings.heroSubtext || "Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement. Une signature visuelle authentique."}
+            <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroSubtext' }) : undefined} class="font-sans text-optical-black/90 text-lg xl:text-xl font-light mb-10 max-w-xl leading-relaxed">
+              {home.heroSubtext || "Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement. Une signature visuelle authentique."}
             </p>
             <div class="flex flex-wrap gap-4">
               <a href="/collections" id="hero-cta-collection" data-cursor-label="EXPLORER" class="group flex items-center gap-3 bg-optical-black text-ivory hover:bg-cobalt px-8 py-4 transition-all duration-300 tracking-widest font-mono text-xs uppercase">
@@ -127,10 +139,10 @@ const featuredFrames = frames.filter(f => f.isFeatured);
 
         <!-- Right column — interactive magnifier lens -->
         <div class="w-[44%] flex flex-col gap-6 justify-between relative pl-4">
-          <div id="hero-img-container" class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 shadow-sm cursor-crosshair select-none group">
+          <div id="hero-img-container" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroImage' }) : undefined} class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 shadow-sm cursor-crosshair select-none group">
             <img
               id="hero-main-img"
-              src={urlFor(settings.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"}
+              src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"}
               alt="Portrait éditorial AlexSEE"
               referrerpolicy="no-referrer"
               class="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.01]"
@@ -144,7 +156,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
               <div class="absolute inset-0 bg-cobalt/[0.03] z-10"></div>
               <div class="absolute top-1/2 left-4 right-4 h-[1px] bg-cobalt/20 -translate-y-1/2 z-10"></div>
               <div class="absolute left-1/2 top-4 bottom-4 w-[1px] bg-cobalt/20 -translate-x-1/2 z-10"></div>
-              <img id="lens-inner-img" src={urlFor(settings.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none origin-center" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22);" />
+              <img id="lens-inner-img" src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none origin-center" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22);" />
               <span class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-optical-black text-ivory text-[7px] font-mono uppercase tracking-widest px-1.5 py-0.5 z-20 border border-white/10 whitespace-nowrap">VERRE ACCORD 1.2x</span>
             </div>
             <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10 z-10">Édition Limitée</div>
@@ -179,8 +191,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
         <p class="font-sans text-optical-black/95 text-base font-light mb-2 max-w-xl leading-relaxed">
           Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement.
         </p>
-        <div class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 mt-2">
-          <img src={urlFor(settings.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="Portrait éditorial AlexSEE" referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+        <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroImage' }) : undefined} class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 mt-2">
+          <img src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="Portrait éditorial AlexSEE" referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+
           <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10">Édition Limitée</div>
           <!-- Mobile Lens -->
           <div class="absolute w-24 h-24 rounded-full border border-cobalt/40 bg-cobalt/[0.03] backdrop-blur-[1px] bottom-[10%] right-[10%] overflow-hidden pointer-events-none z-10">
@@ -225,21 +238,21 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="col-span-1 lg:col-span-8">
           <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-stone-grey block mb-6">[ 01 / Notre Philosophie ]</span>
-          <p style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light tracking-tight leading-tight">
-            {settings.philosophyQuote ? (
-              settings.philosophyQuote.includes('\n') ? (
-                settings.philosophyQuote.split('\n').map((line, i) => (
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'philosophyQuote' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light tracking-tight leading-tight">
+            {home.philosophyQuote ? (
+              home.philosophyQuote.includes('\n') ? (
+                home.philosophyQuote.split('\n').map((line, i) => (
                   <>
                     {i === 1 ? (
                       <span class="text-cobalt font-medium italic">{line}</span>
                     ) : (
                       line
                     )}
-                    {i < settings.philosophyQuote.split('\n').length - 1 && <br />}
+                    {i < home.philosophyQuote.split('\n').length - 1 && <br />}
                   </>
                 ))
               ) : (
-                settings.philosophyQuote
+                home.philosophyQuote
               )
             ) : (
               <>
@@ -250,11 +263,11 @@ const featuredFrames = frames.filter(f => f.isFeatured);
           </p>
         </div>
         <div class="col-span-1 lg:col-span-4 space-y-6">
-          <p class="font-sans text-stone-grey text-md leading-relaxed">
-            {settings.philosophySubtext || "Nous sélectionnons des collections nées d’ateliers indépendants, où le design n’est jamais standardisé. Ici, pas de logos clinquants ni de montures industrielles. Nous privilégions la finesse des plaques d’acétate japonaises, la rigueur constructive du titane brut et la sincérité d’un conseil d’opticien expert."}
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'philosophySubtext' }) : undefined} class="font-sans text-stone-grey text-md leading-relaxed">
+            {home.philosophySubtext || "Nous sélectionnons des collections nées d’ateliers indépendants, où le design n’est jamais standardisé. Ici, pas de logos clinquants ni de montures industrielles. Nous privilégions la finesse des plaques d’acétate japonaises, la rigueur constructive du titane brut et la sincérité d’un conseil d’opticien expert."}
           </p>
-          <a href="/boutique" class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-ivory hover:text-cobalt transition-colors duration-300">
-            <span>{settings.philosophyLinkText || "Visiter notre atelier rue d’Avron"}</span>
+          <a href="/boutique" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'philosophyLinkText' }) : undefined} class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-ivory hover:text-cobalt transition-colors duration-300">
+            <span>{home.philosophyLinkText || "Visiter notre atelier rue d’Avron"}</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
@@ -266,10 +279,10 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-stone-grey/20 pb-8">
         <div>
           <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 02 / Créations phares ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{settings.featuredTitle || "Le regard dessiné"}</h2>
+          <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'featuredTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{home.featuredTitle || "Le regard dessiné"}</h2>
         </div>
-        <a href="/collections" data-cursor-label="LOOKBOOK" class="mt-6 md:mt-0 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#0D0D0E] hover:text-cobalt font-medium transition-colors">
-          <span>{settings.featuredLinkText || "Voir toute la collection"} ({frames.length} modèles)</span>
+        <a href="/collections" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'featuredLinkText' }) : undefined} data-cursor-label="LOOKBOOK" class="mt-6 md:mt-0 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#0D0D0E] hover:text-cobalt font-medium transition-colors">
+          <span>{home.featuredLinkText || "Voir toute la collection"} ({frames.length} modèles)</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -308,9 +321,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       </div>
       <div class="max-w-4xl mx-auto px-6 text-center space-y-12 relative z-10">
         <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-cobalt bg-cobalt/5 py-1 px-3">[ Manifeste AlexSEE ]</span>
-        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light tracking-tight text-optical-black uppercase leading-none">{settings.manifestoHeadline || "Votre regard mérite mieux qu’un choix standard."}</h2>
-        <p class="font-sans text-stone-grey text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
-          {settings.manifestoSubtext || "Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore."}
+        <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoHeadline' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light tracking-tight text-optical-black uppercase leading-none">{home.manifestoHeadline || "Votre regard mérite mieux qu’un choix standard."}</h2>
+        <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoSubtext' }) : undefined} class="font-sans text-stone-grey text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
+          {home.manifestoSubtext || "Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore."}
         </p>
         <div class="pt-4 flex justify-center gap-8 text-left font-mono text-[10px] tracking-widest text-stone-grey uppercase">
           <div>
@@ -330,15 +343,16 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
         <div class="col-span-1 lg:col-span-6">
           <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 03 / Prestations d’exception ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{settings.servicesTitle || "Savoir-faire et garanties"}</h2>
+          <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'servicesTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{home.servicesTitle || "Savoir-faire et garanties"}</h2>
         </div>
         <div class="col-span-1 lg:col-span-6">
-          <p class="font-sans text-stone-grey text-md leading-relaxed">
-            {settings.servicesSubtext || "De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure."}
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'servicesSubtext' }) : undefined} class="font-sans text-stone-grey text-md leading-relaxed">
+            {home.servicesSubtext || "De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure."}
           </p>
         </div>
       </div>
       <div class="border-t border-stone-grey/20">
+
         {services.slice(0, 3).map(service => (
           <div data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type }) : undefined} class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
             <div class="col-span-1 md:col-span-1 font-mono text-cobalt font-medium text-lg">{service.number}</div>
@@ -366,19 +380,19 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         <div class="col-span-1 lg:col-span-5 space-y-8">
           <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 04 / L’Œil de Buzenval ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">
-            {settings.boutiqueTitle ? (
-              settings.boutiqueTitle.includes('\n') ? (
-                <Fragment set:html={settings.boutiqueTitle.replace('\n', '<br />')} />
+          <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'boutiqueTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">
+            {home.boutiqueTitle ? (
+              home.boutiqueTitle.includes('\n') ? (
+                <Fragment set:html={home.boutiqueTitle.replace('\n', '<br />')} />
               ) : (
-                settings.boutiqueTitle
+                home.boutiqueTitle
               )
             ) : (
               <>L’Atelier<br/>Rue d’Avron</>
             )}
           </h2>
-          <p class="font-sans text-stone-grey text-sm md:text-md leading-relaxed">
-            {settings.boutiqueSubtext || "Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval."}
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'boutiqueSubtext' }) : undefined} class="font-sans text-stone-grey text-sm md:text-md leading-relaxed">
+            {home.boutiqueSubtext || "Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval."}
           </p>
           <div class="space-y-4 font-mono text-[11px] uppercase tracking-widest border-t border-stone-grey/20 pt-6">
             <div class="flex justify-between items-center py-1">
@@ -399,9 +413,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
             <a href="/contact" class="border border-ivory/20 hover:border-cobalt text-ivory hover:text-cobalt transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-3.5 px-6">RDV Examen</a>
           </div>
         </div>
-        <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueImage' }) : undefined} class="col-span-1 lg:col-span-7 relative">
+        <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'boutiqueImage' }) : undefined} class="col-span-1 lg:col-span-7 relative">
           <div class="aspect-[16/10] bg-stone-light/5 relative overflow-hidden border border-stone-grey/20">
-            <img src={settings.boutiqueImage ? urlFor(settings.boutiqueImage) : "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80"} alt="Rue de Paris atmosphere" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-80 transition-all duration-1000" />
+            <img src={home.boutiqueImage ? urlFor(home.boutiqueImage) : "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80"} alt="Rue de Paris atmosphere" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-80 transition-all duration-1000" />
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-cobalt/40 pointer-events-none flex items-center justify-center backdrop-blur-[2px]">
               <div class="w-4 h-4 rounded-full bg-cobalt flex items-center justify-center animate-ping"></div>
             </div>
@@ -431,26 +445,26 @@ const featuredFrames = frames.filter(f => f.isFeatured);
     <section id="cta-end-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory text-center relative overflow-hidden">
       <div class="max-w-3xl mx-auto space-y-8 relative z-10">
         <span class="font-mono text-[10px] tracking-[0.25em] text-cobalt uppercase">[ Trouver votre monture de caractère ]</span>
-        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">
-          {settings.ctaTitle ? (
-            settings.ctaTitle.includes('\n') ? (
-              <Fragment set:html={settings.ctaTitle.replace('\n', '<br />')} />
+        <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">
+          {home.ctaTitle ? (
+            home.ctaTitle.includes('\n') ? (
+              <Fragment set:html={home.ctaTitle.replace('\n', '<br />')} />
             ) : (
-              settings.ctaTitle
+              home.ctaTitle
             )
           ) : (
             <>Venez dénicher<br/>la vôtre.</>
           )}
         </h2>
-        <p class="font-sans text-stone-grey text-md md:text-lg max-w-xl mx-auto leading-relaxed">
-          {settings.ctaSubtext || "Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement."}
+        <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaSubtext' }) : undefined} class="font-sans text-stone-grey text-md md:text-lg max-w-xl mx-auto leading-relaxed">
+          {home.ctaSubtext || "Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement."}
         </p>
         <div class="pt-6 flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="bg-cobalt hover:bg-optical-black text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8 font-semibold shadow-lg shadow-cobalt/10">
-            {settings.ctaButton1Text || "Prendre rendez-vous en ligne"}
+          <a href="/contact" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaButton1Text' }) : undefined} class="bg-cobalt hover:bg-optical-black text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8 font-semibold shadow-lg shadow-cobalt/10">
+            {home.ctaButton1Text || "Prendre rendez-vous en ligne"}
           </a>
-          <a href="/collections" class="border border-optical-black/20 hover:border-optical-black text-optical-black transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8">
-            {settings.ctaButton2Text || "Découvrir les créateurs"}
+          <a href="/collections" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaButton2Text' }) : undefined} class="border border-optical-black/20 hover:border-optical-black text-optical-black transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8">
+            {home.ctaButton2Text || "Découvrir les créateurs"}
           </a>
         </div>
       </div>
@@ -462,8 +476,8 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 mb-16 border-b border-stone-grey/15 pb-16">
         <div class="col-span-1 md:col-span-4 space-y-4">
           <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
-          <p class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">
-            {settings.footerDescription || "Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie."}
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'footerDescription' }) : undefined} class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">
+            {home.footerDescription || "Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie."}
           </p>
           <div class="pt-2 flex gap-4">
             <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">

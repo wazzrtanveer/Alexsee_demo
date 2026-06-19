@@ -36,7 +36,71 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool(),
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Contenu du Site')
+          .items([
+            S.listItem()
+              .title('Paramètres de la Boutique')
+              .id('settings')
+              .icon(() => '⚙️')
+              .child(
+                S.document()
+                  .schemaType('settings')
+                  .documentId('settings')
+              ),
+            S.divider(),
+            S.listItem()
+              .title("Page d'Accueil (Landing Page)")
+              .id('pageHome')
+              .icon(() => '🏠')
+              .child(
+                S.document()
+                  .schemaType('pageHome')
+                  .documentId('pageHome')
+              ),
+            S.listItem()
+              .title('Page Collection')
+              .id('pageCollections')
+              .icon(() => '🕶️')
+              .child(
+                S.document()
+                  .schemaType('pageCollections')
+                  .documentId('pageCollections')
+              ),
+            S.listItem()
+              .title('Page Boutique')
+              .id('pageBoutique')
+              .icon(() => '🏪')
+              .child(
+                S.document()
+                  .schemaType('pageBoutique')
+                  .documentId('pageBoutique')
+              ),
+            S.listItem()
+              .title('Page Savoir-Faire (Services)')
+              .id('pageServices')
+              .icon(() => '🔬')
+              .child(
+                S.document()
+                  .schemaType('pageServices')
+                  .documentId('pageServices')
+              ),
+            S.listItem()
+              .title('Page Rendez-vous (Contact)')
+              .id('pageContact')
+              .icon(() => '📅')
+              .child(
+                S.document()
+                  .schemaType('pageContact')
+                  .documentId('pageContact')
+              ),
+            S.divider(),
+            S.documentTypeListItem('frame').title('Montures (Eyeglasses Frames)').icon(() => '👓'),
+            S.documentTypeListItem('service').title('Services').icon(() => '🛠️'),
+          ])
+    }),
     visionTool(),
     presentationTool({
       previewUrl: {

@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SERVICES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
+import { sanityClient, SERVICES_QUERY, SETTINGS_QUERY, PAGE_SERVICES_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { services as mockServices, settings as mockSettings } from '../data/mockData.js';
 
 let services = [];
 let settings = mockSettings;
+let pageServices = null;
 
 try {
   const sanityServices = await sanityClient.fetch(SERVICES_QUERY);
@@ -26,7 +27,24 @@ try {
 } catch (e) {
   console.error("Error fetching settings in Services page:", e);
 }
+
+try {
+  const sanityPageServices = await sanityClient.fetch(PAGE_SERVICES_QUERY);
+  if (sanityPageServices) {
+    pageServices = sanityPageServices;
+  }
+} catch (e) {
+  console.error("Error fetching pageServices from Sanity:", e);
+}
+
+const servicesPage = pageServices || {
+  title: "L’Artisanat de la Vision",
+  subtext: "Notre charte d’artisan opticien de quartier : un accompagnement technique irréprochable combiné à un sens aiguisé du visagisme et des matières nobles.",
+  noteTitle: "Note d'art direction",
+  noteSubtext: "Remplacement de ces visuels par des clichés de votre atelier et d’essayages de montures réelles lors de la session de shooting photo."
+};
 ---
+
 
 <Layout
   title="Nos Savoir-Faire — AlexSEE Paris 20e"
@@ -41,13 +59,13 @@ try {
       </span>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div class="col-span-1 lg:col-span-8">
-          <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
-            {settings.servicesPageTitle || "L’Artisanat de la Vision"}
+          <h1 data-sanity={servicesPage._id ? dataAttribute({ id: servicesPage._id, type: servicesPage._type, path: 'title' }) : undefined} class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
+            {servicesPage.title}
           </h1>
         </div>
         <div class="col-span-1 lg:col-span-4">
-          <p class="font-sans text-stone-grey text-sm leading-relaxed font-light">
-            {settings.servicesPageSubtext || "Notre charte d’artisan opticien de quartier : un accompagnement technique irréprochable combiné à un sens aiguisé du visagisme et des matières nobles."}
+          <p data-sanity={servicesPage._id ? dataAttribute({ id: servicesPage._id, type: servicesPage._type, path: 'subtext' }) : undefined} class="font-sans text-stone-grey text-sm leading-relaxed font-light">
+            {servicesPage.subtext}
           </p>
         </div>
       </div>
@@ -143,11 +161,11 @@ try {
           </div>
 
           <div class="bg-stone-light/30 p-4 border border-stone-grey/15 text-xs text-stone-grey space-y-1.5 font-mono">
-            <span class="font-mono text-[9px] uppercase text-cobalt tracking-wider font-bold block">
-              [ {settings.servicesNoteTitle || "Note d'art direction"} ]
+            <span data-sanity={servicesPage._id ? dataAttribute({ id: servicesPage._id, type: servicesPage._type, path: 'noteTitle' }) : undefined} class="font-mono text-[9px] uppercase text-cobalt tracking-wider font-bold block">
+              [ {servicesPage.noteTitle} ]
             </span>
-            <p class="font-sans leading-relaxed">
-              {settings.servicesNoteSubtext || "Remplacement de ces visuels par des clichés de votre atelier et d’essayages de montures réelles lors de la session de shooting photo."}
+            <p data-sanity={servicesPage._id ? dataAttribute({ id: servicesPage._id, type: servicesPage._type, path: 'noteSubtext' }) : undefined} class="font-sans leading-relaxed">
+              {servicesPage.noteSubtext}
             </p>
           </div>
         </div>
