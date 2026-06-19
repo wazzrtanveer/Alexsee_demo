@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sanityClient, FRAMES_QUERY, urlFor } from '../../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, urlFor, dataAttribute, cleanStega } from '../../lib/sanity.js';
 import { frames as mockFrames } from '../../data/mockData.js';
 
 let frames = [];
@@ -63,12 +63,13 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
     <div id="frame-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
       {frames.map((frame) => (
         <a
-          href={`/frame/${frame.id}`}
+          href={`/frame/${cleanStega(frame.id)}`}
           data-type={frame.type}
           data-gender={frame.gender}
           data-brand={frame.brand}
           data-isnew={frame.isNew ? 'true' : 'false'}
           data-cursor-label="DÉCOUVRIR"
+          data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type }) : undefined}
           class="frame-card flex flex-col justify-between group cursor-pointer focus:outline-none focus:ring-1 focus:ring-cobalt"
           tabindex="0"
         >

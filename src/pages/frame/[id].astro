@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sanityClient, FRAMES_QUERY, SETTINGS_QUERY, urlFor } from '../../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../../lib/sanity.js';
 import { frames as mockFrames, settings as mockSettings } from '../../data/mockData.js';
 
 export async function getStaticPaths() {
@@ -58,7 +58,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
       <!-- Left Column: Image & View Toggle -->
       <div class="col-span-1 lg:col-span-7 flex flex-col gap-6">
-        <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15">
+        <div data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type, path: 'images' }) : undefined} class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15">
           <!-- Images -->
           {frame.images.map((src, i) => (
             <img
@@ -85,7 +85,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
       </div>
 
       <!-- Right Column: Specs & Actions -->
-      <div class="col-span-1 lg:col-span-5 flex flex-col justify-between space-y-8">
+      <div data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type, path: 'model' }) : undefined} class="col-span-1 lg:col-span-5 flex flex-col justify-between space-y-8">
         <div class="space-y-6">
           <div>
             <span class="font-mono text-[10px] tracking-widest text-[#7B7973] uppercase block mb-1">{frame.brand}</span>
@@ -135,14 +135,14 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
 
         <div class="space-y-3 pt-4">
           <a
-            href={`/contact?frame=${encodeURIComponent(frame.brand + ' - ' + frame.model)}`}
+            href={`/contact?frame=${encodeURIComponent(cleanStega(frame.brand) + ' - ' + cleanStega(frame.model))}`}
             class="w-full bg-cobalt hover:bg-optical-black text-ivory text-center py-4 text-xs font-mono font-semibold tracking-widest uppercase transition-colors duration-300 shadow-md shadow-cobalt/10 flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
             <span>Essayer ce modèle en boutique Paris 20</span>
           </a>
           <a
-            href={`mailto:${settings.email}?subject=Demande de disponibilité : ${encodeURIComponent(frame.brand + ' - ' + frame.model)}`}
+            href={`mailto:${cleanStega(settings.email)}?subject=Demande de disponibilité : ${encodeURIComponent(cleanStega(frame.brand) + ' - ' + cleanStega(frame.model))}`}
             class="w-full border border-optical-black/25 hover:border-cobalt text-optical-black hover:text-cobalt text-center py-4 text-xs font-mono tracking-widest uppercase transition-colors duration-300 block bg-transparent"
           >
             Demander la disponibilité à distance

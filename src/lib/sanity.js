@@ -1,7 +1,26 @@
 import { createClient } from '@sanity/client';
 import { createImageUrlBuilder } from '@sanity/image-url';
+import { createDataAttribute } from '@sanity/visual-editing';
 
 const isDev = import.meta.env.DEV;
+
+export function cleanStega(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[\u200B-\u200D\uFEFF]/g, '');
+}
+
+export const dataAttribute = ({ id, type, path }) => {
+  if (!id || !type) return undefined;
+  const targetPath = path || '_id';
+  const attr = createDataAttribute({
+    projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
+    dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+    baseUrl: '/admin',
+    id,
+    type,
+  });
+  return attr(targetPath).toString();
+};
 
 export const sanityClient = createClient({
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',

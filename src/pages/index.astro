@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
-import { sanityClient, FRAMES_QUERY, SERVICES_QUERY, SETTINGS_QUERY, urlFor } from '../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, SERVICES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { frames as mockFrames, services as mockServices, settings as mockSettings } from '../data/mockData.js';
 
 let frames = [];
@@ -55,7 +55,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
     <div class="absolute bottom-[20%] right-[-50px] w-[300px] h-[300px] bg-stone-grey rounded-full blur-[150px] opacity-[0.05] pointer-events-none"></div>
 
     <!-- ── Hero ── -->
-    <section id="hero-section" class="relative min-h-[90vh] flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-12 overflow-hidden border-b border-stone-grey/10">
+    <section id="hero-section" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'heroHeadline' }) : undefined} class="relative min-h-[90vh] flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-12 overflow-hidden border-b border-stone-grey/10">
       <div class="absolute top-1/4 right-1/4 w-[50vw] h-[50vw] rounded-full bg-cobalt/5 blur-[120px] pointer-events-none"></div>
       <div class="absolute inset-y-0 left-1/3 w-[1px] bg-stone-light/40 pointer-events-none hidden lg:block"></div>
       <div class="absolute inset-y-0 left-2/3 w-[1px] bg-stone-light/40 pointer-events-none hidden lg:block"></div>
@@ -75,11 +75,26 @@ const featuredFrames = frames.filter(f => f.isFeatured);
               <p class="font-mono text-[10px] tracking-widest text-cobalt uppercase font-bold">Boutique indépendante de créateurs</p>
             </div>
             <h1 class="text-[64px] lg:text-[100px] xl:text-[112px] font-normal leading-[0.85] tracking-tight text-optical-black mb-10" style="font-family: var(--font-display);">
-              Voir<br />
-              <span class="italic ml-16 text-cobalt block">autrement.</span>
+              {settings.heroHeadline ? (
+                settings.heroHeadline.includes('\n') ? (
+                  settings.heroHeadline.split('\n').map((line, idx) => (
+                    <>
+                      {line}
+                      {idx < settings.heroHeadline.split('\n').length - 1 && <br />}
+                    </>
+                  ))
+                ) : (
+                  settings.heroHeadline
+                )
+              ) : (
+                <>
+                  Voir<br />
+                  <span class="italic ml-16 text-cobalt block">autrement.</span>
+                </>
+              )}
             </h1>
             <p class="font-sans text-optical-black/90 text-lg xl:text-xl font-light mb-10 max-w-xl leading-relaxed">
-              Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement. Une signature visuelle authentique.
+              {settings.heroSubtext || "Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement. Une signature visuelle authentique."}
             </p>
             <div class="flex flex-wrap gap-4">
               <a href="/collections" id="hero-cta-collection" data-cursor-label="EXPLORER" class="group flex items-center gap-3 bg-optical-black text-ivory hover:bg-cobalt px-8 py-4 transition-all duration-300 tracking-widest font-mono text-xs uppercase">
@@ -94,7 +109,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
           </div>
           <div class="mt-14 pt-8 border-t border-stone-grey/25 flex flex-col gap-4 font-mono text-[10px] uppercase tracking-wider text-stone-grey">
             <div class="flex items-center gap-8">
-              <a href={`tel:${settings.phone.replace(/\s+/g, '')}`} class="flex items-center gap-2 hover:text-cobalt group transition-colors">
+              <a href={`tel:${cleanStega(settings.phone).replace(/\s+/g, '')}`} class="flex items-center gap-2 hover:text-cobalt group transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt animate-pulse"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 <span>Téléphone : <strong class="text-optical-black font-medium group-hover:underline">{settings.phone}</strong></span>
               </a>
@@ -186,7 +201,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
           </a>
         </div>
         <div class="mt-4 pt-4 border-t border-stone-grey/25 flex flex-col gap-3 font-mono text-[10px] uppercase tracking-wider text-stone-grey/95">
-          <a href={`tel:${settings.phone.replace(/\s+/g, '')}`} class="flex items-center gap-2.5 py-1 hover:text-cobalt transition-colors min-h-[44px]">
+          <a href={`tel:${cleanStega(settings.phone).replace(/\s+/g, '')}`} class="flex items-center gap-2.5 py-1 hover:text-cobalt transition-colors min-h-[44px]">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             <span>Appeler : <strong class="text-optical-black font-semibold">{settings.phone}</strong></span>
           </a>
@@ -241,7 +256,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
         {featuredFrames.map((frame, idx) => (
-          <a href={`/frame/${frame.id}`} data-cursor-label="VOIR" class={`flex flex-col justify-between group cursor-pointer ${idx === 1 ? 'md:translate-y-12' : idx === 2 ? 'md:translate-y-6' : ''}`}>
+          <a href={`/frame/${cleanStega(frame.id)}`} data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type }) : undefined} data-cursor-label="VOIR" class={`flex flex-col justify-between group cursor-pointer ${idx === 1 ? 'md:translate-y-12' : idx === 2 ? 'md:translate-y-6' : ''}`}>
             <div class="aspect-[3/4] bg-stone-light/40 relative overflow-hidden mb-6 border border-stone-grey/10">
               {frame.isNew && <span class="absolute top-4 left-4 z-10 bg-cobalt text-ivory font-mono text-[8px] uppercase tracking-widest py-1 px-2.5">Nouveauté</span>}
               <img src={urlFor(frame.images[0])} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
@@ -306,7 +321,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       </div>
       <div class="border-t border-stone-grey/20">
         {services.slice(0, 3).map(service => (
-          <div class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
+          <div data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type }) : undefined} class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
             <div class="col-span-1 md:col-span-1 font-mono text-cobalt font-medium text-lg">{service.number}</div>
             <div class="col-span-1 md:col-span-5">
               <span class="font-mono text-[9px] uppercase tracking-wider text-cobalt block mb-1">{service.unconfirmedNote}</span>
@@ -347,7 +362,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
             </div>
             <div class="flex justify-between items-center py-1">
               <span class="text-stone-grey">Contact :</span>
-              <a href={`tel:${settings.phone.replace(/\s+/g,'')}`} class="text-cobalt hover:underline">{settings.phone}</a>
+              <a href={`tel:${cleanStega(settings.phone).replace(/\s+/g,'')}`} class="text-cobalt hover:underline">{settings.phone}</a>
             </div>
           </div>
           <div class="flex gap-4 pt-4">
@@ -406,7 +421,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
           <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
           <p class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.</p>
           <div class="pt-2 flex gap-4">
-            <a href={settings.instagram} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">
+            <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
           </div>
@@ -426,7 +441,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
           <ul class="space-y-2.5 text-stone-grey font-light">
             <li class="normal-case"><span class="text-ivory">Adresse :</span> 28 Rue d’Avron, 75020 Paris</li>
             <li><span class="text-ivory">Métro :</span> Buzenval (M9), Avron (M2)</li>
-            <li class="normal-case"><span class="text-ivory">Téléphone :</span> <a href={`tel:${settings.phone}`} class="hover:text-cobalt transition-colors font-bold text-ivory">{settings.phone}</a></li>
+            <li class="normal-case"><span class="text-ivory">Téléphone :</span> <a href={`tel:${cleanStega(settings.phone)}`} class="hover:text-cobalt transition-colors font-bold text-ivory">{settings.phone}</a></li>
             <li class="normal-case"><span class="text-ivory">Email :</span> {settings.email}</li>
           </ul>
         </div>

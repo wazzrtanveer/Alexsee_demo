@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SETTINGS_QUERY, urlFor } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
 import { settings as mockSettings, boutiqueImages as mockBoutiqueImages } from '../data/mockData.js';
 
 let settings = mockSettings;
@@ -35,7 +35,7 @@ try {
     </div>
 
     <!-- Slideshow Banner -->
-    <div id="boutique-slideshow-banner" class="relative w-full h-[50vh] md:h-[65vh] bg-stone-light/40 overflow-hidden mb-16 border border-stone-grey/15">
+    <div id="boutique-slideshow-banner" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueImages' }) : undefined} class="relative w-full h-[50vh] md:h-[65vh] bg-stone-light/40 overflow-hidden mb-16 border border-stone-grey/15">
       {boutiqueImages.map((src, i) => (
         <img
           src={urlFor(src)}
@@ -67,7 +67,7 @@ try {
       <div class="col-span-1 lg:col-span-5 space-y-8">
         <div class="space-y-4">
           <h3 class="font-mono text-[10px] uppercase tracking-widest text-stone-grey block border-b border-stone-grey/25 pb-3">Heures d’ouverture</h3>
-          <div class="divide-y divide-stone-grey/15 font-mono text-xs text-optical-black">
+          <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'hours' }) : undefined} class="divide-y divide-stone-grey/15 font-mono text-xs text-optical-black">
             {settings.hours.map(row => (
               <div class="flex justify-between py-3.5 items-baseline">
                 <span class="font-medium">{row.days}</span>
@@ -144,7 +144,7 @@ try {
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
             <span>Ouvrir dans Google Maps</span>
           </a>
-          <a href={`tel:${settings.phone}`} class="border border-optical-black/25 hover:border-cobalt text-optical-black hover:text-cobalt font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2 bg-transparent">
+          <a href={`tel:${cleanStega(settings.phone)}`} class="border border-optical-black/25 hover:border-cobalt text-optical-black hover:text-cobalt font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2 bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             <span>Appeler l’Atelier ({settings.phone})</span>
           </a>
