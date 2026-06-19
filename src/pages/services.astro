@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SERVICES_QUERY, urlFor, dataAttribute } from '../lib/sanity.js';
+import { sanityClient, SERVICES_QUERY, urlFor } from '../lib/sanity.js';
 import { services as mockServices } from '../data/mockData.js';
 
 let services = [];
@@ -57,7 +57,6 @@ try {
               data-service-img={urlFor(service.image)}
               data-service-number={service.number}
               data-service-title={service.title}
-              data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type }) : undefined}
               class="service-accordion-row py-8 cursor-pointer group transition-all duration-300 hover:bg-stone-light/5 hover:px-2"
             >
               <div class="flex items-center justify-between">

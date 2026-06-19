@@ -1,6 +1,5 @@
 import { createClient } from '@sanity/client';
 import { createImageUrlBuilder } from '@sanity/image-url';
-import { createDataAttribute } from '@sanity/visual-editing';
 
 const isDev = import.meta.env.DEV;
 
@@ -8,26 +7,14 @@ export const sanityClient = createClient({
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
   dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   useCdn: !isDev, // Disable CDN during development/preview for instant draft updates
-  apiVersion: '2023-05-03',
+  apiVersion: '2024-06-01',
   token: import.meta.env.SANITY_API_READ_TOKEN || import.meta.env.PUBLIC_SANITY_READ_TOKEN || '',
+  perspective: isDev ? 'previewDrafts' : 'published',
   stega: {
-    enabled: true, // Enable Stega content source maps for Visual Editing
+    enabled: isDev, // Only enable stega in development — encodes content source maps into strings
     studioUrl: '/admin',
   },
 });
-
-export const dataAttribute = ({ id, type, path }) => {
-  if (!id || !type) return undefined;
-  const targetPath = path || '_id';
-  const attr = createDataAttribute({
-    projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
-    dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
-    baseUrl: '/admin',
-    id,
-    type,
-  });
-  return attr(targetPath).toString();
-};
 
 const builder = createImageUrlBuilder(sanityClient);
 

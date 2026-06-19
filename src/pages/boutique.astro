@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SETTINGS_QUERY, urlFor, dataAttribute } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, urlFor } from '../lib/sanity.js';
 import { settings as mockSettings, boutiqueImages as mockBoutiqueImages } from '../data/mockData.js';
 
 let settings = mockSettings;
@@ -35,7 +35,7 @@ try {
     </div>
 
     <!-- Slideshow Banner -->
-    <div id="boutique-slideshow-banner" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueImages' }) : undefined} class="relative w-full h-[50vh] md:h-[65vh] bg-stone-light/40 overflow-hidden mb-16 border border-stone-grey/15">
+    <div id="boutique-slideshow-banner" class="relative w-full h-[50vh] md:h-[65vh] bg-stone-light/40 overflow-hidden mb-16 border border-stone-grey/15">
       {boutiqueImages.map((src, i) => (
         <img
           src={urlFor(src)}
@@ -67,7 +67,7 @@ try {
       <div class="col-span-1 lg:col-span-5 space-y-8">
         <div class="space-y-4">
           <h3 class="font-mono text-[10px] uppercase tracking-widest text-stone-grey block border-b border-stone-grey/25 pb-3">Heures d’ouverture</h3>
-          <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'hours' }) : undefined} class="divide-y divide-stone-grey/15 font-mono text-xs text-optical-black">
+          <div class="divide-y divide-stone-grey/15 font-mono text-xs text-optical-black">
             {settings.hours.map(row => (
               <div class="flex justify-between py-3.5 items-baseline">
                 <span class="font-medium">{row.days}</span>

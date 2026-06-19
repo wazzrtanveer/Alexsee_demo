@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sanityClient, FRAMES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute } from '../../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, SETTINGS_QUERY, urlFor } from '../../lib/sanity.js';
 import { frames as mockFrames, settings as mockSettings } from '../../data/mockData.js';
 
 export async function getStaticPaths() {
@@ -58,7 +58,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
       <!-- Left Column: Image & View Toggle -->
       <div class="col-span-1 lg:col-span-7 flex flex-col gap-6">
-        <div data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type, path: 'images' }) : undefined} class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15">
+        <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15">
           <!-- Images -->
           {frame.images.map((src, i) => (
             <img
@@ -87,7 +87,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
       <!-- Right Column: Specs & Actions -->
       <div class="col-span-1 lg:col-span-5 flex flex-col justify-between space-y-8">
         <div class="space-y-6">
-          <div data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type, path: 'model' }) : undefined}>
+          <div>
             <span class="font-mono text-[10px] tracking-widest text-[#7B7973] uppercase block mb-1">{frame.brand}</span>
             <h1 style="font-family: var(--font-display);" class="text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-tight text-optical-black">{frame.model}</h1>
           </div>

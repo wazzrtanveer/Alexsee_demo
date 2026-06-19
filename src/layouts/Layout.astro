@@ -3,6 +3,7 @@ import ClientRouter from 'astro/components/ClientRouter.astro';
 import Header from '../components/Header.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import Preloader from '../components/Preloader.astro';
+import { VisualEditing } from '@sanity/astro/visual-editing';
 import '../styles/global.css';
 
 const { 
@@ -10,7 +11,7 @@ const {
   description = "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure."
 } = Astro.props;
 
-const showVisualEditing = import.meta.env.DEV;
+const isVisualEditingEnabled = import.meta.env.DEV;
 ---
 
 <!DOCTYPE html>
@@ -69,25 +70,6 @@ const showVisualEditing = import.meta.env.DEV;
       </div>
     </div>
 
-    {showVisualEditing && (
-      <script>
-        import { enableVisualEditing } from '@sanity/visual-editing';
-        
-        // Don't enable visual editing overlay when browsing the studio itself
-        if (!window.location.pathname.startsWith('/admin')) {
-          enableVisualEditing({
-            history: {
-              subscribe: (navigate) => {
-                const handler = () => {
-                  navigate({ type: 'push', url: window.location.pathname + window.location.search });
-                };
-                window.addEventListener('astro:page-load', handler);
-                return () => window.removeEventListener('astro:page-load', handler);
-              },
-            },
-          });
-        }
-      </script>
-    )}
+    <VisualEditing enabled={isVisualEditingEnabled} zIndex={9999} />
   </body>
 </html>
