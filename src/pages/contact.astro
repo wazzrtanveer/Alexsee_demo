@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { frames, settings } from '../data/mockData.js';
+import { settings } from '../data/mockData.js';
 
 const requestedFrame = Astro.url.searchParams.get('frame') || '';
 ---
@@ -9,183 +9,256 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
   title="Prendre Rendez-vous — AlexSEE Paris 20e"
   description="Prenez rendez-vous pour votre heure de conseil personnalisé en montures créateur, examen de vue ou essayage dans notre atelier Paris 20e."
 >
-  <div id="contact-view-root" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
-
-    <!-- Breadcrumb -->
-    <div class="flex items-center gap-2 mb-12 border-b border-stone-grey/15 pb-6">
-      <a href="/" class="group flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-stone-grey hover:text-optical-black transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-        <span>Retour</span>
-      </a>
-      <span class="text-stone-grey/40 font-mono text-[9px]">/</span>
-      <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey">[ Prise de Rendez-vous ]</span>
+  <div id="contact-view-root-container">
+    <!-- Success screen (hidden by default) -->
+    <div id="appointment-success-viewport" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24 flex items-center justify-center hidden opacity-0 transition-opacity duration-500">
+      <div class="max-w-xl w-full bg-stone-light/25 p-8 md:p-12 border border-stone-grey/20 text-center space-y-8 relative">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-cobalt"></div>
+        <div class="w-16 h-16 rounded-full bg-cobalt/10 flex items-center justify-center text-cobalt mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="stroke-[1.5]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="space-y-3">
+          <span class="font-mono text-[9px] tracking-[0.25em] text-cobalt uppercase block">
+            [ Rendez-vous enregistré avec succès ]
+          </span>
+          <h1 style="font-family: var(--font-display);" class="text-3xl md:text-4xl font-light uppercase tracking-tight">
+            Merci, <span id="success-user-name"></span>
+          </h1>
+          <p class="font-sans text-stone-grey text-sm leading-relaxed max-w-sm mx-auto">
+            Votre demande de créneau pour <span id="success-service-name" class="font-semibold text-optical-black"></span> a été transmise à notre atelier Rue d’Avron.
+          </p>
+        </div>
+        <div class="border-t border-b border-stone-grey/15 py-5 text-left space-y-3 font-mono text-[11px] uppercase tracking-wider text-stone-grey">
+          <div class="flex justify-between">
+            <span>Date retenue :</span>
+            <span id="success-date" class="text-optical-black font-semibold"></span>
+          </div>
+          <div class="flex justify-between">
+            <span>Heure indicative :</span>
+            <span id="success-time" class="text-optical-black font-semibold"></span>
+          </div>
+          <div class="flex justify-between">
+            <span>Mode de contact :</span>
+            <span id="success-contact" class="text-optical-black normal-case font-semibold"></span>
+          </div>
+          <div id="success-notes-wrap" class="border-t border-stone-grey/15 pt-3 mt-3 normal-case text-[10px] text-stone-grey italic leading-relaxed hidden">
+            Note de profil : « <span id="success-notes"></span> »
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="font-sans text-stone-grey/90 text-xs">
+            Un opticien de la boutique va confirmer ce créneau par appel ou courriel sous 24h. Préparez vos ordonnances ophtalmologiques en cours si nécessaires.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <a href="/" class="w-full bg-optical-black hover:bg-cobalt text-ivory font-mono text-xs uppercase tracking-widest py-3.5 transition-colors duration-300 text-center">
+              Retourner à l’accueil
+            </a>
+            <a href="/collections" class="w-full border border-stone-grey/25 hover:border-optical-black text-optical-black font-mono text-xs uppercase tracking-widest py-3.5 transition-colors duration-300 bg-transparent text-center">
+              Continuer le lookbook
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-24">
-
-      <!-- Left — form -->
-      <div class="lg:col-span-3">
-        <div class="mb-10">
-          <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">[ Formulaire de réservation ]</span>
-          <h1 class="text-4xl md:text-5xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">Prendre<br />Rendez-vous</h1>
-        </div>
-
-        <!-- Success panel (hidden by default) -->
-        <div id="form-success" class="hidden bg-cobalt/5 border border-cobalt/30 p-8 text-center mb-8">
-          <div class="w-10 h-10 bg-cobalt text-ivory rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          </div>
-          <h2 class="text-xl font-light uppercase tracking-tight mb-2" style="font-family: var(--font-display);">Demande Reçue !</h2>
-          <p class="font-sans text-stone-grey text-sm">Nous vous recontactons sous 24h pour confirmer votre créneau.</p>
-          <button id="reset-form-btn" class="mt-6 font-mono text-[10px] uppercase tracking-widest text-cobalt hover:text-optical-black transition-colors">
-            Faire une autre demande →
-          </button>
-        </div>
-
-        <form id="appointment-form" class="space-y-6 font-mono" novalidate>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- First name -->
-            <div>
-              <label for="field-prenom" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Prénom *</label>
-              <input id="field-prenom" type="text" name="prenom" required autocomplete="given-name"
-                class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 transition-colors"
-                placeholder="Votre prénom" />
-              <p class="field-error text-[9px] text-red-500 mt-1 hidden">Champ requis</p>
-            </div>
-            <!-- Last name -->
-            <div>
-              <label for="field-nom" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Nom *</label>
-              <input id="field-nom" type="text" name="nom" required autocomplete="family-name"
-                class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 transition-colors"
-                placeholder="Votre nom" />
-              <p class="field-error text-[9px] text-red-500 mt-1 hidden">Champ requis</p>
-            </div>
-          </div>
-
-          <!-- Email + Phone -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label for="field-email" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Email *</label>
-              <input id="field-email" type="email" name="email" required autocomplete="email"
-                class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 transition-colors"
-                placeholder="votre@email.fr" />
-              <p class="field-error text-[9px] text-red-500 mt-1 hidden">Email invalide</p>
-            </div>
-            <div>
-              <label for="field-phone" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Téléphone</label>
-              <input id="field-phone" type="tel" name="phone" autocomplete="tel"
-                class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 transition-colors"
-                placeholder="+33 6 12 34 56 78" />
-            </div>
-          </div>
-
-          <!-- Service -->
-          <div>
-            <label for="field-service" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Type de Prestation *</label>
-            <div class="relative">
-              <select id="field-service" name="service" required
-                class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 pr-10 text-sm font-sans appearance-none focus:outline-none focus:border-cobalt text-optical-black cursor-pointer transition-colors">
-                <option value="">— Sélectionner un service —</option>
-                <option>Conseil en montures créateur (1h)</option>
-                <option>Vérification optique & précision</option>
-                <option>Ajustage & entretien</option>
-                <option>Essayage de montures sur commande</option>
-                <option>Sélection de verres</option>
-              </select>
-              <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-stone-grey">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-              </div>
-            </div>
-            <p class="field-error text-[9px] text-red-500 mt-1 hidden">Sélection requise</p>
-          </div>
-
-          <!-- Time preference -->
-          <div>
-            <label class="block text-[9px] uppercase tracking-widest text-stone-grey mb-3">Créneau Préféré</label>
-            <div id="time-slots" class="flex flex-wrap gap-2">
-              {['Matin (10h-12h)', 'Après-midi (14h-17h)', 'En soirée (17h-19h30)', 'Le samedi'].map((slot) => (
-                <button type="button" data-slot={slot}
-                  class="time-slot-btn px-4 py-2 border border-stone-grey/25 text-stone-grey hover:border-optical-black hover:text-optical-black text-[10px] uppercase tracking-wider transition-all focus:outline-none">
-                  {slot}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <!-- Pre-selected frame -->
-          <div>
-            <label for="field-frame" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Modèle(s) à Essayer (facultatif)</label>
-            <input id="field-frame" type="text" name="frame" value={requestedFrame}
-              class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 transition-colors"
-              placeholder="Ex : AlexSEE Signature — D'Avron 01" />
-          </div>
-
-          <!-- Message -->
-          <div>
-            <label for="field-message" class="block text-[9px] uppercase tracking-widest text-stone-grey mb-1.5">Message (facultatif)</label>
-            <textarea id="field-message" name="message" rows="4"
-              class="w-full border border-stone-grey/30 bg-white/60 px-4 py-3 text-sm font-sans focus:outline-none focus:border-cobalt placeholder:text-stone-grey/50 resize-y transition-colors"
-              placeholder="Une prescription existante, une préférence colorimétrique, une demande spéciale..."></textarea>
-          </div>
-
-          <!-- Submit -->
-          <button type="submit" id="form-submit-btn"
-            class="w-full bg-cobalt hover:bg-optical-black text-ivory py-4 font-mono text-xs font-semibold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-            <span>Envoyer la demande de rendez-vous</span>
-          </button>
-          <p class="text-[9px] text-stone-grey/80 text-center leading-relaxed">
-            Aucune confirmation immédiate. Nous revenons sous 24h maximum par email ou téléphone.
+    <!-- Active view root -->
+    <div id="contact-view-root" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
+      <!-- Header -->
+      <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
+        <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block">
+          [ 05 / Planification & RDV ]
+        </span>
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
+            Prendre Rendez-vous
+          </h1>
+          <p class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
+            Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive.
           </p>
-        </form>
+        </div>
       </div>
 
-      <!-- Right — sidebar -->
-      <div class="lg:col-span-2 space-y-8">
-        <div class="sticky top-28">
-          <!-- Contact info -->
-          <div class="bg-stone-light/30 border border-stone-grey/10 p-6 space-y-5 mb-6">
-            <h2 class="font-mono text-[10px] uppercase tracking-widest text-stone-grey mb-1">[ Infos Boutique ]</h2>
-            <a href="https://maps.google.com/?q=28+Rue+d'Avron,+75020+Paris" target="_blank" rel="noreferrer" class="flex items-center gap-3 group hover:text-cobalt transition-colors">
-              <div class="w-8 h-8 bg-white border border-stone-grey/20 flex items-center justify-center flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <!-- Main grid content -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
+        <!-- Left Column: Form -->
+        <div class="col-span-1 lg:col-span-7 flex flex-col justify-start">
+          <form id="appointment-form" class="space-y-6" novalidate>
+            
+            <!-- Preselected Frame model notification -->
+            {requestedFrame && (
+              <div id="selected-frame-banner" class="bg-cobalt/5 p-4 border border-cobalt/20 flex justify-between items-center">
+                <div class="flex items-center gap-2 text-xs text-cobalt font-mono uppercase tracking-wider">
+                  <svg class="animate-pulse" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <span>Modèle sélectionné pour l’essai : <strong class="text-optical-black">{requestedFrame}</strong></span>
+                </div>
+                <button type="button" id="clear-frame-selection-btn" class="font-mono text-[9px] uppercase tracking-widest text-[#7B7973] hover:text-[#0D0D0E]">
+                  [ Annuler ]
+                </button>
               </div>
-              <div>
-                <span class="font-mono text-[9px] text-stone-grey block">Adresse</span>
-                <span class="text-sm font-medium">{settings.address}, {settings.postalCode} {settings.city}</span>
+            )}
+
+            <!-- Form fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Name -->
+              <div class="space-y-1.5">
+                <label for="user-name" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
+                  <span>Votre Nom et Prénom *</span>
+                  <span id="error-name" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
+                </label>
+                <input
+                  id="user-name"
+                  type="text"
+                  placeholder="Ex. Alexandre de Paris"
+                  required
+                  class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
+                />
               </div>
-            </a>
-            <a href={`tel:${settings.phone.replace(/\s+/g,'')}`} class="flex items-center gap-3 group hover:text-cobalt transition-colors">
-              <div class="w-8 h-8 bg-white border border-stone-grey/20 flex items-center justify-center flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+
+              <!-- Email -->
+              <div class="space-y-1.5">
+                <label for="user-email" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
+                  <span>Adresse Courriel *</span>
+                  <span id="error-email" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
+                </label>
+                <input
+                  id="user-email"
+                  type="email"
+                  placeholder="Ex. mail@exemple.fr"
+                  required
+                  class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
+                />
               </div>
-              <div>
-                <span class="font-mono text-[9px] text-stone-grey block">Téléphone</span>
-                <span class="text-sm font-medium">{settings.phone}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Phone -->
+              <div class="space-y-1.5">
+                <label for="user-phone" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
+                  <span>Numéro de Téléphone *</span>
+                  <span id="error-phone" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
+                </label>
+                <input
+                  id="user-phone"
+                  type="tel"
+                  placeholder="Ex. 01 43 73 12 12"
+                  required
+                  class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
+                />
               </div>
-            </a>
-            <a href={`mailto:${settings.email}`} class="flex items-center gap-3 group hover:text-cobalt transition-colors">
-              <div class="w-8 h-8 bg-white border border-stone-grey/20 flex items-center justify-center flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+
+              <!-- Service selection -->
+              <div class="space-y-1.5">
+                <label for="user-service" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                  Sélection du motif
+                </label>
+                <select id="user-service" class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors cursor-pointer text-optical-black">
+                  <option value="Conseil en montures créateur">Conseil en montures créateur (1h)</option>
+                  <option value="Examen de vue & Contrôle">Examen de vue & Contrôle (45min)</option>
+                  <option value="Ajustage technique ou entretien">Ajustage technique ou entretien (30min)</option>
+                  <option value="Sélection verres de haute technologie">Sélection verres de haute technologie (30min)</option>
+                  <option value="Espace Enfant & Solaire libre">Espace Enfant & Solaire libre</option>
+                </select>
               </div>
-              <div>
-                <span class="font-mono text-[9px] text-stone-grey block">Email</span>
-                <span class="text-sm font-medium">{settings.email}</span>
+            </div>
+
+            <!-- Date and Hours slots selection -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-1.5">
+                <label for="user-pref-date" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
+                  <span>Date souhaitée *</span>
+                  <span id="error-date" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
+                </label>
+                <input
+                  id="user-pref-date"
+                  type="date"
+                  required
+                  class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-mono text-sm focus:border-cobalt focus:outline-none transition-colors"
+                />
               </div>
-            </a>
+
+              <div class="space-y-1.5">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                  Créneau horaire estimé :
+                </span>
+                <div class="flex flex-wrap gap-1.5" id="time-slots-container">
+                  {["10:30", "11:00", "14:30", "15:30", "16:30", "17:30", "18:30"].map((time) => (
+                    <button
+                      type="button"
+                      data-time={time}
+                      class={`time-slot-btn font-mono text-[10px] tracking-tight px-3 py-2.5 border transition-all ${time === '11:00' ? 'bg-cobalt text-ivory border-cobalt font-semibold' : 'bg-stone-light/20 text-[#0D0D0E] border-stone-grey/15 hover:border-[#0D0D0E]'}`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="space-y-1.5">
+              <label for="user-notes" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                Notes ou demandes spéciales
+              </label>
+              <textarea
+                id="user-notes"
+                rows="3"
+                placeholder="Ex. Précisions de prescription, montures aperçues, etc."
+                class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors resize-y"
+              >{requestedFrame ? `Souhaite essayer le modèle : ${requestedFrame}` : ''}</textarea>
+            </div>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              data-cursor-label="ENVOYER"
+              class="w-full bg-optical-black hover:bg-cobalt text-ivory text-center py-4 font-mono font-semibold tracking-widest text-xs uppercase transition-colors duration-300 shadow-md flex items-center justify-center gap-2.5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Réserver mon créneau à l’atelier</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Column: Sidebar Cards -->
+        <div class="col-span-1 lg:col-span-5 space-y-8">
+          <!-- Card 1: Contact info -->
+          <div class="p-6 bg-stone-light/25 border border-stone-grey/20 space-y-6">
+            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[#7B7973] block">
+              [ Contact Alternatif ]
+            </span>
+            <p class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
+              Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien.
+            </p>
+            <div class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
+              <div class="flex justify-between items-center py-1">
+                <span class="text-stone-grey normal-case">Téléphone direct :</span>
+                <a href={`tel:${settings.phone.replace(/\s+/g,'')}`} class="font-bold text-cobalt hover:underline">
+                  {settings.phone}
+                </a>
+              </div>
+              <div class="flex justify-between items-center py-1">
+                <span class="text-stone-grey">Email d'atelier :</span>
+                <span class="lowercase font-semibold">{settings.email}</span>
+              </div>
+              <div class="flex justify-between items-center py-1">
+                <span class="text-stone-grey">Instagram :</span>
+                <a href={settings.instagram} target="_blank" rel="noopener noreferrer" class="text-cobalt hover:underline text-xs">
+                  @alexsee.avron
+                </a>
+              </div>
+            </div>
           </div>
 
-          <!-- Hours -->
-          <div class="border border-stone-grey/10 p-6">
-            <h2 class="font-mono text-[10px] uppercase tracking-widest text-stone-grey mb-4">[ Horaires ]</h2>
-            <div class="space-y-2.5 divide-y divide-stone-grey/10">
-              {settings.hours.map(row => (
-                <div class="flex justify-between pt-2.5 first:pt-0 font-mono text-xs">
-                  <span class="text-stone-grey">{row.days}</span>
-                  <span class={row.hours === 'Fermé' ? 'text-stone-grey/50 italic' : 'text-optical-black font-medium'}>{row.hours}</span>
-                </div>
-              ))}
-            </div>
+          <!-- Card 2: Access & location -->
+          <div class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
+            <span class="font-mono text-[9px] uppercase text-stone-grey tracking-widest flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              Accès & Localisation
+            </span>
+            <p class="font-sans text-xs text-stone-grey leading-relaxed">
+              <strong>{settings.name}</strong> est implanté au <strong>{settings.address}, {settings.postalCode} {settings.city}</strong>.<br />
+              L’entrée est accessible directement de plain-pied. Métro Buzenval (Ligne 9) à 300 mètres ou Avron (Ligne 2) à 400 mètres.
+            </p>
           </div>
         </div>
       </div>
@@ -194,87 +267,154 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 </Layout>
 
 <script>
-  function initContact() {
+  function setupContact() {
     const form = document.getElementById('appointment-form') as HTMLFormElement | null;
-    const successPanel = document.getElementById('form-success');
-    const resetBtn = document.getElementById('reset-form-btn');
-    const slotBtns = document.querySelectorAll('.time-slot-btn');
-    if (!form) return;
+    const viewRoot = document.getElementById('contact-view-root');
+    const successRoot = document.getElementById('appointment-success-viewport');
+    const timeSlots = document.querySelectorAll('#time-slots-container .time-slot-btn');
+    const banner = document.getElementById('selected-frame-banner');
+    const clearFrameBtn = document.getElementById('clear-frame-selection-btn');
+    const frameInput = document.getElementById('field-frame') as HTMLInputElement | null;
 
-    // Time slot toggle
-    slotBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const isActive = btn.classList.contains('bg-optical-black');
-        slotBtns.forEach(b => {
-          b.classList.remove('bg-optical-black', 'text-ivory', 'border-optical-black');
-          b.classList.add('border-stone-grey/25', 'text-stone-grey');
-        });
-        if (!isActive) {
-          btn.classList.add('bg-optical-black', 'text-ivory', 'border-optical-black');
-          btn.classList.remove('border-stone-grey/25', 'text-stone-grey');
+    if (!form || !viewRoot || !successRoot) return;
+
+    let selectedTime = '11:00';
+
+    // Clear frame selection banner
+    if (clearFrameBtn && banner) {
+      clearFrameBtn.addEventListener('click', () => {
+        banner.remove();
+        const notes = document.getElementById('user-notes') as HTMLTextAreaElement | null;
+        if (notes && notes.value.startsWith('Souhaite essayer le modèle :')) {
+          notes.value = '';
         }
       });
-    });
-
-    // Field validation helpers
-    function setError(input: HTMLElement, msg: string) {
-      input.classList.add('border-red-400');
-      input.classList.remove('border-stone-grey/30');
-      const err = input.parentElement?.querySelector('.field-error') || input.nextElementSibling;
-      if (err) { err.textContent = msg; (err as HTMLElement).classList.remove('hidden'); }
-    }
-    function clearError(input: HTMLElement) {
-      input.classList.remove('border-red-400');
-      input.classList.add('border-stone-grey/30');
-      const err = input.parentElement?.querySelector('.field-error') || input.nextElementSibling;
-      if (err) { (err as HTMLElement).classList.add('hidden'); }
     }
 
-    // Live validation
-    const requiredFields = form.querySelectorAll('[required]');
-    requiredFields.forEach(field => {
-      field.addEventListener('blur', () => {
-        const f = field as HTMLInputElement | HTMLSelectElement;
-        if (!f.value.trim()) { setError(f, 'Champ requis'); }
-        else if (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value)) { setError(f, 'Email invalide'); }
-        else { clearError(f); }
+    // Time slot toggle
+    timeSlots.forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeSlots.forEach(b => {
+          b.classList.remove('bg-cobalt', 'text-ivory', 'border-cobalt', 'font-semibold');
+          b.classList.add('bg-stone-light/20', 'text-[#0D0D0E]', 'border-stone-grey/15', 'hover:border-[#0D0D0E]');
+        });
+        btn.classList.add('bg-cobalt', 'text-ivory', 'border-cobalt', 'font-semibold');
+        btn.classList.remove('bg-stone-light/20', 'text-[#0D0D0E]', 'border-stone-grey/15', 'hover:border-[#0D0D0E]');
+        selectedTime = btn.getAttribute('data-time') || '11:00';
       });
     });
 
-    // Submit handler
+    // Form inputs and errors
+    const inputName = document.getElementById('user-name') as HTMLInputElement;
+    const inputEmail = document.getElementById('user-email') as HTMLInputElement;
+    const inputPhone = document.getElementById('user-phone') as HTMLInputElement;
+    const inputDate = document.getElementById('user-pref-date') as HTMLInputElement;
+    const selectService = document.getElementById('user-service') as HTMLSelectElement;
+    const txtNotes = document.getElementById('user-notes') as HTMLTextAreaElement;
+
+    // Set minimum date to today
+    if (inputDate) {
+      inputDate.min = new Date().toISOString().split('T')[0];
+    }
+
+    // Show/Hide error helper
+    const showError = (id: string, text: string, input: HTMLInputElement) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = `(${text})`;
+        el.classList.remove('hidden');
+      }
+      input.classList.add('border-rose-300', 'bg-rose-50/10');
+      input.classList.remove('border-stone-grey/25');
+    };
+
+    const clearError = (id: string, input: HTMLInputElement) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+      }
+      input.classList.remove('border-rose-300', 'bg-rose-50/10');
+      input.classList.add('border-stone-grey/25');
+    };
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      let valid = true;
+      let hasError = false;
 
-      requiredFields.forEach(field => {
-        const f = field as HTMLInputElement | HTMLSelectElement;
-        if (!f.value.trim()) { setError(f, 'Champ requis'); valid = false; }
-        else if (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value)) { setError(f, 'Email invalide'); valid = false; }
-        else { clearError(f); }
-      });
+      // Validate name
+      if (!inputName.value.trim()) {
+        showError('error-name', 'Le nom est obligatoire.', inputName);
+        hasError = true;
+      } else {
+        clearError('error-name', inputName);
+      }
 
-      if (!valid) return;
+      // Validate email
+      if (!inputEmail.value.trim() || !inputEmail.value.includes('@')) {
+        showError('error-email', 'Un email valide est requis.', inputEmail);
+        hasError = true;
+      } else {
+        clearError('error-email', inputEmail);
+      }
 
-      // Simulate submission
-      const submitBtn = document.getElementById('form-submit-btn');
-      if (submitBtn) submitBtn.textContent = 'Envoi en cours...';
+      // Validate phone
+      if (!inputPhone.value.trim()) {
+        showError('error-phone', 'Le numéro de téléphone est obligatoire.', inputPhone);
+        hasError = true;
+      } else {
+        clearError('error-phone', inputPhone);
+      }
 
+      // Validate date
+      if (!inputDate.value) {
+        showError('error-date', 'Le choix du jour est requis.', inputDate);
+        hasError = true;
+      } else {
+        clearError('error-date', inputDate);
+      }
+
+      if (hasError) {
+        form.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // Populate success fields
+      const successName = document.getElementById('success-user-name');
+      const successService = document.getElementById('success-service-name');
+      const successDate = document.getElementById('success-date');
+      const successTime = document.getElementById('success-time');
+      const successContact = document.getElementById('success-contact');
+      const successNotesWrap = document.getElementById('success-notes-wrap');
+      const successNotes = document.getElementById('success-notes');
+
+      if (successName) successName.textContent = inputName.value;
+      if (successService) successService.textContent = selectService.value;
+      if (successDate) successDate.textContent = inputDate.value;
+      if (successTime) successTime.textContent = selectedTime;
+      if (successContact) successContact.textContent = `${inputEmail.value} / ${inputPhone.value}`;
+      
+      if (txtNotes.value.trim()) {
+        if (successNotes) successNotes.textContent = txtNotes.value;
+        successNotesWrap?.classList.remove('hidden');
+      } else {
+        successNotesWrap?.classList.add('hidden');
+      }
+
+      // Slide out form, slide in success panel
+      viewRoot.classList.add('opacity-0');
       setTimeout(() => {
-        form.style.display = 'none';
-        successPanel?.classList.remove('hidden');
-        successPanel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 900);
-    });
-
-    // Reset
-    resetBtn?.addEventListener('click', () => {
-      form.reset();
-      form.style.display = '';
-      successPanel?.classList.add('hidden');
-      const submitBtn = document.getElementById('form-submit-btn');
-      if (submitBtn) submitBtn.textContent = 'Envoyer la demande de rendez-vous';
+        viewRoot.classList.add('hidden');
+        successRoot.classList.remove('hidden');
+        setTimeout(() => {
+          successRoot.classList.remove('opacity-0');
+        }, 10);
+      }, 500);
     });
   }
 
-  document.addEventListener('astro:page-load', initContact);
+  let cleanup;
+  document.addEventListener('astro:page-load', () => {
+    if (cleanup) cleanup();
+    cleanup = setupContact();
+  });
 </script>

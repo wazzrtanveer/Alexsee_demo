@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Preloader from '../components/Preloader.astro';
-import { frames, settings } from '../data/mockData.js';
+import Logo from '../components/Logo.astro';
+import { frames, settings, services } from '../data/mockData.js';
 
 const featuredFrames = frames.filter(f => f.isFeatured);
 ---
@@ -75,13 +76,13 @@ const featuredFrames = frames.filter(f => f.isFeatured);
 
         <!-- Right column — interactive magnifier lens -->
         <div class="w-[44%] flex flex-col gap-6 justify-between relative pl-4">
-          <div id="hero-img-container" class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 shadow-sm cursor-crosshair select-none">
+          <div id="hero-img-container" class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 shadow-sm cursor-crosshair select-none group">
             <img
               id="hero-main-img"
               src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"
               alt="Portrait éditorial AlexSEE"
               referrerpolicy="no-referrer"
-              class="w-full h-full object-cover transition-transform duration-[1.2s] ease-out"
+              class="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.01]"
               style="transform: scale(1.03); opacity: 0;"
             />
             <div class="absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-ivory to-transparent pointer-events-none z-10"></div>
@@ -92,7 +93,7 @@ const featuredFrames = frames.filter(f => f.isFeatured);
               <div class="absolute inset-0 bg-cobalt/[0.03] z-10"></div>
               <div class="absolute top-1/2 left-4 right-4 h-[1px] bg-cobalt/20 -translate-y-1/2 z-10"></div>
               <div class="absolute left-1/2 top-4 bottom-4 w-[1px] bg-cobalt/20 -translate-x-1/2 z-10"></div>
-              <img id="lens-inner-img" src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80" alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22);" />
+              <img id="lens-inner-img" src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80" alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none origin-center" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22);" />
               <span class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-optical-black text-ivory text-[7px] font-mono uppercase tracking-widest px-1.5 py-0.5 z-20 border border-white/10 whitespace-nowrap">VERRE ACCORD 1.2x</span>
             </div>
             <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10 z-10">Édition Limitée</div>
@@ -130,55 +131,207 @@ const featuredFrames = frames.filter(f => f.isFeatured);
         <div class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 mt-2">
           <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80" alt="Portrait éditorial AlexSEE" referrerpolicy="no-referrer" class="w-full h-full object-cover" />
           <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10">Édition Limitée</div>
+          <!-- Mobile Lens -->
+          <div class="absolute w-24 h-24 rounded-full border border-cobalt/40 bg-cobalt/[0.03] backdrop-blur-[1px] bottom-[10%] right-[10%] overflow-hidden pointer-events-none z-10">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-[1px] h-8 bg-cobalt/20"></div>
+              <div class="h-[1px] w-8 bg-cobalt/20"></div>
+            </div>
+            <div class="absolute bottom-1.5 right-1/2 translate-x-1/2 text-[6px] font-mono tracking-widest text-cobalt uppercase font-bold text-center">LENS 1.2</div>
+          </div>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 mt-4 w-full">
           <a href="/collections" class="flex items-center justify-center gap-3 bg-optical-black text-ivory hover:bg-cobalt px-6 py-4 transition-all duration-300 tracking-widest font-mono text-xs uppercase w-full">
             <span>Découvrir la sélection</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a href="/contact" class="flex items-center justify-center gap-2 border border-optical-black/30 hover:border-cobalt px-6 py-4 text-optical-black hover:text-cobalt bg-transparent transition-all duration-300 font-mono text-xs uppercase tracking-widest w-full">
             <span>Prendre rendez-vous</span>
           </a>
         </div>
+        <div class="mt-4 pt-4 border-t border-stone-grey/25 flex flex-col gap-3 font-mono text-[10px] uppercase tracking-wider text-stone-grey/95">
+          <a href={`tel:${settings.phone.replace(/\s+/g, '')}`} class="flex items-center gap-2.5 py-1 hover:text-cobalt transition-colors min-h-[44px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>Appeler : <strong class="text-optical-black font-semibold">{settings.phone}</strong></span>
+          </a>
+          <a href="https://maps.google.com/?q=28+Rue+d'Avron,+75020+Paris" target="_blank" rel="noreferrer" class="flex items-center gap-2.5 py-1 hover:text-cobalt transition-colors min-h-[44px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Itinéraire : <strong class="text-optical-black font-semibold">{settings.address}, Paris 20e</strong></span>
+          </a>
+          <div class="flex items-start gap-2.5 py-1 min-h-[44px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt mt-0.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="leading-relaxed">Horaires : <strong class="text-optical-black font-semibold block sm:inline">9h30 - 13h00, 14h00 - 19h30 (Mar-Sam)</strong></span>
+          </div>
+        </div>
+        <div class="text-[8.5px] font-mono uppercase text-stone-grey/75 mt-2">
+          <span>{settings.name} optique — Paris 20e — {settings.unconfirmedNote}</span>
+        </div>
       </div>
     </section>
 
-    <!-- ── Featured Frames ── -->
-    <section class="px-6 md:px-12 lg:px-24 py-24 border-b border-stone-grey/10">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16">
-        <div>
-          <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">[ Sélection de la Saison ]</span>
-          <h2 class="text-3xl md:text-5xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">Pièces de Collection</h2>
+    <!-- ── Notre Philosophie ── -->
+    <section id="intro-philosophy-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-optical-black text-ivory relative">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="col-span-1 lg:col-span-8">
+          <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-stone-grey block mb-6">[ 01 / Notre Philosophie ]</span>
+          <p style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light tracking-tight leading-tight">
+            « Chez AlexSEE, une monture ne complète pas simplement un visage.<br/>
+            <span class="text-cobalt font-medium italic">Elle révèle une attitude. »</span>
+          </p>
         </div>
-        <a href="/collections" class="font-mono text-[10px] uppercase tracking-widest text-cobalt hover:text-optical-black transition-colors flex items-center gap-2 group">
-          Voir tout le catalogue
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <div class="col-span-1 lg:col-span-4 space-y-6">
+          <p class="font-sans text-stone-grey text-md leading-relaxed">
+            Nous sélectionnons des collections nées d’ateliers indépendants, où le design n’est jamais standardisé. Ici, pas de logos clinquants ni de montures industrielles. Nous privilégions la finesse des plaques d’acétate japonaises, la rigueur constructive du titane brut et la sincérité d’un conseil d’opticien expert.
+          </p>
+          <a href="/boutique" class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-ivory hover:text-cobalt transition-colors duration-300">
+            <span>Visiter notre atelier rue d’Avron</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Featured Eyewear (Créations Phares) ── -->
+    <section id="featured-eyewear-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-stone-grey/20 pb-8">
+        <div>
+          <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 02 / Créations phares ]</span>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">Le regard dessiné</h2>
+        </div>
+        <a href="/collections" data-cursor-label="LOOKBOOK" class="mt-6 md:mt-0 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#0D0D0E] hover:text-cobalt font-medium transition-colors">
+          <span>Voir toute la collection ({frames.length} modèles)</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
-        {featuredFrames.map((frame) => (
-          <a href={`/frame/${frame.id}`} data-cursor-label="DÉCOUVRIR" class="flex flex-col group cursor-pointer featured-frame-card">
-            <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden mb-4 border border-stone-grey/10">
-              {frame.isNew && <span class="absolute top-3 left-3 z-10 bg-cobalt text-ivory font-mono text-[8px] uppercase tracking-widest py-1 px-2">Nouveau</span>}
-              <span class="absolute top-3 right-3 z-10 bg-optical-black/80 text-ivory font-mono text-[8px] uppercase tracking-widest py-1 px-2 backdrop-blur-sm">{frame.type}</span>
-              <img src={frame.images[0]} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer" class="frame-img-primary w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
-              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                <img src={frame.images[1]} alt={`${frame.brand} lifestyle`} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+        {featuredFrames.map((frame, idx) => (
+          <a href={`/frame/${frame.id}`} data-cursor-label="VOIR" class={`flex flex-col justify-between group cursor-pointer ${idx === 1 ? 'md:translate-y-12' : idx === 2 ? 'md:translate-y-6' : ''}`}>
+            <div class="aspect-[3/4] bg-stone-light/40 relative overflow-hidden mb-6 border border-stone-grey/10">
+              {frame.isNew && <span class="absolute top-4 left-4 z-10 bg-cobalt text-ivory font-mono text-[8px] uppercase tracking-widest py-1 px-2.5">Nouveauté</span>}
+              <img src={frame.images[0]} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out pointer-events-none">
+                <img src={frame.images[1]} alt={`${frame.brand} model study`} referrerpolicy="no-referrer" class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-ivory/10 to-transparent mix-blend-overlay"></div>
               </div>
             </div>
-            <div class="flex justify-between font-mono text-[9px] uppercase tracking-wider text-stone-grey mb-1">
-              <span>{frame.brand}</span><span class="text-cobalt">{frame.availability}</span>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-baseline justify-between">
+                <span class="font-mono text-[9px] uppercase tracking-wider text-stone-grey">{frame.brand}</span>
+                <span class="font-mono text-[10px] tracking-normal text-stone-grey">{frame.price}</span>
+              </div>
+              <h3 style="font-family: var(--font-display);" class="text-2xl font-light uppercase tracking-tight group-hover:text-cobalt transition-colors duration-300">{frame.model}</h3>
+              <p class="text-xs text-stone-grey/90 line-clamp-2 leading-relaxed">{frame.description}</p>
+              <div class="mt-4 flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-[#0D0D0E] group-hover:text-cobalt transition-colors">
+                <span>Détails & Disponibilité</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="translate-x-0 group-hover:translate-x-1.5 transition-transform"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
             </div>
-            <div class="flex items-baseline justify-between border-b border-stone-grey/10 pb-2 mb-2">
-              <h3 class="text-xl font-light uppercase tracking-tight group-hover:text-cobalt transition-colors" style="font-family: var(--font-display);">{frame.model}</h3>
-              <span class="font-mono text-sm tracking-tight font-medium">{frame.price}</span>
-            </div>
-            <span class="text-[11px] text-stone-grey/80 font-mono">Matière : {frame.material}</span>
           </a>
         ))}
       </div>
     </section>
 
-    <!-- ── Stats ── -->
+    <!-- ── Manifeste AlexSEE ── -->
+    <section id="manifesto-section" class="py-24 md:py-36 bg-ivory border-t border-b border-stone-grey/20 relative">
+      <div class="absolute inset-0 opacity-5 pointer-events-none">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-optical-black w-[40vw] h-[40vw] animate-lens-pulse"></div>
+      </div>
+      <div class="max-w-4xl mx-auto px-6 text-center space-y-12 relative z-10">
+        <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-cobalt bg-cobalt/5 py-1 px-3">[ Manifeste AlexSEE ]</span>
+        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light tracking-tight text-optical-black uppercase leading-none">Votre regard mérite mieux qu’un choix standard.</h2>
+        <p class="font-sans text-stone-grey text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
+          Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore.
+        </p>
+        <div class="pt-4 flex justify-center gap-8 text-left font-mono text-[10px] tracking-widest text-stone-grey uppercase">
+          <div>
+            <span class="text-cobalt block text-lg font-bold">100%</span>
+            <span>Indépendant</span>
+          </div>
+          <div class="border-l border-stone-grey/20 pl-8">
+            <span class="text-cobalt block text-lg font-bold">Paris 20</span>
+            <span>Ancrage Local</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Services Highlight ── -->
+    <section id="services-highlight" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
+        <div class="col-span-1 lg:col-span-6">
+          <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 03 / Prestations d’exception ]</span>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">Savoir-faire et garanties</h2>
+        </div>
+        <div class="col-span-1 lg:col-span-6">
+          <p class="font-sans text-stone-grey text-md leading-relaxed">
+            De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure.
+          </p>
+        </div>
+      </div>
+      <div class="border-t border-stone-grey/20">
+        {services.slice(0, 3).map(service => (
+          <div class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
+            <div class="col-span-1 md:col-span-1 font-mono text-cobalt font-medium text-lg">{service.number}</div>
+            <div class="col-span-1 md:col-span-5">
+              <span class="font-mono text-[9px] uppercase tracking-wider text-cobalt block mb-1">{service.unconfirmedNote}</span>
+              <h3 style="font-family: var(--font-display);" class="text-2xl md:text-3xl font-light uppercase tracking-tight group-hover:translate-x-2 transition-transform duration-300">{service.title}</h3>
+            </div>
+            <div class="col-span-1 md:col-span-4 text-xs md:text-sm text-stone-grey/90">{service.description}</div>
+            <div class="col-span-1 md:col-span-2 text-right">
+              <a href="/services" class="font-mono text-[9px] uppercase tracking-widest text-stone-grey group-hover:text-cobalt transition-colors duration-300 inline-flex items-center gap-2">
+                <span>Détails</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-stone-grey group-hover:text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── Boutique Vibe Section ── -->
+    <section id="boutique-vibe-section" class="py-24 md:py-36 bg-optical-black text-ivory relative">
+      <div class="absolute inset-0 opacity-15 pointer-events-none">
+        <div class="absolute bottom-0 right-0 w-[60%] h-[70%] bg-gradient-to-bl from-cobalt/30 to-transparent blur-3xl"></div>
+      </div>
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div class="col-span-1 lg:col-span-5 space-y-8">
+          <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 04 / L’Œil de Buzenval ]</span>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">L’Atelier<br/>Rue d’Avron</h2>
+          <p class="font-sans text-stone-grey text-sm md:text-md leading-relaxed">
+            Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval.
+          </p>
+          <div class="space-y-4 font-mono text-[11px] uppercase tracking-widest border-t border-stone-grey/20 pt-6">
+            <div class="flex justify-between items-center py-1">
+              <span class="text-stone-grey">Adresse :</span>
+              <span class="text-ivory font-semibold">{settings.address}, Paris XX</span>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <span class="text-stone-grey">Accès Métro :</span>
+              <span class="text-ivory">{settings.metro}</span>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <span class="text-stone-grey">Contact :</span>
+              <a href={`tel:${settings.phone.replace(/\s+/g,'')}`} class="text-cobalt hover:underline">{settings.phone}</a>
+            </div>
+          </div>
+          <div class="flex gap-4 pt-4">
+            <a href="/boutique" class="bg-ivory text-optical-black hover:bg-cobalt hover:text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-3.5 px-6">Plan & Horaires</a>
+            <a href="/contact" class="border border-ivory/20 hover:border-cobalt text-ivory hover:text-cobalt transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-3.5 px-6">RDV Examen</a>
+          </div>
+        </div>
+        <div class="col-span-1 lg:col-span-7 relative">
+          <div class="aspect-[16/10] bg-stone-light/5 relative overflow-hidden border border-stone-grey/20">
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80" alt="Rue de Paris atmosphere" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-80 transition-all duration-1000" />
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-cobalt/40 pointer-events-none flex items-center justify-center backdrop-blur-[2px]">
+              <div class="w-4 h-4 rounded-full bg-cobalt flex items-center justify-center animate-ping"></div>
+            </div>
+          </div>
+          <p class="font-mono text-[9px] tracking-wider text-stone-grey/80 mt-3 uppercase text-right">{settings.unconfirmedNote}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Stats Strip ── -->
     <section class="px-6 md:px-12 lg:px-24 py-20 border-b border-stone-grey/10">
       <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-grey/15">
         {[
@@ -194,17 +347,63 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       </div>
     </section>
 
-    <!-- ── CTA strip ── -->
-    <section class="px-6 md:px-12 lg:px-24 py-20 flex flex-col md:flex-row items-center justify-between gap-6">
-      <div>
-        <h2 class="text-3xl md:text-4xl font-light uppercase tracking-tight mb-2" style="font-family: var(--font-display);">Votre Regard, Notre Expertise</h2>
-        <p class="font-sans text-stone-grey text-sm max-w-md leading-relaxed">Prenez rendez-vous pour un conseil personnalisé dans notre atelier du 20e arrondissement.</p>
+    <!-- ── CTA Strip ── -->
+    <section id="cta-end-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory text-center relative overflow-hidden">
+      <div class="max-w-3xl mx-auto space-y-8 relative z-10">
+        <span class="font-mono text-[10px] tracking-[0.25em] text-cobalt uppercase">[ Trouver votre monture de caractère ]</span>
+        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">Venez dénicher<br/>la vôtre.</h2>
+        <p class="font-sans text-stone-grey text-md md:text-lg max-w-xl mx-auto leading-relaxed">
+          Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement.
+        </p>
+        <div class="pt-6 flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="bg-cobalt hover:bg-optical-black text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8 font-semibold shadow-lg shadow-cobalt/10">Prendre rendez-vous en ligne</a>
+          <a href="/collections" class="border border-optical-black/20 hover:border-optical-black text-optical-black transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8">Découvrir les créateurs</a>
+        </div>
       </div>
-      <a href="/contact" class="flex-shrink-0 group flex items-center gap-3 bg-cobalt text-ivory hover:bg-optical-black px-8 py-5 transition-all duration-300 tracking-widest font-mono text-xs uppercase">
-        Prendre Rendez-vous
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
     </section>
+
+    <!-- ── Footer ── -->
+    <footer id="homepage-footer" class="bg-optical-black text-ivory pt-24 pb-12 px-6 md:px-12 lg:px-24 border-t border-stone-grey/20 relative">
+      <div class="opacity-5 font-bold tracking-widest uppercase text-[15vw] leading-none select-none pointer-events-none absolute bottom-0 left-0 right-0 text-center">AlexSEE</div>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 mb-16 border-b border-stone-grey/15 pb-16">
+        <div class="col-span-1 md:col-span-4 space-y-4">
+          <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
+          <p class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.</p>
+          <div class="pt-2 flex gap-4">
+            <a href={settings.instagram} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="col-span-1 md:col-span-3 space-y-4 font-mono text-xs uppercase tracking-widest">
+          <span class="text-stone-grey text-[10px] block font-semibold mb-2">[ Pages ]</span>
+          <ul class="space-y-2.5">
+            <li><a href="/" class="hover:text-cobalt transition-colors text-stone-grey">Accueil Optique</a></li>
+            <li><a href="/collections" class="hover:text-cobalt transition-colors text-stone-grey">Les Collections</a></li>
+            <li><a href="/services" class="hover:text-cobalt transition-colors text-stone-grey">Prestations & Savoir</a></li>
+            <li><a href="/boutique" class="hover:text-cobalt transition-colors text-stone-grey">Atelier & Plan</a></li>
+            <li><a href="/contact" class="hover:text-cobalt transition-colors text-stone-grey">Contacter / RDV</a></li>
+          </ul>
+        </div>
+        <div class="col-span-1 md:col-span-5 space-y-4 font-mono text-xs uppercase tracking-widest">
+          <span class="text-stone-grey text-[10px] block font-semibold mb-2">[ Boutique ]</span>
+          <ul class="space-y-2.5 text-stone-grey font-light">
+            <li class="normal-case"><span class="text-ivory">Adresse :</span> 28 Rue d’Avron, 75020 Paris</li>
+            <li><span class="text-ivory">Métro :</span> Buzenval (M9), Avron (M2)</li>
+            <li class="normal-case"><span class="text-ivory">Téléphone :</span> <a href={`tel:${settings.phone}`} class="hover:text-cobalt transition-colors font-bold text-ivory">{settings.phone}</a></li>
+            <li class="normal-case"><span class="text-ivory">Email :</span> {settings.email}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row items-center justify-between font-mono text-[9px] text-stone-grey uppercase tracking-widest relative z-10 gap-4">
+        <span>© {new Date().getFullYear()} AlexSEE. Tous droits réservés.</span>
+        <div class="flex gap-6">
+          <span class="hover:text-cobalt transition-colors cursor-pointer">Mentions Légales</span>
+          <span class="hover:text-cobalt transition-colors cursor-pointer">Politique de Confidentialité</span>
+          <span class="text-stone-grey/50">Paris XX, France</span>
+        </div>
+      </div>
+    </footer>
   </div>
 </Layout>
 

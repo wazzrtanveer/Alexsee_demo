@@ -1,279 +1,219 @@
 ---
 import Logo from './Logo.astro';
+import { settings } from '../data/mockData.js';
 
 const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.replace(/\/$/, '');
 
-// Helper to check if a route is active
-const isActive = (path) => {
-  if (path === '/') {
-    return currentPath === '/' || currentPath === '/index.html';
-  }
-  // Strip trailing slashes to compare
-  const cleanPath = path.replace(/\/$/, '');
-  const cleanCurrent = currentPath.replace(/\/$/, '');
-  return cleanCurrent === cleanPath || cleanCurrent.startsWith(cleanPath + '/');
+const isActive = (path: string) => {
+  if (path === '/') return currentPath === '/' || currentPath === '/index.html';
+  const cleanItemPath = path.replace(/\/$/, '');
+  return cleanPath === cleanItemPath || cleanPath.startsWith(cleanItemPath + '/');
 };
 
 const navItems = [
-  {
-    id: 'home',
-    path: '/',
-    label: 'Collection',
-    fullLabel: 'Accueil Opticien',
-    number: '01',
-    img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'collections',
-    path: '/collections',
-    label: 'Collection',
-    fullLabel: 'Lookbook & Lunettes',
-    number: '02',
-    img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'services',
-    path: '/services',
-    label: 'Savoir-Faire',
-    fullLabel: "L'Art de l'Optique",
-    number: '03',
-    img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'boutique',
-    path: '/boutique',
-    label: 'La Boutique',
-    fullLabel: "L'Atelier Rue d'Avron",
-    number: '04',
-    img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'contact',
-    path: '/contact',
-    label: 'Prendre Rendez-vous',
-    fullLabel: 'Prendre rendez-vous',
-    number: '05',
-    img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
-  },
+  { id: 'home', label: 'Accueil Opticien', num: '01', path: '/', img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' },
+  { id: 'collections', label: 'Lookbook & Lunettes', num: '02', path: '/collections', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' },
+  { id: 'services', label: 'L’Art de l’Optique', num: '03', path: '/services', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' },
+  { id: 'boutique', label: 'L’Atelier Rue d’Avron', num: '04', path: '/boutique', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
+  { id: 'contact', label: 'Prendre rendez-vous', num: '05', path: '/contact', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80' }
 ];
 
-const desktopNavItems = navItems.filter((n) => n.id !== 'home');
+const isCollectionsActive = isActive('/collections') || currentPath.includes('/frame/');
+const isServicesActive = isActive('/services');
+const isBoutiqueActive = isActive('/boutique');
 ---
 
-<header
-  id="main-header"
-  class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-ivory/80 backdrop-blur-md border-b border-stone-grey/10"
->
-  <div class="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16">
-    {/* Logo */}
-    <a href="/" class="focus:outline-none" aria-label="AlexSEE Accueil">
-      <Logo size="sm" showText={true} />
+<header id="app-main-header" class="fixed top-0 left-0 right-0 z-50 bg-ivory/80 backdrop-blur-md border-b border-stone-grey/10 py-5 px-6 md:px-12 flex items-center justify-between transition-colors duration-300">
+  <div class="flex items-center gap-6">
+    <a id="header-logo-btn" href="/" data-cursor-label="Accueil" class="flex items-center gap-3 text-left group">
+      <Logo size="sm" showText={true} inverse={false} class="items-start text-left" />
+      <div class="hidden xs:block h-6 w-[1px] bg-stone-grey/25 self-center mt-1"></div>
+      <span class="hidden xs:block font-mono text-[8.5px] uppercase tracking-[0.25em] text-stone-grey/80 text-left mt-1 self-center max-w-[140px] leading-[1.3] font-medium">
+        Opticien Créateur Paris 20
+      </span>
     </a>
+  </div>
 
-    {/* Desktop nav */}
-    <nav class="hidden lg:flex items-center gap-8">
-      {desktopNavItems.map((item) => {
-        const active = isActive(item.path);
-        return (
-          <a
-            href={item.path}
-            class={`relative font-sans text-sm font-medium transition-colors duration-200 ${
-              active ? 'text-optical-black' : 'text-stone-grey hover:text-optical-black'
-            }`}
-          >
-            {item.id === 'contact' ? (
-              <span class="inline-flex items-center gap-1.5 bg-cobalt text-ivory px-4 py-1.5 rounded-full text-xs font-medium tracking-wider hover:bg-cobalt/90 transition-colors duration-200">
-                <span class="w-1.5 h-1.5 rounded-full bg-ivory/60 inline-block" />
-                {item.label}
-              </span>
-            ) : (
-              <>
-                {item.label}
-                {active && (
-                  <span class="absolute -bottom-1 left-0 right-0 h-[2px] bg-cobalt rounded-full" />
-                )}
-              </>
-            )}
-          </a>
-        );
-      })}
-    </nav>
+  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] uppercase tracking-widest text-optical-black">
+    <a href="/collections" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isCollectionsActive ? 'text-cobalt font-medium' : ''}`}>
+      Collection
+      {isCollectionsActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
+    </a>
+    <a href="/services" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isServicesActive ? 'text-cobalt font-medium' : ''}`}>
+      Savoir-Faire
+      {isServicesActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
+    </a>
+    <a href="/boutique" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isBoutiqueActive ? 'text-cobalt font-medium' : ''}`}>
+      La Boutique
+      {isBoutiqueActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
+    </a>
+    <a href="/contact" class="ml-4 bg-cobalt hover:bg-optical-black text-ivory px-5 py-2.5 transition-colors duration-300 text-[10px] tracking-widest font-semibold">
+      Rendez-vous
+    </a>
+  </nav>
 
-    {/* Mobile hamburger button */}
-    <button
-      id="hamburger-btn"
-      class="lg:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 focus:outline-none"
-      aria-label="Ouvrir le menu"
-    >
-      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black origin-center transition-transform duration-300"></span>
-      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black transition-opacity duration-200"></span>
-      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black origin-center transition-transform duration-300"></span>
+  <div class="flex items-center gap-4">
+    <button id="header-hamburger-toggle" data-cursor-label="MENU" class="flex items-center gap-3 bg-optical-black text-ivory hover:bg-cobalt px-4 py-2.5 transition-all duration-300 relative z-[60]" aria-label="Toggle navigation menu">
+      <span id="hamburger-text" class="font-mono text-[10px] uppercase tracking-widest hidden md:inline">Menu</span>
+      <svg id="hamburger-icon-menu" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      <svg id="hamburger-icon-close" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
     </button>
   </div>
 </header>
 
-{/* Mobile full-screen overlay */}
-<div
-  id="mobile-nav-overlay"
-  class="fixed inset-0 z-[60] bg-optical-black text-ivory flex translate-y-[-100%] transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden"
->
-  {/* Left Panel: Hover image (Desktop only) */}
-  <div class="hidden md:block relative w-1/2 overflow-hidden bg-optical-black">
-    {navItems.map((item) => (
-      <img
-        id={`mobile-nav-img-${item.id}`}
-        src={item.img}
-        alt={item.fullLabel}
-        class="mobile-nav-img absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300"
-      />
-    ))}
-    <div id="mobile-nav-default-logo" class="absolute inset-0 bg-optical-black/85 flex items-center justify-center">
-      <Logo size="xl" inverse={true} showText={true} />
+<div id="fullscreen-menu-overlay" class="fixed inset-0 z-40 bg-optical-black text-ivory flex flex-col pt-28 pb-10 px-6 md:px-12 lg:px-24 justify-between overflow-y-auto hidden opacity-0 transition-opacity duration-300">
+  {/* Background line grids */}
+  <div class="absolute inset-x-0 top-0 bottom-0 pointer-events-none opacity-5 grid grid-cols-4 divide-x divide-ivory">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center justify-center my-auto relative z-10">
+    <div class="col-span-1 lg:col-span-7 flex flex-col gap-6 md:gap-10">
+      <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-stone-grey block border-b border-stone-grey/25 pb-3">Navigation</span>
+      <nav id="overlay-menu-nav" class="flex flex-col gap-4 md:gap-6">
+        {navItems.map((item) => {
+          const active = currentPath === item.path || (item.path !== '/' && currentPath.startsWith(item.path));
+          return (
+            <div class="group overlay-link-wrap animate-fade-in" data-img={item.img}>
+              <a href={item.path} class="text-left flex items-baseline gap-4 md:gap-8 group">
+                <span class="font-mono text-xs md:text-sm text-cobalt opacity-70 group-hover:opacity-100 transition-opacity">{item.num}</span>
+                <span style="font-family: var(--font-display);" class={`text-3xl md:text-5xl lg:text-6xl font-light tracking-tight group-hover:translate-x-3 transition-transform duration-300 ${active ? 'font-medium text-cobalt' : 'text-ivory'}`}>
+                  {item.label}
+                </span>
+              </a>
+            </div>
+          );
+        })}
+      </nav>
+    </div>
+
+    <div class="col-span-1 lg:col-span-5 hidden lg:flex flex-col gap-8 relative items-center justify-center">
+      <div class="w-full max-w-sm aspect-[4/5] bg-stone-grey/10 relative overflow-hidden flex items-center justify-center">
+        <div id="overlay-preview-container" class="absolute inset-0 opacity-0 transition-all duration-300 scale-110 filter blur-sm">
+          <img id="overlay-preview-img" src="" alt="Aperçu visuel AlexSEE" class="w-full h-full object-cover opacity-80" referrerpolicy="no-referrer" />
+        </div>
+        <div id="overlay-placeholder" class="p-8 text-center flex flex-col items-center justify-center h-full relative transition-opacity duration-300">
+          <div class="w-32 h-32 rounded-full border border-stone-grey/25 mb-6 flex items-center justify-center animate-lens-pulse">
+            <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey">Lentille</span>
+          </div>
+          <p class="font-mono text-[10px] text-stone-grey tracking-widest uppercase">AlexSEE — Paris 20e</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  {/* Right Panel: Links */}
-  <div class="relative flex flex-col justify-between p-8 md:p-12 w-full md:w-1/2">
-    {/* Header section in overlay */}
-    <div class="flex justify-between items-center mb-12">
-      <Logo size="sm" inverse={true} showText={true} />
-      <button
-        id="close-mobile-nav"
-        class="text-stone-grey hover:text-ivory transition-colors duration-200 font-mono text-xs tracking-widest"
-      >
-        [ Fermer ]
-      </button>
+  <div class="border-t border-stone-grey/25 pt-6 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-[10px] tracking-wider text-stone-grey uppercase relative z-10">
+    <div>
+      <span class="text-ivory block mb-2 font-semibold">Atelier Paris 20</span>
+      <span class="block normal-case flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        {settings.address}, Paris 20e
+      </span>
+      <span class="block text-[9px] text-stone-grey/80 lowercase mt-1">{settings.metro}</span>
     </div>
-
-    {/* Nav links */}
-    <nav class="flex-1 flex flex-col justify-center gap-2">
-      {navItems.map((item) => {
-        const active = isActive(item.path);
-        return (
-          <a
-            href={item.path}
-            data-nav-id={item.id}
-            class={`group mobile-nav-link flex items-baseline gap-4 text-left py-3 border-b border-white/10 hover:border-cobalt/30 transition-all duration-200 ${
-              active ? 'opacity-100' : 'opacity-60 hover:opacity-100'
-            }`}
-          >
-            <span class="font-mono text-[10px] text-cobalt tracking-[0.3em] w-6 shrink-0">
-              {item.number}
-            </span>
-            <div class="flex flex-col">
-              <span
-                class={`font-display text-2xl md:text-3xl italic transition-colors duration-200 ${
-                  active ? 'text-ivory' : 'group-hover:text-ivory text-ivory/60'
-                }`}
-              >
-                {item.fullLabel}
-              </span>
-              <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase mt-0.5">
-                {item.label}
-              </span>
-            </div>
-            {active && (
-              <span class="ml-auto w-1.5 h-1.5 rounded-full bg-cobalt" />
-            )}
-          </a>
-        );
-      })}
-    </nav>
-
-    {/* Footer info in overlay */}
-    <div class="mt-8">
-      <p class="font-mono text-[9px] tracking-[0.25em] text-stone-grey/50 uppercase">
-        28 Rue d'Avron · Paris 20e · +33 (0)1 43 73 12 12
-      </p>
+    <div>
+      <span class="text-ivory block mb-2 font-semibold">Heures d’ouverture</span>
+      <span class="block flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Lun: 14h – 19h30
+      </span>
+      <span class="block">Mar – Sam: 10h – 19h30</span>
+    </div>
+    <div class="flex flex-col gap-2 justify-between">
+      <div>
+        <span class="text-ivory block mb-1 font-semibold">Aide & Contact</span>
+        <a href={`tel:${settings.phone}`} class="hover:text-cobalt transition-colors inline-flex items-center gap-1.5 font-bold text-ivory">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt animate-bounce"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          {settings.phone}
+        </a>
+      </div>
+      <div class="flex gap-4 items-center">
+        <a href={settings.instagram} target="_blank" rel="noopener noreferrer" class="hover:text-cobalt transition-colors inline-flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          Instagram
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
   function setupHeader() {
-    const header = document.getElementById('main-header');
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const closeBtn = document.getElementById('close-mobile-nav');
-    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
-    const lines = hamburgerBtn?.querySelectorAll('.hamburger-line');
+    const hamburgerBtn = document.getElementById('header-hamburger-toggle');
+    const overlay = document.getElementById('fullscreen-menu-overlay');
+    const textSpan = document.getElementById('hamburger-text');
+    const iconMenu = document.getElementById('hamburger-icon-menu');
+    const iconClose = document.getElementById('hamburger-icon-close');
 
-    if (!header || !hamburgerBtn || !mobileNavOverlay) return;
+    if (!hamburgerBtn || !overlay) return;
 
-    // Sticky shadow on scroll
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        header.classList.add('shadow-sm', 'border-b', 'border-stone-grey/10');
+    let isOpen = false;
+
+    const toggleMenu = () => {
+      isOpen = !isOpen;
+      if (isOpen) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          overlay.classList.remove('opacity-0');
+        }, 10);
+        if (textSpan) textSpan.textContent = 'Fermer';
+        hamburgerBtn.setAttribute('data-cursor-label', 'FERMER');
+        iconMenu?.classList.replace('block', 'hidden');
+        iconClose?.classList.replace('hidden', 'block');
       } else {
-        header.classList.remove('shadow-sm');
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    // Toggle menu state
-    const openMenu = () => {
-      mobileNavOverlay.classList.remove('translate-y-[-100%]');
-      // Animate hamburger
-      if (lines && lines.length === 3) {
-        lines[0].style.transform = 'rotate(45deg) translateY(6px)';
-        lines[1].style.opacity = '0';
-        lines[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+        overlay.classList.add('opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 300);
+        if (textSpan) textSpan.textContent = 'Menu';
+        hamburgerBtn.setAttribute('data-cursor-label', 'MENU');
+        iconMenu?.classList.replace('hidden', 'block');
+        iconClose?.classList.replace('block', 'hidden');
       }
     };
 
-    const closeMenu = () => {
-      mobileNavOverlay.classList.add('translate-y-[-100%]');
-      // Reset hamburger
-      if (lines && lines.length === 3) {
-        lines[0].style.transform = 'none';
-        lines[1].style.opacity = '1';
-        lines[2].style.transform = 'none';
-      }
-    };
+    hamburgerBtn.addEventListener('click', toggleMenu);
 
-    hamburgerBtn.addEventListener('click', () => {
-      const isOpen = !mobileNavOverlay.classList.contains('translate-y-[-100%]');
-      if (isOpen) closeMenu();
-      else openMenu();
-    });
+    // Hover image logic
+    const linkWraps = document.querySelectorAll('.overlay-link-wrap');
+    const previewContainer = document.getElementById('overlay-preview-container');
+    const previewImg = document.getElementById('overlay-preview-img') as HTMLImageElement | null;
+    const placeholder = document.getElementById('overlay-placeholder');
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeMenu);
-    }
-
-    // Overlay Hover Images
-    const defaultLogo = document.getElementById('mobile-nav-default-logo');
-    const navLinks = mobileNavOverlay.querySelectorAll('.mobile-nav-link');
-    const navImages = mobileNavOverlay.querySelectorAll('.mobile-nav-img');
-
-    navLinks.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        const id = link.getAttribute('data-nav-id');
-        if (defaultLogo) defaultLogo.style.opacity = '0';
-        
-        navImages.forEach(img => {
-          if (img.id === `mobile-nav-img-${id}`) {
-            img.style.opacity = '1';
-            img.style.transform = 'scale(1)';
-          } else {
-            img.style.opacity = '0';
-            img.style.transform = 'scale(1.04)';
-          }
-        });
+    linkWraps.forEach(wrap => {
+      wrap.addEventListener('mouseenter', () => {
+        const imgUrl = wrap.getAttribute('data-img');
+        if (imgUrl && previewImg && previewContainer && placeholder) {
+          previewImg.src = imgUrl;
+          previewContainer.classList.remove('opacity-0', 'scale-110', 'blur-sm');
+          previewContainer.classList.add('opacity-100', 'scale-100', 'blur-0');
+          placeholder.classList.add('opacity-0');
+        }
       });
 
-      link.addEventListener('mouseleave', () => {
-        if (defaultLogo) defaultLogo.style.opacity = '1';
-        navImages.forEach(img => {
-          img.style.opacity = '0';
-        });
+      wrap.addEventListener('mouseleave', () => {
+        if (previewContainer && placeholder) {
+          previewContainer.classList.remove('opacity-100', 'scale-100', 'blur-0');
+          previewContainer.classList.add('opacity-0', 'scale-110', 'blur-sm');
+          placeholder.classList.remove('opacity-0');
+        }
       });
 
-      // Close menu on link click
-      link.addEventListener('click', closeMenu);
+      // Close menu when a link is clicked
+      wrap.querySelector('a')?.addEventListener('click', () => {
+        if (isOpen) toggleMenu();
+      });
     });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      hamburgerBtn.removeEventListener('click', toggleMenu);
+      document.body.style.overflow = '';
     };
   }
 
