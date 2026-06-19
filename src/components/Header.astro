@@ -1,6 +1,17 @@
 ---
 import Logo from './Logo.astro';
-import { settings } from '../data/mockData.js';
+import { settings as mockSettings } from '../data/mockData.js';
+import { sanityClient, SETTINGS_QUERY, cleanStega } from '../lib/sanity.js';
+
+let settings = mockSettings;
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings in Header:", e);
+}
 
 const currentPath = Astro.url.pathname;
 const cleanPath = currentPath.replace(/\/$/, '');
@@ -12,11 +23,11 @@ const isActive = (path: string) => {
 };
 
 const navItems = [
-  { id: 'home', label: 'Accueil Opticien', num: '01', path: '/', img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' },
-  { id: 'collections', label: 'Lookbook & Lunettes', num: '02', path: '/collections', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' },
-  { id: 'services', label: 'L’Art de l’Optique', num: '03', path: '/services', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' },
-  { id: 'boutique', label: 'L’Atelier Rue d’Avron', num: '04', path: '/boutique', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
-  { id: 'contact', label: 'Prendre rendez-vous', num: '05', path: '/contact', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80' }
+  { id: 'home', label: settings.navHomeLabel || 'Accueil Opticien', num: '01', path: '/', img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' },
+  { id: 'collections', label: settings.navCollectionsLabel || 'Lookbook & Lunettes', num: '02', path: '/collections', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' },
+  { id: 'services', label: settings.navServicesLabel || 'L’Art de l’Optique', num: '03', path: '/services', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' },
+  { id: 'boutique', label: settings.navBoutiqueLabel || 'L’Atelier Rue d’Avron', num: '04', path: '/boutique', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
+  { id: 'contact', label: settings.navContactLabel || 'Prendre rendez-vous', num: '05', path: '/contact', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80' }
 ];
 
 const isCollectionsActive = isActive('/collections') || currentPath.includes('/frame/');
@@ -37,19 +48,19 @@ const isBoutiqueActive = isActive('/boutique');
 
   <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] uppercase tracking-widest text-optical-black">
     <a href="/collections" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isCollectionsActive ? 'text-cobalt font-medium' : ''}`}>
-      Collection
+      {settings.navCollectionsLabel || "Collection"}
       {isCollectionsActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
     </a>
     <a href="/services" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isServicesActive ? 'text-cobalt font-medium' : ''}`}>
-      Savoir-Faire
+      {settings.navServicesLabel || "Savoir-Faire"}
       {isServicesActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
     </a>
     <a href="/boutique" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isBoutiqueActive ? 'text-cobalt font-medium' : ''}`}>
-      La Boutique
+      {settings.navBoutiqueLabel || "La Boutique"}
       {isBoutiqueActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
     </a>
     <a href="/contact" class="ml-4 bg-cobalt hover:bg-optical-black text-ivory px-5 py-2.5 transition-colors duration-300 text-[10px] tracking-widest font-semibold">
-      Rendez-vous
+      {settings.navButtonText || "Rendez-vous"}
     </a>
   </nav>
 
@@ -126,13 +137,13 @@ const isBoutiqueActive = isActive('/boutique');
     <div class="flex flex-col gap-2 justify-between">
       <div>
         <span class="text-ivory block mb-1 font-semibold">Aide & Contact</span>
-        <a href={`tel:${settings.phone}`} class="hover:text-cobalt transition-colors inline-flex items-center gap-1.5 font-bold text-ivory">
+        <a href={`tel:${cleanStega(settings.phone)}`} class="hover:text-cobalt transition-colors inline-flex items-center gap-1.5 font-bold text-ivory">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt animate-bounce"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           {settings.phone}
         </a>
       </div>
       <div class="flex gap-4 items-center">
-        <a href={settings.instagram} target="_blank" rel="noopener noreferrer" class="hover:text-cobalt transition-colors inline-flex items-center gap-1">
+        <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="hover:text-cobalt transition-colors inline-flex items-center gap-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
           Instagram
         </a>

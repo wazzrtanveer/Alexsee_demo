@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SERVICES_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
-import { services as mockServices } from '../data/mockData.js';
+import { sanityClient, SERVICES_QUERY, SETTINGS_QUERY, urlFor, dataAttribute, cleanStega } from '../lib/sanity.js';
+import { services as mockServices, settings as mockSettings } from '../data/mockData.js';
 
 let services = [];
+let settings = mockSettings;
 
 try {
   const sanityServices = await sanityClient.fetch(SERVICES_QUERY);
@@ -15,6 +16,15 @@ try {
 } catch (e) {
   console.error("Error fetching services from Sanity, using mock data:", e);
   services = mockServices;
+}
+
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings in Services page:", e);
 }
 ---
 
@@ -32,12 +42,12 @@ try {
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div class="col-span-1 lg:col-span-8">
           <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
-            L’Artisanat de la Vision
+            {settings.servicesPageTitle || "L’Artisanat de la Vision"}
           </h1>
         </div>
         <div class="col-span-1 lg:col-span-4">
           <p class="font-sans text-stone-grey text-sm leading-relaxed font-light">
-            Notre charte d’artisan opticien de quartier : un accompagnement technique irréprochable combiné à un sens aiguisé du visagisme et des matières nobles.
+            {settings.servicesPageSubtext || "Notre charte d’artisan opticien de quartier : un accompagnement technique irréprochable combiné à un sens aiguisé du visagisme et des matières nobles."}
           </p>
         </div>
       </div>
@@ -134,10 +144,10 @@ try {
 
           <div class="bg-stone-light/30 p-4 border border-stone-grey/15 text-xs text-stone-grey space-y-1.5 font-mono">
             <span class="font-mono text-[9px] uppercase text-cobalt tracking-wider font-bold block">
-              [ Note d'art direction ]
+              [ {settings.servicesNoteTitle || "Note d'art direction"} ]
             </span>
             <p class="font-sans leading-relaxed">
-              Remplacement de ces visuels par des clichés de votre atelier et d’essayages de montures réelles lors de la session de shooting photo.
+              {settings.servicesNoteSubtext || "Remplacement de ces visuels par des clichés de votre atelier et d’essayages de montures réelles lors de la session de shooting photo."}
             </p>
           </div>
         </div>

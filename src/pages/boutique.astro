@@ -27,9 +27,9 @@ try {
     <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
       <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block">[ 04 / L’Expérience Physique ]</span>
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">L’Atelier Paris 20e</h1>
+        <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">{settings.boutiquePageTitle || "L’Atelier Paris 20e"}</h1>
         <p class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
-          Une escale optique intime située rue d’Avron. Venez prendre le temps de dialoguer autour de vos mesures et choisir des montures sous une lumière naturelle.
+          {settings.boutiquePageSubtext || "Une escale optique intime située rue d’Avron. Venez prendre le temps de dialoguer autour de vos mesures et choisir des montures sous une lumière naturelle."}
         </p>
       </div>
     </div>
@@ -103,10 +103,20 @@ try {
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 Transports Métro
               </span>
-              <p class="text-sm font-semibold text-optical-black">Ligne 9 ou Ligne 2</p>
+              <p class="text-sm font-semibold text-optical-black">{settings.boutiqueMetroTitle || "Ligne 9 ou Ligne 2"}</p>
               <p class="text-sm text-stone-grey leading-relaxed">
-                Station Buzenval (L9) à 3 min à pied.<br />
-                Station Avron (M2) à 6 min à pied.
+                {settings.boutiqueMetroDetails ? (
+                  settings.boutiqueMetroDetails.includes('\n') ? (
+                    <Fragment set:html={settings.boutiqueMetroDetails.replace('\n', '<br />')} />
+                  ) : (
+                    settings.boutiqueMetroDetails
+                  )
+                ) : (
+                  <>
+                    Station Buzenval (L9) à 3 min à pied.<br />
+                    Station Avron (M2) à 6 min à pied.
+                  </>
+                )}
               </p>
             </div>
           </div>

@@ -226,16 +226,35 @@ const featuredFrames = frames.filter(f => f.isFeatured);
         <div class="col-span-1 lg:col-span-8">
           <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-stone-grey block mb-6">[ 01 / Notre Philosophie ]</span>
           <p style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light tracking-tight leading-tight">
-            « Chez AlexSEE, une monture ne complète pas simplement un visage.<br/>
-            <span class="text-cobalt font-medium italic">Elle révèle une attitude. »</span>
+            {settings.philosophyQuote ? (
+              settings.philosophyQuote.includes('\n') ? (
+                settings.philosophyQuote.split('\n').map((line, i) => (
+                  <>
+                    {i === 1 ? (
+                      <span class="text-cobalt font-medium italic">{line}</span>
+                    ) : (
+                      line
+                    )}
+                    {i < settings.philosophyQuote.split('\n').length - 1 && <br />}
+                  </>
+                ))
+              ) : (
+                settings.philosophyQuote
+              )
+            ) : (
+              <>
+                « Chez AlexSEE, une monture ne complète pas simplement un visage.<br/>
+                <span class="text-cobalt font-medium italic">Elle révèle une attitude. »</span>
+              </>
+            )}
           </p>
         </div>
         <div class="col-span-1 lg:col-span-4 space-y-6">
           <p class="font-sans text-stone-grey text-md leading-relaxed">
-            Nous sélectionnons des collections nées d’ateliers indépendants, où le design n’est jamais standardisé. Ici, pas de logos clinquants ni de montures industrielles. Nous privilégions la finesse des plaques d’acétate japonaises, la rigueur constructive du titane brut et la sincérité d’un conseil d’opticien expert.
+            {settings.philosophySubtext || "Nous sélectionnons des collections nées d’ateliers indépendants, où le design n’est jamais standardisé. Ici, pas de logos clinquants ni de montures industrielles. Nous privilégions la finesse des plaques d’acétate japonaises, la rigueur constructive du titane brut et la sincérité d’un conseil d’opticien expert."}
           </p>
           <a href="/boutique" class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-ivory hover:text-cobalt transition-colors duration-300">
-            <span>Visiter notre atelier rue d’Avron</span>
+            <span>{settings.philosophyLinkText || "Visiter notre atelier rue d’Avron"}</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
@@ -247,10 +266,10 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-stone-grey/20 pb-8">
         <div>
           <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 02 / Créations phares ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">Le regard dessiné</h2>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{settings.featuredTitle || "Le regard dessiné"}</h2>
         </div>
         <a href="/collections" data-cursor-label="LOOKBOOK" class="mt-6 md:mt-0 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#0D0D0E] hover:text-cobalt font-medium transition-colors">
-          <span>Voir toute la collection ({frames.length} modèles)</span>
+          <span>{settings.featuredLinkText || "Voir toute la collection"} ({frames.length} modèles)</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -289,9 +308,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       </div>
       <div class="max-w-4xl mx-auto px-6 text-center space-y-12 relative z-10">
         <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-cobalt bg-cobalt/5 py-1 px-3">[ Manifeste AlexSEE ]</span>
-        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light tracking-tight text-optical-black uppercase leading-none">Votre regard mérite mieux qu’un choix standard.</h2>
+        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light tracking-tight text-optical-black uppercase leading-none">{settings.manifestoHeadline || "Votre regard mérite mieux qu’un choix standard."}</h2>
         <p class="font-sans text-stone-grey text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
-          Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore.
+          {settings.manifestoSubtext || "Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore."}
         </p>
         <div class="pt-4 flex justify-center gap-8 text-left font-mono text-[10px] tracking-widest text-stone-grey uppercase">
           <div>
@@ -311,11 +330,11 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
         <div class="col-span-1 lg:col-span-6">
           <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 03 / Prestations d’exception ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">Savoir-faire et garanties</h2>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{settings.servicesTitle || "Savoir-faire et garanties"}</h2>
         </div>
         <div class="col-span-1 lg:col-span-6">
           <p class="font-sans text-stone-grey text-md leading-relaxed">
-            De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure.
+            {settings.servicesSubtext || "De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure."}
           </p>
         </div>
       </div>
@@ -347,9 +366,19 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         <div class="col-span-1 lg:col-span-5 space-y-8">
           <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 04 / L’Œil de Buzenval ]</span>
-          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">L’Atelier<br/>Rue d’Avron</h2>
+          <h2 style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">
+            {settings.boutiqueTitle ? (
+              settings.boutiqueTitle.includes('\n') ? (
+                <Fragment set:html={settings.boutiqueTitle.replace('\n', '<br />')} />
+              ) : (
+                settings.boutiqueTitle
+              )
+            ) : (
+              <>L’Atelier<br/>Rue d’Avron</>
+            )}
+          </h2>
           <p class="font-sans text-stone-grey text-sm md:text-md leading-relaxed">
-            Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval.
+            {settings.boutiqueSubtext || "Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval."}
           </p>
           <div class="space-y-4 font-mono text-[11px] uppercase tracking-widest border-t border-stone-grey/20 pt-6">
             <div class="flex justify-between items-center py-1">
@@ -370,9 +399,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
             <a href="/contact" class="border border-ivory/20 hover:border-cobalt text-ivory hover:text-cobalt transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-3.5 px-6">RDV Examen</a>
           </div>
         </div>
-        <div class="col-span-1 lg:col-span-7 relative">
+        <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueImage' }) : undefined} class="col-span-1 lg:col-span-7 relative">
           <div class="aspect-[16/10] bg-stone-light/5 relative overflow-hidden border border-stone-grey/20">
-            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80" alt="Rue de Paris atmosphere" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-80 transition-all duration-1000" />
+            <img src={settings.boutiqueImage ? urlFor(settings.boutiqueImage) : "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80"} alt="Rue de Paris atmosphere" referrerpolicy="no-referrer" class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-80 transition-all duration-1000" />
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-cobalt/40 pointer-events-none flex items-center justify-center backdrop-blur-[2px]">
               <div class="w-4 h-4 rounded-full bg-cobalt flex items-center justify-center animate-ping"></div>
             </div>
@@ -402,13 +431,27 @@ const featuredFrames = frames.filter(f => f.isFeatured);
     <section id="cta-end-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory text-center relative overflow-hidden">
       <div class="max-w-3xl mx-auto space-y-8 relative z-10">
         <span class="font-mono text-[10px] tracking-[0.25em] text-cobalt uppercase">[ Trouver votre monture de caractère ]</span>
-        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">Venez dénicher<br/>la vôtre.</h2>
+        <h2 style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">
+          {settings.ctaTitle ? (
+            settings.ctaTitle.includes('\n') ? (
+              <Fragment set:html={settings.ctaTitle.replace('\n', '<br />')} />
+            ) : (
+              settings.ctaTitle
+            )
+          ) : (
+            <>Venez dénicher<br/>la vôtre.</>
+          )}
+        </h2>
         <p class="font-sans text-stone-grey text-md md:text-lg max-w-xl mx-auto leading-relaxed">
-          Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement.
+          {settings.ctaSubtext || "Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement."}
         </p>
         <div class="pt-6 flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="bg-cobalt hover:bg-optical-black text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8 font-semibold shadow-lg shadow-cobalt/10">Prendre rendez-vous en ligne</a>
-          <a href="/collections" class="border border-optical-black/20 hover:border-optical-black text-optical-black transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8">Découvrir les créateurs</a>
+          <a href="/contact" class="bg-cobalt hover:bg-optical-black text-ivory transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8 font-semibold shadow-lg shadow-cobalt/10">
+            {settings.ctaButton1Text || "Prendre rendez-vous en ligne"}
+          </a>
+          <a href="/collections" class="border border-optical-black/20 hover:border-optical-black text-optical-black transition-colors duration-300 font-mono text-xs uppercase tracking-widest py-4 px-8">
+            {settings.ctaButton2Text || "Découvrir les créateurs"}
+          </a>
         </div>
       </div>
     </section>
@@ -419,7 +462,9 @@ const featuredFrames = frames.filter(f => f.isFeatured);
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 mb-16 border-b border-stone-grey/15 pb-16">
         <div class="col-span-1 md:col-span-4 space-y-4">
           <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
-          <p class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.</p>
+          <p class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">
+            {settings.footerDescription || "Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie."}
+          </p>
           <div class="pt-2 flex gap-4">
             <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>

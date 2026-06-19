@@ -82,10 +82,10 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
         </span>
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight text-optical-black" style="font-family: var(--font-display);">
-            Prendre Rendez-vous
+            {settings.contactPageTitle || "Prendre Rendez-vous"}
           </h1>
           <p class="font-sans text-stone-grey text-sm max-w-sm leading-relaxed font-light">
-            Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive.
+            {settings.contactPageSubtext || "Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive."}
           </p>
         </div>
       </div>
@@ -226,7 +226,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               class="w-full bg-optical-black hover:bg-cobalt text-ivory text-center py-4 font-mono font-semibold tracking-widest text-xs uppercase transition-colors duration-300 shadow-md flex items-center justify-center gap-2.5"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span>Réserver mon créneau à l’atelier</span>
+              <span>{settings.contactFormButtonText || "Réserver mon créneau à l’atelier"}</span>
             </button>
           </form>
         </div>
@@ -239,7 +239,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               [ Contact Alternatif ]
             </span>
             <p class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
-              Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien.
+              {settings.contactPageContactSubtext || "Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien."}
             </p>
             <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined} class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
               <div class="flex justify-between items-center py-1">
@@ -268,8 +268,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               Accès & Localisation
             </span>
             <p class="font-sans text-xs text-stone-grey leading-relaxed">
-              <strong>{settings.name}</strong> est implanté au <strong>{settings.address}, {settings.postalCode} {settings.city}</strong>.<br />
-              L’entrée est accessible directement de plain-pied. Métro Buzenval (Ligne 9) à 300 mètres ou Avron (Ligne 2) à 400 mètres.
+              {settings.contactPageAccessSubtext || "Situé à l’angle de la rue d’Avron, proche Buzenval. Stationnement possible dans les rues adjacentes."}
             </p>
           </div>
         </div>
