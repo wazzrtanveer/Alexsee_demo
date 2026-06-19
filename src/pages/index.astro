@@ -51,7 +51,11 @@ try {
   console.error("Error fetching pageHome from Sanity:", e);
 }
 
-const home = pageHome || settings;
+const home = pageHome || {
+  ...settings,
+  _id: 'pageHome',
+  _type: 'pageHome'
+};
 const featuredFrames = frames.filter(f => f.isFeatured);
 ---
 
