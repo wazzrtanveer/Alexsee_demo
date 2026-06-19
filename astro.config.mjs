@@ -11,7 +11,7 @@ export default defineConfig({
       projectId: process.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
       dataset: process.env.PUBLIC_SANITY_DATASET || 'production',
       useCdn: false,
-      studioBasePath: '/studio',
+      studioBasePath: '/admin',
     }),
   ],
   output: 'static',
