@@ -82,8 +82,8 @@ import Logo from './Logo.astro';
 
     if (!preloader) return;
 
-    // Check conditions to bypass preloader (session storage or reduced motion)
-    const isPlayed = sessionStorage.getItem('preloader-played');
+    // Check conditions to bypass preloader (window variable or reduced motion)
+    const isPlayed = window['__preloaderPlayed'];
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const bypass = () => {
@@ -125,7 +125,7 @@ import Logo from './Logo.astro';
 
     const finish = () => {
       preloader.style.opacity = '0';
-      sessionStorage.setItem('preloader-played', 'true');
+      window['__preloaderPlayed'] = true;
       setTimeout(() => {
         preloader.style.display = 'none';
         document.body.classList.remove('preloader-active');

@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Preloader from '../components/Preloader.astro';
 import Logo from '../components/Logo.astro';
 import { frames, settings, services } from '../data/mockData.js';
 
@@ -11,7 +10,6 @@ const featuredFrames = frames.filter(f => f.isFeatured);
   title="AlexSEE — Opticien Créateur Paris 20e"
   description="Boutique d'optique indépendante à Paris 20e. Découvrez notre vestiaire de lunettes de créateurs."
 >
-  <Preloader />
 
   <div id="homepage-container" class="pt-24 bg-ivory text-optical-black overflow-x-hidden relative">
     <!-- Decorative blurs -->
