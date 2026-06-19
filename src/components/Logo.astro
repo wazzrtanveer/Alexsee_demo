@@ -15,8 +15,11 @@ const lightColor = "#F5F2ED";
 
 const mainColor = inverse ? lightColor : darkColor;
 const accentColor = inverse ? darkColor : lightColor;
+// Detect override positioning
+const hasAlign = className.includes('items-') || className.includes('text-') || className.includes('justify-');
+const defaultFlexClasses = hasAlign ? '' : 'items-center justify-center text-center';
 ---
-<div class={`flex flex-col items-center justify-center text-center select-none ${className}`}>
+<div class={`flex flex-col select-none ${defaultFlexClasses} ${className}`}>
   <svg
     viewBox="0 0 240 128"
     width={w}
@@ -49,7 +52,7 @@ const accentColor = inverse ? darkColor : lightColor;
   </svg>
   {showText && (
     <div 
-      class="flex items-center justify-center font-sans tracking-[0.45em] text-center mt-2 pl-[0.45em]"
+      class={`flex items-center font-sans tracking-[0.45em] mt-2 pl-[0.45em] ${hasAlign ? 'justify-start text-left' : 'justify-center text-center'}`}
       style={{ 
         color: mainColor, 
         fontSize: size === "sm" ? "10px" : size === "md" ? "14px" : size === "lg" ? "18px" : "22px" 

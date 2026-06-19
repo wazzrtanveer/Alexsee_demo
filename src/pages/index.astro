@@ -56,7 +56,41 @@ const home = pageHome || {
   _id: 'pageHome',
   _type: 'pageHome'
 };
-const featuredFrames = frames.filter(f => f.isFeatured);
+const rawFeatured = frames.filter(f => f.isFeatured);
+const rawNonFeatured = frames.filter(f => !f.isFeatured);
+
+const tempFeatured = [...rawFeatured];
+const includedIds = new Set(tempFeatured.map(f => cleanStega(f.id || f._id)));
+
+// Add Sanity non-featured frames if we have fewer than 3
+for (const frame of rawNonFeatured) {
+  if (tempFeatured.length >= 3) break;
+  const cleanId = cleanStega(frame.id || frame._id);
+  if (cleanId && !includedIds.has(cleanId)) {
+    tempFeatured.push(frame);
+    includedIds.add(cleanId);
+  }
+}
+
+// Fallback to mock featured frames
+for (const mockFrame of mockFrames) {
+  if (tempFeatured.length >= 3) break;
+  if (mockFrame.isFeatured && !includedIds.has(mockFrame.id)) {
+    tempFeatured.push(mockFrame);
+    includedIds.add(mockFrame.id);
+  }
+}
+
+// Fallback to mock non-featured frames
+for (const mockFrame of mockFrames) {
+  if (tempFeatured.length >= 3) break;
+  if (!includedIds.has(mockFrame.id)) {
+    tempFeatured.push(mockFrame);
+    includedIds.add(mockFrame.id);
+  }
+}
+
+const featuredFrames = tempFeatured.slice(0, 3);
 ---
 
 
