@@ -71,5 +71,35 @@ const isVisualEditingEnabled = import.meta.env.DEV;
     </div>
 
     <VisualEditing enabled={isVisualEditingEnabled} zIndex={9999} />
+
+    <script>
+      // Block native link navigation and button clicks only when inside the Sanity iframe AND edit mode is active.
+      if (window.self !== window.top) {
+        window.addEventListener('click', (event) => {
+          // Allow modifier clicks (e.g. Alt + Click) for native navigation
+          if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+            return;
+          }
+          
+          // Check if overlays are currently active on the page (indicating Edit Mode is ON)
+          const hasOverlays = !!document.querySelector('[data-sanity-overlay-element]');
+          if (hasOverlays) {
+            const target = event.target;
+            if (target instanceof Element) {
+              // Only block clicks if they did not hit a visual editing overlay element
+              const isOverlayClick = !!target.closest('[data-sanity-overlay-element]') || target.hasAttribute('data-sanity-overlay-element');
+              if (!isOverlayClick) {
+                const interactiveElement = target.closest('a, button');
+                if (interactiveElement) {
+                  // Block the navigation / action trigger
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }
+            }
+          }
+        }, true); // Capture phase to intercept before React/native handlers run
+      }
+    </script>
   </body>
 </html>
