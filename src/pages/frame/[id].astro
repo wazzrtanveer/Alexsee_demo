@@ -1,15 +1,40 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { frames, settings } from '../../data/mockData.js';
+import { sanityClient, FRAMES_QUERY, SETTINGS_QUERY, urlFor } from '../../lib/sanity.js';
+import { frames as mockFrames, settings as mockSettings } from '../../data/mockData.js';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  let frames = [];
+  try {
+    const sanityFrames = await sanityClient.fetch(FRAMES_QUERY);
+    if (sanityFrames && sanityFrames.length > 0) {
+      frames = sanityFrames;
+    } else {
+      frames = mockFrames;
+    }
+  } catch (e) {
+    console.error("Error fetching frames from Sanity in getStaticPaths, using mock data:", e);
+    frames = mockFrames;
+  }
+
   return frames.map(frame => ({
     params: { id: frame.id },
-    props: { frame },
+    props: { frame, frames },
   }));
 }
 
-const { frame } = Astro.props;
+const { frame, frames } = Astro.props;
+let settings = mockSettings;
+
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings from Sanity, using mock data:", e);
+}
+
 const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
 ---
 
@@ -38,7 +63,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
           {frame.images.map((src, i) => (
             <img
               id={`detail-img-${i}`}
-              src={src}
+              src={urlFor(src)}
               alt={`${frame.brand} view`}
               referrerpolicy="no-referrer"
               class={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
@@ -146,7 +171,7 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
           {others.map(other => (
             <a href={`/frame/${other.id}`} class="flex items-center gap-6 p-4 border border-stone-grey/15 hover:border-cobalt bg-ivory transition-all duration-300 cursor-pointer group">
               <div class="w-24 h-24 bg-stone-light/40 overflow-hidden relative border border-stone-light shrink-0">
-                <img src={other.images[0]} alt={other.model} referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={urlFor(other.images[0])} alt={other.model} referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div class="space-y-1">
                 <span class="font-mono text-[8px] uppercase tracking-wider text-stone-grey block">{other.brand}</span>

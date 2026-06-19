@@ -2,7 +2,7 @@
 // This is the Sanity Studio configuration for managing the AlexSEE optician website
 
 import {defineConfig} from 'sanity'
-import {deskTool} from 'sanity/desk'
+import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './sanity-schemas/schema'
 
@@ -10,11 +10,10 @@ export default defineConfig({
   name: 'alexsee',
   title: 'AlexSEE — Studio CMS',
 
-  // Replace with your actual project ID from https://sanity.io/manage
-  projectId: 'your_project_id_here',
+  projectId: '4bz7y7k4',
   dataset: 'production',
 
-  plugins: [deskTool(), visionTool()],
+  plugins: [structureTool(), visionTool()],
 
   schema: {
     types: schemaTypes,

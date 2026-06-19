@@ -1,6 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { settings } from '../data/mockData.js';
+import { sanityClient, SETTINGS_QUERY } from '../lib/sanity.js';
+import { settings as mockSettings } from '../data/mockData.js';
+
+let settings = mockSettings;
+
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings from Sanity, using mock data:", e);
+}
 
 const requestedFrame = Astro.url.searchParams.get('frame') || '';
 ---

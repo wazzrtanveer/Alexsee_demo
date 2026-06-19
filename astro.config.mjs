@@ -1,8 +1,18 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import sanity from '@sanity/astro';
 
 // https://astro.build/config
 export default defineConfig({
-  // React integration removed — site is now 100% native Astro
-  integrations: [],
+  integrations: [
+    react(),
+    sanity({
+      projectId: process.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
+      dataset: process.env.PUBLIC_SANITY_DATASET || 'production',
+      useCdn: false,
+      studioBasePath: '/studio',
+    }),
+  ],
+  output: 'static',
 });

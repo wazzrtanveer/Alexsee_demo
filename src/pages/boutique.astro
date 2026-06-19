@@ -1,6 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { settings, boutiqueImages } from '../data/mockData.js';
+import { sanityClient, SETTINGS_QUERY, urlFor } from '../lib/sanity.js';
+import { settings as mockSettings, boutiqueImages as mockBoutiqueImages } from '../data/mockData.js';
+
+let settings = mockSettings;
+let boutiqueImages = mockBoutiqueImages;
+
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+    boutiqueImages = settings.boutiqueImages || [];
+  }
+} catch (e) {
+  console.error("Error fetching settings from Sanity, using mock data:", e);
+}
 ---
 
 <Layout
@@ -24,7 +38,7 @@ import { settings, boutiqueImages } from '../data/mockData.js';
     <div id="boutique-slideshow-banner" class="relative w-full h-[50vh] md:h-[65vh] bg-stone-light/40 overflow-hidden mb-16 border border-stone-grey/15">
       {boutiqueImages.map((src, i) => (
         <img
-          src={src}
+          src={urlFor(src)}
           alt="Intérieur AlexSEE"
           referrerpolicy="no-referrer"
           class={`boutique-slide w-full h-full object-cover absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${i === 0 ? 'opacity-85' : 'opacity-0'}`}

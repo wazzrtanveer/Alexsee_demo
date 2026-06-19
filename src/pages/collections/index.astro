@@ -1,6 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { frames } from '../../data/mockData.js';
+import { sanityClient, FRAMES_QUERY, urlFor } from '../../lib/sanity.js';
+import { frames as mockFrames } from '../../data/mockData.js';
+
+let frames = [];
+
+try {
+  const sanityFrames = await sanityClient.fetch(FRAMES_QUERY);
+  if (sanityFrames && sanityFrames.length > 0) {
+    frames = sanityFrames;
+  } else {
+    frames = mockFrames;
+  }
+} catch (e) {
+  console.error("Error fetching frames from Sanity, using mock data:", e);
+  frames = mockFrames;
+}
 
 const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'Nouveautés'];
 ---
@@ -58,15 +73,15 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
           tabindex="0"
         >
           <!-- Image -->
-          <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden mb-5 border border-stone-grey/10">
+           <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden mb-5 border border-stone-grey/10">
             <div class="absolute top-4 left-4 z-10 flex gap-2">
               {frame.isNew && <span class="bg-cobalt text-ivory font-mono text-[8.5px] uppercase tracking-widest py-1 px-2">Nouveau</span>}
               <span class="bg-optical-black/80 text-ivory font-mono text-[8.5px] uppercase tracking-widest py-1 px-2 backdrop-blur-sm">{frame.type}</span>
             </div>
-            <img src={frame.images[0]} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer"
+            <img src={urlFor(frame.images[0])} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer"
               class="frame-img-primary w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out pointer-events-none">
-              <img src={frame.images[1]} alt={`${frame.brand} lifestyle`} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+              <img src={urlFor(frame.images[1])} alt={`${frame.brand} lifestyle`} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
               <div class="absolute inset-0 border-[30px] border-optical-black/20 pointer-events-none"></div>
             </div>
           </div>
