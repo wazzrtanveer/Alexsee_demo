@@ -21,6 +21,11 @@ export default defineConfig({
     }),
   ],
   vite: {
+    server: {
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    },
     optimizeDeps: {
       include: [
         'react/compiler-runtime',
