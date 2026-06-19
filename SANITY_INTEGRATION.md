@@ -285,7 +285,7 @@ alexsee-astro/
 - [ ] Content seeded via /studio
 - [ ] Cloudflare Pages env vars set
 - [ ] CORS origins added in Sanity
-- [ ] Pushed to GitHub → deployed on Cloudflare
+- [x] Pushed to GitHub → deployed on Cloudflare
 - [ ] Live site verified loading from Sanity
 
 ---
