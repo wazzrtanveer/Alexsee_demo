@@ -180,11 +180,11 @@ const featuredFrames = tempFeatured.slice(0, 3);
           <div id="hero-img-container" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroImage' }) : undefined} class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 shadow-sm cursor-crosshair select-none group">
             <img
               id="hero-main-img"
-              src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"}
+              src={urlFor(home.heroImage) || "/assets/alexsee_hero_man_1781887423927-Daa6PeCv.jpg"}
               alt="Portrait éditorial AlexSEE"
               referrerpolicy="no-referrer"
               class="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.01]"
-              style="transform: scale(1.03); opacity: 0;"
+              style="transform: scale(1); opacity: 1; transition: transform 1.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.4s;"
             />
             <div class="absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-ivory to-transparent pointer-events-none z-10"></div>
             <div class="absolute inset-0 border border-double border-white/10 m-3 pointer-events-none z-10"></div>
@@ -194,7 +194,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
               <div class="absolute inset-0 bg-cobalt/[0.03] z-10"></div>
               <div class="absolute top-1/2 left-4 right-4 h-[1px] bg-cobalt/20 -translate-y-1/2 z-10"></div>
               <div class="absolute left-1/2 top-4 bottom-4 w-[1px] bg-cobalt/20 -translate-x-1/2 z-10"></div>
-              <img id="lens-inner-img" src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none origin-center" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22);" />
+              <img id="lens-inner-img" src={urlFor(home.heroImage) || "/assets/alexsee_hero_man_1781887423927-Daa6PeCv.jpg"} alt="" referrerpolicy="no-referrer" class="absolute max-w-none pointer-events-none select-none origin-center" style="width: 450px; height: 560px; left: -300px; top: -320px; transform: scale(1.22); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);" />
               <span class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-optical-black text-ivory text-[7px] font-mono uppercase tracking-widest px-1.5 py-0.5 z-20 border border-white/10 whitespace-nowrap">VERRE ACCORD 1.2x</span>
             </div>
             <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10 z-10">Édition Limitée</div>
@@ -218,7 +218,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
           Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement.
         </p>
         <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroImage' }) : undefined} class="relative w-full aspect-[4/5] bg-[#EAE5DF] overflow-hidden border border-stone-grey/15 mt-2">
-          <img src={urlFor(home.heroImage) || "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=80"} alt="Portrait éditorial AlexSEE" referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+          <img src={urlFor(home.heroImage) || "/assets/alexsee_hero_man_1781887423927-Daa6PeCv.jpg"} alt="Portrait éditorial AlexSEE" referrerpolicy="no-referrer" class="w-full h-full object-cover" />
 
           <div class="absolute top-4 left-4 bg-optical-black/85 text-ivory text-[8px] font-mono uppercase tracking-widest px-2 py-1 border border-white/10">Édition Limitée</div>
           <!-- Mobile Lens -->
@@ -550,13 +550,6 @@ const featuredFrames = tempFeatured.slice(0, 3);
     const lens = document.getElementById('lens-circle');
     const lensImg = document.getElementById('lens-inner-img');
     if (!container || !lens || !lensImg || !mainImg) return;
-
-    // Animate main image in
-    setTimeout(() => {
-      mainImg.style.transform = 'scale(1)';
-      mainImg.style.opacity = '1';
-      mainImg.style.transition = 'transform 1.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.4s ease';
-    }, 100);
 
     container.addEventListener('mousemove', (e) => {
       const rect = container.getBoundingClientRect();
