@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { services } from '../data/mockData.js';
+---
+
+<Layout
+  title="Nos Savoir-Faire — AlexSEE Paris 20e"
+  description="Découvrez nos expertises optiques : conseil en montures créateur, vérification optique, ajustage, sélection de verres haute qualité et espace enfants."
+>
+  <div id="services-view-root" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen">
+
+    <!-- Header -->
+    <div class="px-6 md:px-12 lg:px-24 border-b border-stone-grey/15 pb-14 mb-0">
+      <div class="flex items-center gap-2 mb-8">
+        <a href="/" class="group flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-stone-grey hover:text-optical-black transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span>Retour à l'accueil</span>
+        </a>
+      </div>
+      <div class="flex flex-col lg:flex-row justify-between gap-6 items-end">
+        <div>
+          <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">[ Expertise & Savoir-Faire ]</span>
+          <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">Nos Services</h1>
+        </div>
+        <p class="font-sans text-stone-grey text-sm max-w-md leading-relaxed">
+          Un accompagnement complet : du choix de la monture à la vérification optique, en passant par l'ajustage et la sélection de verres.
+        </p>
+      </div>
+    </div>
+
+    <!-- Sticky accordion layout -->
+    <div id="services-accordion-root" class="flex flex-col lg:flex-row min-h-[70vh]">
+      <!-- Accordion tabs -->
+      <div class="w-full lg:w-1/2 flex flex-col border-r border-stone-grey/10">
+        {services.map((service, idx) => (
+          <div
+            data-service-idx={idx}
+            data-service-img={service.image}
+            class="service-accordion-item border-b border-stone-grey/10 cursor-pointer group"
+            tabindex="0"
+          >
+            <div class="flex items-start gap-6 p-6 lg:p-10 relative">
+              <span class="flex-shrink-0 font-mono text-[11px] text-stone-grey/60 tracking-widest mt-2 w-6">{service.number}</span>
+              <div class="flex-1">
+                <div class="flex items-center justify-between gap-4">
+                  <h2 class="text-xl md:text-2xl font-light uppercase tracking-tight text-optical-black group-hover:text-cobalt transition-colors" style="font-family: var(--font-display);">{service.title}</h2>
+                  <div class="service-icon w-8 h-8 flex items-center justify-center rounded-full border border-stone-grey/25 flex-shrink-0 transition-all duration-300 text-optical-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </div>
+                </div>
+                <div class="service-details hidden mt-4 space-y-4 overflow-hidden">
+                  <p class="font-sans text-stone-grey text-sm leading-relaxed">{service.description}</p>
+                  <ul class="space-y-2">
+                    {service.details.map(d => (
+                      <li class="flex items-start gap-2.5 font-mono text-xs text-optical-black/80">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2E5BFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                  <!-- Mobile-only image -->
+                  <div class="block lg:hidden mt-4 aspect-video overflow-hidden border border-stone-grey/10">
+                    <img src={service.image} alt={service.title} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+                  </div>
+                  <a href="/contact" class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-cobalt hover:text-optical-black transition-colors mt-2">
+                    <span>Prendre rendez-vous</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Sticky image panel (desktop only) -->
+      <div class="hidden lg:flex sticky top-0 h-screen w-full lg:w-1/2 items-center overflow-hidden bg-stone-light/20">
+        <div id="service-panel-img-wrap" class="w-full h-full relative">
+          <img
+            id="service-panel-img"
+            src={services[0].image}
+            alt="Savoir-faire AlexSEE"
+            referrerpolicy="no-referrer"
+            class="w-full h-full object-cover"
+            style="transition: opacity 0.5s ease;"
+          />
+          <div id="service-panel-label" class="absolute bottom-8 left-8 right-8 bg-optical-black/80 backdrop-blur-sm text-ivory px-5 py-3 border border-white/10">
+            <span class="font-mono text-[8px] uppercase tracking-widest text-stone-grey block mb-1">{services[0].number}</span>
+            <span class="font-sans text-sm font-light" id="service-panel-label-text">{services[0].title}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="px-6 md:px-12 lg:px-24 mt-16 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-stone-grey/15 pt-12">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-light uppercase tracking-tight mb-2" style="font-family: var(--font-display);">Un Conseil Personnalisé</h2>
+        <p class="font-sans text-stone-grey text-sm max-w-md">Réservez votre heure de conseil exclusive pour une expérience optique unique.</p>
+      </div>
+      <a href="/contact" class="group flex items-center gap-3 bg-cobalt text-ivory hover:bg-optical-black px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors duration-300 flex-shrink-0">
+        <span>Prendre Rendez-vous</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function initServices() {
+    const items = document.querySelectorAll('.service-accordion-item');
+    const panelImg = document.getElementById('service-panel-img');
+    const panelLabel = document.getElementById('service-panel-label-text');
+    if (!items.length) return;
+
+    // Open first by default
+    openItem(items[0]);
+
+    function openItem(item) {
+      const details = item.querySelector('.service-details');
+      const icon = item.querySelector('.service-icon');
+      const imgSrc = item.getAttribute('data-service-img');
+      const title = item.querySelector('h2')?.textContent;
+
+      // Close all
+      items.forEach(el => {
+        const d = el.querySelector('.service-details');
+        const i = el.querySelector('.service-icon');
+        d?.classList.add('hidden');
+        if (i) {
+          i.classList.remove('bg-cobalt', 'border-cobalt', 'text-ivory');
+          i.classList.add('border-stone-grey/25', 'text-optical-black');
+        }
+      });
+
+      // Open clicked
+      details?.classList.remove('hidden');
+      if (icon) {
+        icon.classList.add('bg-cobalt', 'border-cobalt', 'text-ivory');
+        icon.classList.remove('border-stone-grey/25', 'text-optical-black');
+      }
+
+      // Update sticky image
+      if (panelImg && imgSrc) {
+        panelImg.style.opacity = '0';
+        setTimeout(() => {
+          panelImg.src = imgSrc;
+          panelImg.style.opacity = '1';
+          if (panelLabel) panelLabel.textContent = title || '';
+        }, 300);
+      }
+    }
+
+    items.forEach(item => {
+      item.addEventListener('click', () => openItem(item));
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openItem(item); }
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initServices);
+</script>

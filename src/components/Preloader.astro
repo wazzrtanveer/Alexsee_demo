@@ -1,0 +1,164 @@
+---
+import Logo from './Logo.astro';
+---
+
+<div
+  id="preloader"
+  class="fixed inset-0 z-[9999] bg-optical-black text-ivory flex flex-col items-center justify-center overflow-hidden transition-opacity duration-600 ease-in-out"
+>
+  {/* Skip button */}
+  <button
+    id="preloader-skip"
+    class="absolute top-8 right-8 font-mono text-[10px] tracking-[0.25em] text-stone-grey hover:text-ivory transition-colors duration-300 z-10 focus:outline-none"
+  >
+    [ Passer l'introduction / Skip ]
+  </button>
+
+  {/* Animated lens circle */}
+  <div
+    id="preloader-lens-1"
+    class="absolute rounded-full border border-cobalt/40 mix-blend-screen pointer-events-none w-[480px] h-[480px] scale-[0.6] opacity-0 transition-all duration-[1.8s] ease-out"
+  ></div>
+
+  {/* Second decorative ring */}
+  <div
+    id="preloader-lens-2"
+    class="absolute rounded-full border border-cobalt/20 pointer-events-none w-[600px] h-[600px] scale-[0.7] opacity-0 transition-all duration-[1.8s] delay-200 ease-out"
+  ></div>
+
+  {/* Logo container */}
+  <div
+    id="preloader-logo"
+    class="mb-8 opacity-0 translate-y-3 transition-all duration-[0.8s] delay-300 ease-out"
+  >
+    <Logo size="lg" inverse={true} showText={true} />
+  </div>
+
+  {/* Tagline */}
+  <p
+    id="preloader-tagline"
+    class="font-mono tracking-[0.25em] text-stone-grey text-[10px] uppercase text-center mb-10 opacity-0 translate-y-2 transition-all duration-[0.8s] delay-500 ease-out"
+  >
+    Le regard comme expression personnelle — Paris XX
+  </p>
+
+  {/* Cobalt dot + label */}
+  <div
+    id="preloader-dot-label"
+    class="flex items-center gap-2 opacity-0 transition-opacity duration-600 delay-800"
+  >
+    <span class="w-1.5 h-1.5 rounded-full bg-cobalt inline-block animate-pulse"></span>
+    <span class="font-mono text-[9px] tracking-[0.3em] text-stone-grey uppercase">
+      Opticien Créateur Paris 20
+    </span>
+  </div>
+
+  {/* Loading bar */}
+  <div class="absolute bottom-12 flex flex-col items-center gap-2">
+    <div
+      class="relative overflow-hidden w-32 h-[1px] bg-stone-grey/20"
+    >
+      <div
+        id="preloader-progress"
+        class="absolute top-0 left-0 h-full bg-cobalt w-0 transition-all duration-[1.8s] delay-200 ease-in-out"
+      ></div>
+    </div>
+    <span class="font-mono text-[8px] tracking-[0.3em] text-stone-grey/40 uppercase">
+      Chargement
+    </span>
+  </div>
+</div>
+
+<script>
+  function runPreloader() {
+    const preloader = document.getElementById('preloader');
+    const skipBtn = document.getElementById('preloader-skip');
+    const progress = document.getElementById('preloader-progress');
+    const lens1 = document.getElementById('preloader-lens-1');
+    const lens2 = document.getElementById('preloader-lens-2');
+    const logo = document.getElementById('preloader-logo');
+    const tagline = document.getElementById('preloader-tagline');
+    const label = document.getElementById('preloader-dot-label');
+
+    if (!preloader) return;
+
+    // Check conditions to bypass preloader (session storage or reduced motion)
+    const isPlayed = sessionStorage.getItem('preloader-played');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const bypass = () => {
+      preloader.style.display = 'none';
+      document.body.classList.remove('preloader-active');
+    };
+
+    if (isPlayed || prefersReducedMotion) {
+      bypass();
+      return;
+    }
+
+    // Set page to non-scrollable during load
+    document.body.classList.add('preloader-active');
+
+    // Trigger animations via styles
+    setTimeout(() => {
+      if (progress) progress.style.width = '100%';
+      if (lens1) {
+        lens1.style.transform = 'scale(1)';
+        lens1.style.opacity = '0.15';
+      }
+      if (lens2) {
+        lens2.style.transform = 'scale(1)';
+        lens2.style.opacity = '0.07';
+      }
+      if (logo) {
+        logo.style.transform = 'translateY(0)';
+        logo.style.opacity = '1';
+      }
+      if (tagline) {
+        tagline.style.transform = 'translateY(0)';
+        tagline.style.opacity = '1';
+      }
+      if (label) {
+        label.style.opacity = '1';
+      }
+    }, 50);
+
+    const finish = () => {
+      preloader.style.opacity = '0';
+      sessionStorage.setItem('preloader-played', 'true');
+      setTimeout(() => {
+        preloader.style.display = 'none';
+        document.body.classList.remove('preloader-active');
+      }, 600);
+    };
+
+    // Auto-dissolve timer (2.1s duration + fade)
+    const mainTimer = setTimeout(finish, 2100);
+
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => {
+        clearTimeout(mainTimer);
+        finish();
+      });
+    }
+  }
+
+  // Run on page load
+  document.addEventListener('astro:page-load', () => {
+    // Only run if preloader element is on page (typically only home page)
+    if (document.getElementById('preloader')) {
+      runPreloader();
+    }
+  });
+</script>
+
+<style is:global>
+  /* Custom class to lock scrolling */
+  body.preloader-active {
+    overflow: hidden !important;
+    pointer-events: none;
+  }
+  body.preloader-active #preloader {
+    pointer-events: auto;
+  }
+</style>

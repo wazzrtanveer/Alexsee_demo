@@ -1,0 +1,181 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { frames } from '../../data/mockData.js';
+
+const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'Nouveautés'];
+---
+
+<Layout
+  title="Le Catalogue — AlexSEE Opticien Paris 20e"
+  description="Lookbook et catalogue de montures de créateurs. Filtrez par type, genre et marque pour trouver votre prochaine signature visuelle."
+>
+  <div id="collections-view-root" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
+
+    <!-- Header -->
+    <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
+      <div class="flex items-center gap-2">
+        <a href="/" class="group flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-stone-grey hover:text-optical-black transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span>Retour</span>
+        </a>
+        <span class="text-stone-grey/40 font-mono text-[9px]">|</span>
+        <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey">[ Collection Lookbook ]</span>
+      </div>
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <h1 class="text-4xl md:text-6xl font-light uppercase tracking-tight" style="font-family: var(--font-display);">Le Catalogue</h1>
+        <p class="font-sans text-stone-grey text-sm max-w-md leading-relaxed">
+          Une sélection rigoureuse de montures de créateurs haut de gamme. Chaque pièce est choisie pour l'excellence de son façonnage et sa force graphique.
+        </p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-12">
+      <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">Filtrer par type ou créateur :</span>
+      <div class="flex flex-wrap gap-2.5" id="filter-buttons">
+        {FILTERS.map(f => (
+          <button
+            data-filter={f}
+            class={`filter-btn font-mono text-[10px] uppercase tracking-widest px-4 py-2 border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-cobalt ${f === 'Tous' ? 'bg-optical-black text-ivory border-optical-black' : 'bg-transparent text-stone-grey border-stone-grey/20 hover:border-optical-black hover:text-optical-black'}`}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Frame Grid -->
+    <div id="frame-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+      {frames.map((frame) => (
+        <a
+          href={`/frame/${frame.id}`}
+          data-type={frame.type}
+          data-gender={frame.gender}
+          data-brand={frame.brand}
+          data-isnew={frame.isNew ? 'true' : 'false'}
+          data-cursor-label="DÉCOUVRIR"
+          class="frame-card flex flex-col justify-between group cursor-pointer focus:outline-none focus:ring-1 focus:ring-cobalt"
+          tabindex="0"
+        >
+          <!-- Image -->
+          <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden mb-5 border border-stone-grey/10">
+            <div class="absolute top-4 left-4 z-10 flex gap-2">
+              {frame.isNew && <span class="bg-cobalt text-ivory font-mono text-[8.5px] uppercase tracking-widest py-1 px-2">Nouveau</span>}
+              <span class="bg-optical-black/80 text-ivory font-mono text-[8.5px] uppercase tracking-widest py-1 px-2 backdrop-blur-sm">{frame.type}</span>
+            </div>
+            <img src={frame.images[0]} alt={`${frame.brand} ${frame.model}`} referrerpolicy="no-referrer"
+              class="frame-img-primary w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+              <img src={frame.images[1]} alt={`${frame.brand} lifestyle`} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 border-[30px] border-optical-black/20 pointer-events-none"></div>
+            </div>
+          </div>
+          <!-- Info -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-stone-grey">
+              <span>{frame.brand}</span>
+              <span class="text-cobalt">{frame.availability}</span>
+            </div>
+            <div class="flex items-baseline justify-between gap-2 border-b border-stone-grey/10 pb-2">
+              <h3 class="text-2xl font-light uppercase tracking-tight group-hover:text-cobalt transition-colors" style="font-family: var(--font-display);">{frame.model}</h3>
+              <span class="font-mono text-sm tracking-tight font-medium">{frame.price}</span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-stone-grey/80 font-mono">
+              <span>Matière : {frame.material}</span>
+              <span class="font-semibold text-optical-black group-hover:text-cobalt transition-colors inline-flex items-center gap-1 uppercase text-[9px] tracking-widest">
+                <span>Fiche</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden text-center py-20 font-mono text-stone-grey text-xs uppercase tracking-widest">
+      [ Aucun modèle correspondant trouvé pour la sélection ]
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="mt-28 border-t border-stone-grey/25 pt-12 flex flex-col md:flex-row items-center justify-between gap-6 font-mono text-[10px] text-stone-grey uppercase tracking-widest">
+      <span>AlexSEE Paris — Eyewear character collection</span>
+      <a href="/contact" class="bg-cobalt text-ivory hover:bg-optical-black px-6 py-3 transition-colors duration-300 font-semibold text-[9px] tracking-widest">
+        Essayer à l'atelier du 20e
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function initCollections() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.frame-card');
+    const emptyState = document.getElementById('empty-state');
+    if (!filterBtns.length) return;
+
+    let activeFilter = 'Tous';
+
+    const applyFilter = (filter) => {
+      activeFilter = filter;
+      let visible = 0;
+
+      // Update button styles
+      filterBtns.forEach(btn => {
+        const f = btn.getAttribute('data-filter');
+        if (f === filter) {
+          btn.classList.add('bg-optical-black', 'text-ivory', 'border-optical-black');
+          btn.classList.remove('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
+        } else {
+          btn.classList.remove('bg-optical-black', 'text-ivory', 'border-optical-black');
+          btn.classList.add('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
+        }
+      });
+
+      // Filter cards
+      cards.forEach(card => {
+        const type = card.getAttribute('data-type');
+        const gender = card.getAttribute('data-gender');
+        const brand = card.getAttribute('data-brand') || '';
+        const isNew = card.getAttribute('data-isnew') === 'true';
+
+        let show = false;
+        if (filter === 'Tous') show = true;
+        else if (filter === 'Optique') show = type === 'Optique';
+        else if (filter === 'Solaire') show = type === 'Solaire';
+        else if (filter === 'Femme') show = gender === 'Femme' || gender === 'Unisex';
+        else if (filter === 'Homme') show = gender === 'Homme' || gender === 'Unisex';
+        else if (filter === 'Créateur') show = brand.toLowerCase().includes('alexsee') || brand.toLowerCase().includes('nackymade');
+        else if (filter === 'Nouveautés') show = isNew;
+
+        if (show) {
+          card.style.display = '';
+          visible++;
+          card.style.animation = 'fadeInUp 0.4s ease forwards';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (emptyState) {
+        emptyState.classList.toggle('hidden', visible > 0);
+      }
+    };
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') || 'Tous';
+        applyFilter(filter);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCollections);
+</script>
+
+<style>
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

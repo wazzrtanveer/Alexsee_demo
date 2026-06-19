@@ -1,0 +1,285 @@
+---
+import Logo from './Logo.astro';
+
+const currentPath = Astro.url.pathname;
+
+// Helper to check if a route is active
+const isActive = (path) => {
+  if (path === '/') {
+    return currentPath === '/' || currentPath === '/index.html';
+  }
+  // Strip trailing slashes to compare
+  const cleanPath = path.replace(/\/$/, '');
+  const cleanCurrent = currentPath.replace(/\/$/, '');
+  return cleanCurrent === cleanPath || cleanCurrent.startsWith(cleanPath + '/');
+};
+
+const navItems = [
+  {
+    id: 'home',
+    path: '/',
+    label: 'Collection',
+    fullLabel: 'Accueil Opticien',
+    number: '01',
+    img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'collections',
+    path: '/collections',
+    label: 'Collection',
+    fullLabel: 'Lookbook & Lunettes',
+    number: '02',
+    img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'services',
+    path: '/services',
+    label: 'Savoir-Faire',
+    fullLabel: "L'Art de l'Optique",
+    number: '03',
+    img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'boutique',
+    path: '/boutique',
+    label: 'La Boutique',
+    fullLabel: "L'Atelier Rue d'Avron",
+    number: '04',
+    img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'contact',
+    path: '/contact',
+    label: 'Prendre Rendez-vous',
+    fullLabel: 'Prendre rendez-vous',
+    number: '05',
+    img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+const desktopNavItems = navItems.filter((n) => n.id !== 'home');
+---
+
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-ivory/80 backdrop-blur-md border-b border-stone-grey/10"
+>
+  <div class="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16">
+    {/* Logo */}
+    <a href="/" class="focus:outline-none" aria-label="AlexSEE Accueil">
+      <Logo size="sm" showText={true} />
+    </a>
+
+    {/* Desktop nav */}
+    <nav class="hidden lg:flex items-center gap-8">
+      {desktopNavItems.map((item) => {
+        const active = isActive(item.path);
+        return (
+          <a
+            href={item.path}
+            class={`relative font-sans text-sm font-medium transition-colors duration-200 ${
+              active ? 'text-optical-black' : 'text-stone-grey hover:text-optical-black'
+            }`}
+          >
+            {item.id === 'contact' ? (
+              <span class="inline-flex items-center gap-1.5 bg-cobalt text-ivory px-4 py-1.5 rounded-full text-xs font-medium tracking-wider hover:bg-cobalt/90 transition-colors duration-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-ivory/60 inline-block" />
+                {item.label}
+              </span>
+            ) : (
+              <>
+                {item.label}
+                {active && (
+                  <span class="absolute -bottom-1 left-0 right-0 h-[2px] bg-cobalt rounded-full" />
+                )}
+              </>
+            )}
+          </a>
+        );
+      })}
+    </nav>
+
+    {/* Mobile hamburger button */}
+    <button
+      id="hamburger-btn"
+      class="lg:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 focus:outline-none"
+      aria-label="Ouvrir le menu"
+    >
+      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black origin-center transition-transform duration-300"></span>
+      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black transition-opacity duration-200"></span>
+      <span class="hamburger-line block w-5 h-[1.5px] bg-optical-black origin-center transition-transform duration-300"></span>
+    </button>
+  </div>
+</header>
+
+{/* Mobile full-screen overlay */}
+<div
+  id="mobile-nav-overlay"
+  class="fixed inset-0 z-[60] bg-optical-black text-ivory flex translate-y-[-100%] transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden"
+>
+  {/* Left Panel: Hover image (Desktop only) */}
+  <div class="hidden md:block relative w-1/2 overflow-hidden bg-optical-black">
+    {navItems.map((item) => (
+      <img
+        id={`mobile-nav-img-${item.id}`}
+        src={item.img}
+        alt={item.fullLabel}
+        class="mobile-nav-img absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300"
+      />
+    ))}
+    <div id="mobile-nav-default-logo" class="absolute inset-0 bg-optical-black/85 flex items-center justify-center">
+      <Logo size="xl" inverse={true} showText={true} />
+    </div>
+  </div>
+
+  {/* Right Panel: Links */}
+  <div class="relative flex flex-col justify-between p-8 md:p-12 w-full md:w-1/2">
+    {/* Header section in overlay */}
+    <div class="flex justify-between items-center mb-12">
+      <Logo size="sm" inverse={true} showText={true} />
+      <button
+        id="close-mobile-nav"
+        class="text-stone-grey hover:text-ivory transition-colors duration-200 font-mono text-xs tracking-widest"
+      >
+        [ Fermer ]
+      </button>
+    </div>
+
+    {/* Nav links */}
+    <nav class="flex-1 flex flex-col justify-center gap-2">
+      {navItems.map((item) => {
+        const active = isActive(item.path);
+        return (
+          <a
+            href={item.path}
+            data-nav-id={item.id}
+            class={`group mobile-nav-link flex items-baseline gap-4 text-left py-3 border-b border-white/10 hover:border-cobalt/30 transition-all duration-200 ${
+              active ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+            }`}
+          >
+            <span class="font-mono text-[10px] text-cobalt tracking-[0.3em] w-6 shrink-0">
+              {item.number}
+            </span>
+            <div class="flex flex-col">
+              <span
+                class={`font-display text-2xl md:text-3xl italic transition-colors duration-200 ${
+                  active ? 'text-ivory' : 'group-hover:text-ivory text-ivory/60'
+                }`}
+              >
+                {item.fullLabel}
+              </span>
+              <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase mt-0.5">
+                {item.label}
+              </span>
+            </div>
+            {active && (
+              <span class="ml-auto w-1.5 h-1.5 rounded-full bg-cobalt" />
+            )}
+          </a>
+        );
+      })}
+    </nav>
+
+    {/* Footer info in overlay */}
+    <div class="mt-8">
+      <p class="font-mono text-[9px] tracking-[0.25em] text-stone-grey/50 uppercase">
+        28 Rue d'Avron · Paris 20e · +33 (0)1 43 73 12 12
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupHeader() {
+    const header = document.getElementById('main-header');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const closeBtn = document.getElementById('close-mobile-nav');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const lines = hamburgerBtn?.querySelectorAll('.hamburger-line');
+
+    if (!header || !hamburgerBtn || !mobileNavOverlay) return;
+
+    // Sticky shadow on scroll
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        header.classList.add('shadow-sm', 'border-b', 'border-stone-grey/10');
+      } else {
+        header.classList.remove('shadow-sm');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    // Toggle menu state
+    const openMenu = () => {
+      mobileNavOverlay.classList.remove('translate-y-[-100%]');
+      // Animate hamburger
+      if (lines && lines.length === 3) {
+        lines[0].style.transform = 'rotate(45deg) translateY(6px)';
+        lines[1].style.opacity = '0';
+        lines[2].style.transform = 'rotate(-45deg) translateY(-6px)';
+      }
+    };
+
+    const closeMenu = () => {
+      mobileNavOverlay.classList.add('translate-y-[-100%]');
+      // Reset hamburger
+      if (lines && lines.length === 3) {
+        lines[0].style.transform = 'none';
+        lines[1].style.opacity = '1';
+        lines[2].style.transform = 'none';
+      }
+    };
+
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = !mobileNavOverlay.classList.contains('translate-y-[-100%]');
+      if (isOpen) closeMenu();
+      else openMenu();
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeMenu);
+    }
+
+    // Overlay Hover Images
+    const defaultLogo = document.getElementById('mobile-nav-default-logo');
+    const navLinks = mobileNavOverlay.querySelectorAll('.mobile-nav-link');
+    const navImages = mobileNavOverlay.querySelectorAll('.mobile-nav-img');
+
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        const id = link.getAttribute('data-nav-id');
+        if (defaultLogo) defaultLogo.style.opacity = '0';
+        
+        navImages.forEach(img => {
+          if (img.id === `mobile-nav-img-${id}`) {
+            img.style.opacity = '1';
+            img.style.transform = 'scale(1)';
+          } else {
+            img.style.opacity = '0';
+            img.style.transform = 'scale(1.04)';
+          }
+        });
+      });
+
+      link.addEventListener('mouseleave', () => {
+        if (defaultLogo) defaultLogo.style.opacity = '1';
+        navImages.forEach(img => {
+          img.style.opacity = '0';
+        });
+      });
+
+      // Close menu on link click
+      link.addEventListener('click', closeMenu);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }
+
+  let cleanup;
+  document.addEventListener('astro:page-load', () => {
+    if (cleanup) cleanup();
+    cleanup = setupHeader();
+  });
+</script>
