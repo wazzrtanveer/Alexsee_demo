@@ -1,0 +1,44 @@
+---
+import AlexSeeApp from '../components/AlexSeeApp.jsx';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="fr" class="bg-ivory text-optical-black selection:bg-cobalt selection:text-ivory">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Primary Meta Tags -->
+    <title>AlexSEE — Opticien Créateur Paris 20e</title>
+    <meta name="title" content="AlexSEE — Opticien Créateur Paris 20e" />
+    <meta name="description" content="Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://alexsee-opticien.fr/" />
+    <meta property="og:title" content="AlexSEE — Opticien Créateur Paris 20e" />
+    <meta property="og:description" content="Boutique d'optique indépendante à Paris 20e. Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://alexsee-opticien.fr/" />
+    <meta property="twitter:title" content="AlexSEE — Opticien Créateur Paris 20e" />
+    <meta property="twitter:description" content="Boutique d'optique indépendante à Paris 20e. Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure." />
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Preconnect to fonts and images -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+  </head>
+  <body class="overflow-x-hidden antialiased">
+    <div id="root">
+      <AlexSeeApp client:load />
+    </div>
+  </body>
+</html>
