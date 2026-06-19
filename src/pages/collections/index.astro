@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sanityClient, FRAMES_QUERY, urlFor } from '../../lib/sanity.js';
+import { sanityClient, FRAMES_QUERY, urlFor, dataAttribute } from '../../lib/sanity.js';
 import { frames as mockFrames } from '../../data/mockData.js';
 
 let frames = [];
@@ -69,6 +69,7 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
           data-brand={frame.brand}
           data-isnew={frame.isNew ? 'true' : 'false'}
           data-cursor-label="DÉCOUVRIR"
+          data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type }) : undefined}
           class="frame-card flex flex-col justify-between group cursor-pointer focus:outline-none focus:ring-1 focus:ring-cobalt"
           tabindex="0"
         >

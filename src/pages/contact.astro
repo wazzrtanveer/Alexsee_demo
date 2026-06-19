@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { sanityClient, SETTINGS_QUERY } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, dataAttribute } from '../lib/sanity.js';
 import { settings as mockSettings } from '../data/mockData.js';
 
 let settings = mockSettings;
@@ -241,7 +241,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
             <p class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
               Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien.
             </p>
-            <div class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
+            <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined} class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
               <div class="flex justify-between items-center py-1">
                 <span class="text-stone-grey normal-case">Téléphone direct :</span>
                 <a href={`tel:${settings.phone.replace(/\s+/g,'')}`} class="font-bold text-cobalt hover:underline">
@@ -262,7 +262,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
           </div>
 
           <!-- Card 2: Access & location -->
-          <div class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
+          <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined} class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
             <span class="font-mono text-[9px] uppercase text-stone-grey tracking-widest flex items-center gap-1.5">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               Accès & Localisation
