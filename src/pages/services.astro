@@ -190,25 +190,10 @@ import { services } from '../data/mockData.js';
 
     rows.forEach(row => {
       const el = row as HTMLElement;
-      
-      // On click, toggle expansion
-      el.addEventListener('click', (e) => {
-        // If clicking inside the collapsible actions, don't re-toggle
-        const target = e.target as HTMLElement;
-        if (target.closest('.service-row-content a') || target.closest('.service-row-content button')) {
-          return;
-        }
-        openRow(el);
-      });
 
-      // Hover updates image preview too
+      // On hover, open the row (and close all others)
       el.addEventListener('mouseenter', () => {
-        const imgUrl = el.getAttribute('data-service-img');
-        const title = el.getAttribute('data-service-title') || '';
-        if (previewImg && imgUrl) {
-          previewImg.src = imgUrl;
-          previewImg.alt = title;
-        }
+        openRow(el);
       });
     });
   }
