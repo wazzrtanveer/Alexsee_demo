@@ -9,7 +9,7 @@ export const sanityClient = createClient({
   useCdn: !isDev, // Disable CDN during development/preview for instant draft updates
   apiVersion: '2024-06-01',
   token: import.meta.env.SANITY_API_READ_TOKEN || import.meta.env.PUBLIC_SANITY_READ_TOKEN || '',
-  perspective: isDev ? 'previewDrafts' : 'published',
+  perspective: isDev ? 'drafts' : 'published',
   stega: {
     enabled: isDev, // Only enable stega in development — encodes content source maps into strings
     studioUrl: '/admin',
