@@ -4,8 +4,9 @@ import Logo from './Logo.astro';
 
 <div
   id="preloader"
-  class="fixed inset-0 z-[9999] bg-optical-black text-ivory flex flex-col items-center justify-center overflow-hidden transition-opacity duration-600 ease-in-out"
-  style="display: none;"
+  transition:persist
+  class="fixed inset-0 text-ivory flex flex-col items-center justify-center overflow-hidden transition-opacity duration-600 ease-in-out"
+  style="display: none; background-color: #0a0a0a; z-index: 99999;"
 >
   <!-- Skip button -->
   <button
@@ -62,15 +63,15 @@ import Logo from './Logo.astro';
 </div>
 
 <script is:inline>
-  // Block rendering of other elements by instantly displaying the preloader on first land / refresh
   (function() {
+    const isPlayed = window['__preloaderPlayed'];
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!window.__preloaderPlayed && !prefersReducedMotion) {
+    if (!isPlayed && !prefersReducedMotion) {
       const preloader = document.getElementById('preloader');
       if (preloader) {
         preloader.style.display = 'flex';
+        document.body.classList.add('preloader-active');
       }
-      document.body.classList.add('preloader-active');
     }
   })();
 </script>
@@ -96,7 +97,7 @@ import Logo from './Logo.astro';
       return;
     }
 
-    // Set page to non-scrollable during load
+    // Lock scrolling on load
     document.body.classList.add('preloader-active');
 
     const finish = () => {
@@ -123,8 +124,10 @@ import Logo from './Logo.astro';
     };
   }
 
-  // Run on page load
-  let cleanup;
+  // Run immediately on script execution to catch initial load
+  let cleanup = runPreloader();
+
+  // Also run on page load for client-side view transition navigations
   document.addEventListener('astro:page-load', () => {
     if (cleanup) cleanup();
     cleanup = runPreloader();
