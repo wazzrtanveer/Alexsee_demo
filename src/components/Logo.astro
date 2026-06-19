@@ -55,7 +55,7 @@ const defaultFlexClasses = hasAlign ? '' : 'items-center justify-center text-cen
       class={`flex items-center font-sans tracking-[0.45em] mt-2 pl-[0.45em] ${hasAlign ? 'justify-start text-left' : 'justify-center text-center'}`}
       style={{ 
         color: mainColor, 
-        fontSize: size === "sm" ? "10px" : size === "md" ? "14px" : size === "lg" ? "18px" : "22px" 
+        fontSize: size === "sm" ? "10px" : size === "md" ? "14px" : size === "lg" ? "18px" : size === "custom" ? Math.round((width || 80) * 0.2) + "px" : "22px" 
       }}
     >
       <span class="font-light uppercase">ALEX</span>
