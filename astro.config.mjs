@@ -17,4 +17,15 @@ export default defineConfig({
       },
     }),
   ],
+  vite: {
+    optimizeDeps: {
+      include: [
+        'lodash/isObject.js',
+        'lodash/groupBy.js',
+        'lodash/keyBy.js',
+        'lodash/partition.js',
+        'lodash/sortedIndex.js',
+      ],
+    },
+  },
 });
