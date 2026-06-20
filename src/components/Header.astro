@@ -22,13 +22,11 @@ const isActive = (path: string) => {
   return cleanPath === cleanItemPath || cleanPath.startsWith(cleanItemPath + '/');
 };
 
-const desktopLinks = settings.headerLinks && settings.headerLinks.length > 0
-  ? settings.headerLinks.filter(item => cleanStega(item.path) !== '/')
-  : [
-      { label: settings.navCollectionsLabel || 'Collection', path: '/collections' },
-      { label: settings.navServicesLabel || 'Savoir-Faire', path: '/services' },
-      { label: settings.navBoutiqueLabel || 'La Boutique', path: '/boutique' }
-    ];
+const desktopLinks = [
+  { field: 'navCollectionsLabel', label: settings.navCollectionsLabel || 'Collection', path: '/collections' },
+  { field: 'navServicesLabel', label: settings.navServicesLabel || 'Savoir-Faire', path: '/services' },
+  { field: 'navBoutiqueLabel', label: settings.navBoutiqueLabel || 'La Boutique', path: '/boutique' }
+];
 
 const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
   ? settings.headerLinks.map((item, index) => ({
@@ -70,13 +68,13 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
     </a>
   </div>
 
-  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] tracking-widest text-optical-black" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' }) : undefined}>
+  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] tracking-widest text-optical-black">
     {desktopLinks.map((item) => {
       const active = isActive(item.path || "#") || (item.path && cleanStega(item.path) === '/collections' && currentPath.includes('/frame/'));
       return (
         <a 
           href={item.path || "#"} 
-          data-sanity={settings._id ? (item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' })) : undefined}
+          data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: item.field }) : undefined}
           class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${active ? 'text-cobalt font-medium' : ''}`}
         >
           {item.label || ""}
