@@ -416,6 +416,13 @@ export default {
             { name: 'image', title: 'Image de survol (Preview Image)', type: 'image', options: { hotspot: true } }
           ]
         }
+      ],
+      initialValue: [
+        { label: 'Accueil Opticien', path: '/', num: '01' },
+        { label: 'Lookbook & Lunettes', path: '/collections', num: '02' },
+        { label: 'L’Art de l’Optique', path: '/services', num: '03' },
+        { label: 'L’Atelier Rue d’Avron', path: '/boutique', num: '04' },
+        { label: 'Prendre rendez-vous', path: '/contact', num: '05' }
       ]
     },
     {
@@ -438,6 +445,13 @@ export default {
             { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
           ]
         }
+      ],
+      initialValue: [
+        { label: 'Accueil Optique', path: '/' },
+        { label: 'Les Collections', path: '/collections' },
+        { label: 'Prestations & Savoir', path: '/services' },
+        { label: 'Atelier & Plan', path: '/boutique' },
+        { label: 'Contacter / RDV', path: '/contact' }
       ]
     },
     {
@@ -460,6 +474,10 @@ export default {
             { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
           ]
         }
+      ],
+      initialValue: [
+        { label: 'Mentions Légales', path: '#' },
+        { label: 'Politique de Confidentialité', path: '#' }
       ]
     },
     {

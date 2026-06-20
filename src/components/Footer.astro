@@ -66,8 +66,8 @@ const currentYear = new Date().getFullYear();
       </span>
       <ul class="space-y-2.5" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerPagesLinks' }) : undefined}>
         {footerPagesLinks.map((link) => (
-          <li data-sanity={settings._id && link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerPagesLinks[_key == "${link._key}"]` }) : undefined}>
-            <a href={link.path} class="hover:text-cobalt transition-colors text-stone-grey">{link.label}</a>
+          <li data-sanity={settings._id ? (link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerPagesLinks[_key == "${link._key}"]` }) : dataAttribute({ id: settings._id, type: settings._type, path: 'footerPagesLinks' })) : undefined}>
+            <a href={link.path || "#"} class="hover:text-cobalt transition-colors text-stone-grey">{link.label || ""}</a>
           </li>
         ))}
       </ul>
@@ -120,11 +120,11 @@ const currentYear = new Date().getFullYear();
     <div class="flex gap-6" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerLegalLinks' }) : undefined}>
       {footerLegalLinks.map((link) => (
         <a 
-          href={link.path} 
-          data-sanity={settings._id && link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerLegalLinks[_key == "${link._key}"]` }) : undefined}
+          href={link.path || "#"} 
+          data-sanity={settings._id ? (link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerLegalLinks[_key == "${link._key}"]` }) : dataAttribute({ id: settings._id, type: settings._type, path: 'footerLegalLinks' })) : undefined}
           class="hover:text-cobalt transition-colors cursor-pointer"
         >
-          {link.label}
+          {link.label || ""}
         </a>
       ))}
       <span 
