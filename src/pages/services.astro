@@ -81,14 +81,17 @@ const servicesPage = pageServices || {
           Prestations de notre atelier :
         </p>
         <div class="divide-y divide-stone-grey/20">
-          {services.map((service, idx) => (
-            <div
-              data-service-id={service.id}
-              data-service-img={urlFor(service.image)}
-              data-service-number={service.number}
-              data-service-title={service.title}
-              class="service-accordion-row py-8 cursor-pointer group transition-all duration-300 hover:bg-stone-light/5 hover:px-2"
-            >
+          {services.map((service, idx) => {
+            const serviceImg = service.image ? cleanStega(urlFor(service.image)) : (mockServices[idx]?.image || '');
+            return (
+              <div
+                data-service-id={service.id}
+                data-service-img={serviceImg}
+                data-service-number={service.number}
+                data-service-title={service.title}
+                data-service-sanity-img-attr={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'image' }) : undefined}
+                class="service-accordion-row py-8 cursor-pointer group transition-all duration-300 hover:bg-stone-light/5 hover:px-2"
+              >
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-6">
                   <span 
@@ -144,7 +147,7 @@ const servicesPage = pageServices || {
                     data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'image' }) : undefined}
                     class="block lg:hidden mt-4 aspect-video overflow-hidden border border-stone-grey/10"
                   >
-                    <img src={urlFor(service.image)} alt={service.title} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
+                    <img src={serviceImg} alt={service.title} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
                   </div>
 
                   <div class="pt-4 flex justify-between items-center border-t border-stone-grey/15">
@@ -158,18 +161,22 @@ const servicesPage = pageServices || {
                 </div>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </div>
 
       <!-- Right Column: Sticky Preview Image (Desktop only) -->
       <div id="services-photo-column" class="col-span-1 lg:col-span-5 hidden lg:flex flex-col justify-start relative">
         <div class="sticky top-32 space-y-6">
-          <div class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15 block shadow-xl shadow-stone-light/35">
+          <div 
+            id="service-preview-img-container"
+            data-sanity={services[0]?._id ? dataAttribute({ id: services[0]._id, type: services[0]._type, path: 'image' }) : undefined}
+            class="aspect-[4/5] bg-stone-light/40 relative overflow-hidden border border-stone-grey/15 block shadow-xl shadow-stone-light/35"
+          >
             <img
               id="service-preview-img"
-              src={urlFor(services[0].image)}
-              alt={services[0].title}
+              src={services[0]?.image ? cleanStega(urlFor(services[0].image)) : (mockServices[0]?.image || '')}
+              alt={services[0]?.title || ''}
               referrerpolicy="no-referrer"
               class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 opacity-85 scale-100"
               style="filter: blur(0px);"
@@ -229,9 +236,20 @@ const servicesPage = pageServices || {
       row.classList.add('bg-stone-light/15', 'px-4');
       row.classList.remove('hover:bg-stone-light/5', 'hover:px-2');
 
-      // Update image
+      // Update image and visual editing data-sanity target
       const imgUrl = row.getAttribute('data-service-img');
       const title = row.getAttribute('data-service-title') || '';
+      const sanityImgAttr = row.getAttribute('data-service-sanity-img-attr');
+      const previewImgContainer = document.getElementById('service-preview-img-container');
+
+      if (previewImgContainer) {
+        if (sanityImgAttr) {
+          previewImgContainer.setAttribute('data-sanity', sanityImgAttr);
+        } else {
+          previewImgContainer.removeAttribute('data-sanity');
+        }
+      }
+
       if (previewImg && imgUrl) {
         previewImg.style.opacity = '0';
         previewImg.style.filter = 'blur(10px)';
