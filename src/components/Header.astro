@@ -67,7 +67,11 @@ const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
     {desktopLinks.map((item) => {
       const active = isActive(item.path) || (cleanStega(item.path) === '/collections' && currentPath.includes('/frame/'));
       return (
-        <a href={item.path} class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${active ? 'text-cobalt font-medium' : ''}`}>
+        <a 
+          href={item.path} 
+          data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : undefined}
+          class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${active ? 'text-cobalt font-medium' : ''}`}
+        >
           {item.label}
           {active && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
         </a>
@@ -103,7 +107,11 @@ const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
         {overlayLinks.map((item) => {
           const active = currentPath === item.path || (item.path !== '/' && currentPath.startsWith(item.path));
           return (
-            <div class="group overlay-link-wrap animate-fade-in" data-img={item.img}>
+            <div 
+              class="group overlay-link-wrap animate-fade-in" 
+              data-img={item.img}
+              data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : undefined}
+            >
               <a href={item.path} class="text-left flex items-baseline gap-4 md:gap-8 group">
                 <span class="font-mono text-xs md:text-sm text-cobalt opacity-70 group-hover:opacity-100 transition-opacity">{item.num}</span>
                 <span style="font-family: var(--font-display);" class={`text-3xl md:text-5xl lg:text-6xl font-light tracking-tight group-hover:translate-x-3 transition-transform duration-300 ${active ? 'font-medium text-cobalt' : 'text-ivory'}`}>

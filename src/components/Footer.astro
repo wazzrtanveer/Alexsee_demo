@@ -66,7 +66,7 @@ const currentYear = new Date().getFullYear();
       </span>
       <ul class="space-y-2.5">
         {footerPagesLinks.map((link) => (
-          <li>
+          <li data-sanity={settings._id && link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerPagesLinks[_key == "${link._key}"]` }) : undefined}>
             <a href={link.path} class="hover:text-cobalt transition-colors text-stone-grey">{link.label}</a>
           </li>
         ))}
@@ -119,7 +119,13 @@ const currentYear = new Date().getFullYear();
     </span>
     <div class="flex gap-6">
       {footerLegalLinks.map((link) => (
-        <a href={link.path} class="hover:text-cobalt transition-colors cursor-pointer">{link.label}</a>
+        <a 
+          href={link.path} 
+          data-sanity={settings._id && link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerLegalLinks[_key == "${link._key}"]` }) : undefined}
+          class="hover:text-cobalt transition-colors cursor-pointer"
+        >
+          {link.label}
+        </a>
       ))}
       <span 
         data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerLocationText' }) : undefined}

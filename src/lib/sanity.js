@@ -144,6 +144,7 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   logoImage,
   logoText,
   headerLinks[] {
+    _key,
     label,
     path,
     num,
@@ -151,11 +152,13 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   },
   footerPagesTitle,
   footerPagesLinks[] {
+    _key,
     label,
     path
   },
   footerBoutiqueTitle,
   footerLegalLinks[] {
+    _key,
     label,
     path
   },
@@ -195,6 +198,7 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
   title,
   subtext,
   filters[] {
+    _key,
     label,
     filterType,
     value
