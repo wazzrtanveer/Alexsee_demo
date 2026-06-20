@@ -70,38 +70,50 @@ const {
     <script>
       import { enableVisualEditing } from '@sanity/visual-editing';
 
-      // Always initialize visual editing when loaded within the Sanity Presentation iframe
-      if (window.self !== window.top) {
-        enableVisualEditing({
-          zIndex: 9999,
-          history: {
-            subscribe: (navigate) => {
-              const syncCurrentUrl = () => {
-                navigate({
-                  type: 'push',
-                  url: window.location.pathname + window.location.search + window.location.hash,
-                });
-              };
+      let disableVisualEditing = null;
 
-              syncCurrentUrl();
-              window.addEventListener('popstate', syncCurrentUrl);
-              window.addEventListener('hashchange', syncCurrentUrl);
-              return () => {
-                window.removeEventListener('popstate', syncCurrentUrl);
-                window.removeEventListener('hashchange', syncCurrentUrl);
-              };
+      function initVisualEditing() {
+        if (disableVisualEditing) {
+          disableVisualEditing();
+          disableVisualEditing = null;
+        }
+
+        if (window.self !== window.top) {
+          disableVisualEditing = enableVisualEditing({
+            zIndex: 9999,
+            history: {
+              subscribe: (navigate) => {
+                // Listens to navigation updates from Sanity Studio
+                const handlePopState = () => {
+                  navigate({
+                    pathname: window.location.pathname,
+                    search: window.location.search,
+                  });
+                };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+              },
+              update: (update) => {
+                // Updates the browser history when a user navigates inside the iframe
+                if (update.type === 'push') {
+                  window.history.pushState(null, '', update.url);
+                } else if (update.type === 'replace') {
+                  window.history.replaceState(null, '', update.url);
+                }
+              },
             },
-            update: (update) => {
-              if (update.type === 'push' || update.type === 'replace') {
-                window.location.assign(update.url);
-              } else if (update.type === 'pop') {
-                window.history.back();
-              }
-            }
-          }
-        });
+          });
+        }
+      }
 
-        // Block native link navigation, button clicks, and form submissions inside the Sanity iframe when visual edit mode is active.
+      // Initialize on initial page load
+      initVisualEditing();
+
+      // Listen for Astro page-load event to re-initialize visual editing on view transitions
+      document.addEventListener('astro:page-load', initVisualEditing);
+
+      // Block native link navigation, button clicks, and form submissions inside the Sanity iframe when visual edit mode is active.
+      if (window.self !== window.top) {
         // Track the current edit mode state. Persist via sessionStorage so it survives page reloads inside the iframe.
         let isEditModeActive = sessionStorage.getItem('sanity-edit-mode') === 'true';
 
