@@ -119,7 +119,15 @@ export default defineConfig({
             type: 'pageBoutique',
           },
           {
+            route: '/boutique/',
+            type: 'pageBoutique',
+          },
+          {
             route: '/collections',
+            type: 'pageCollections',
+          },
+          {
+            route: '/collections/',
             type: 'pageCollections',
           },
           {
@@ -127,11 +135,23 @@ export default defineConfig({
             type: 'pageServices',
           },
           {
+            route: '/services/',
+            type: 'pageServices',
+          },
+          {
             route: '/contact',
             type: 'pageContact',
           },
           {
+            route: '/contact/',
+            type: 'pageContact',
+          },
+          {
             route: '/frame/:slug',
+            filter: '_type == "frame" && slug.current == $slug',
+          },
+          {
+            route: '/frame/:slug/',
             filter: '_type == "frame" && slug.current == $slug',
           },
         ]),

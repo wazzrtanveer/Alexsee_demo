@@ -85,20 +85,27 @@ const {
               subscribe: (navigate) => {
                 // Listens to navigation updates from Sanity Studio
                 const handlePopState = () => {
+                  const currentUrl = window.location.pathname + window.location.search + window.location.hash;
                   navigate({
+                    type: 'push',
+                    url: currentUrl,
                     pathname: window.location.pathname,
                     search: window.location.search,
                   });
                 };
                 window.addEventListener('popstate', handlePopState);
+                
+                // Immediately synchronize navigation state on mount
+                handlePopState();
+                
                 return () => window.removeEventListener('popstate', handlePopState);
               },
               update: (update) => {
-                // Updates the browser history when a user navigates inside the iframe
-                if (update.type === 'push') {
-                  window.history.pushState(null, '', update.url);
-                } else if (update.type === 'replace') {
-                  window.history.replaceState(null, '', update.url);
+                // Updates the browser history and performs client-side programmatic navigation in Astro View Transitions
+                if (update.type === 'push' || update.type === 'replace') {
+                  import('astro:transitions/client').then(({ navigate }) => {
+                    navigate(update.url);
+                  });
                 }
               },
             },
@@ -111,8 +118,6 @@ const {
 
       // Listen for Astro page-load event to re-initialize visual editing on view transitions
       document.addEventListener('astro:page-load', initVisualEditing);
-
-
     </script>
   </body>
 </html>
