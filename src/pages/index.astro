@@ -56,6 +56,25 @@ const home = pageHome || {
   _id: 'pageHome',
   _type: 'pageHome'
 };
+
+const headlineRaw = home.heroHeadline || "Voir\nautrement.";
+const hasNewline = cleanStega(headlineRaw).includes('\n');
+const spaceIdx = cleanStega(headlineRaw).indexOf(' ');
+
+let firstLine = "Voir";
+let secondLine = "autrement.";
+
+if (hasNewline) {
+  const parts = headlineRaw.split('\n');
+  firstLine = parts[0];
+  secondLine = parts.slice(1).join('\n');
+} else if (spaceIdx > -1) {
+  firstLine = headlineRaw.substring(0, spaceIdx); 
+  secondLine = headlineRaw.substring(spaceIdx + 1);
+} else {
+  firstLine = headlineRaw;
+  secondLine = "";
+}
 const rawFeatured = frames.filter(f => f.isFeatured);
 const rawNonFeatured = frames.filter(f => !f.isFeatured);
 
@@ -125,21 +144,11 @@ const featuredFrames = tempFeatured.slice(0, 3);
               <p class="font-mono text-[10px] tracking-widest text-cobalt uppercase font-bold">Boutique indépendante de créateurs</p>
             </div>
             <h1 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroHeadline' }) : undefined} class="text-[64px] lg:text-[100px] xl:text-[112px] font-normal leading-[0.85] tracking-tight text-optical-black mb-10" style="font-family: var(--font-display);">
-              {home.heroHeadline ? (
-                home.heroHeadline.includes('\n') ? (
-                  home.heroHeadline.split('\n').map((line, idx) => (
-                    <>
-                      {line}
-                      {idx < home.heroHeadline.split('\n').length - 1 && <br />}
-                    </>
-                  ))
-                ) : (
-                  home.heroHeadline
-                )
-              ) : (
+              {firstLine}
+              {secondLine && (
                 <>
-                  Voir<br />
-                  <span class="italic ml-16 text-cobalt block">autrement.</span>
+                  <br />
+                  <span class="italic ml-16 text-cobalt block">{secondLine}</span>
                 </>
               )}
             </h1>
@@ -209,9 +218,14 @@ const featuredFrames = tempFeatured.slice(0, 3);
             <span class="w-1.5 h-1.5 bg-cobalt rounded-full animate-pulse"></span>
             <p class="font-mono text-[9px] tracking-widest text-cobalt uppercase font-bold">Boutique indépendante de créateurs</p>
           </div>
-          <h1 class="text-[48px] sm:text-[68px] font-normal leading-[0.9] tracking-tight text-optical-black mb-4" style="font-family: var(--font-display);">
-            Voir<br />
-            <span class="italic ml-6 sm:ml-12 text-cobalt block">autrement.</span>
+          <h1 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'heroHeadline' }) : undefined} class="text-[48px] sm:text-[68px] font-normal leading-[0.9] tracking-tight text-optical-black mb-4" style="font-family: var(--font-display);">
+            {firstLine}
+            {secondLine && (
+              <>
+                <br />
+                <span class="italic ml-6 sm:ml-12 text-cobalt block">{secondLine}</span>
+              </>
+            )}
           </h1>
         </div>
         <p class="font-sans text-optical-black/95 text-base font-light mb-2 max-w-xl leading-relaxed">
