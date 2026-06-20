@@ -57,6 +57,68 @@ export default {
       initialValue: 'https://www.instagram.com/alexsee.avron/'
     },
     {
+      name: 'socialLinks',
+      title: 'Liens des Réseaux Sociaux (Social Links)',
+      type: 'array',
+      description: 'Ajoutez vos liens de réseaux sociaux (Instagram, Facebook, etc.)',
+      of: [
+        {
+          type: 'object',
+          name: 'socialLink',
+          title: 'Réseau Social',
+          fields: [
+            {
+              name: 'platform',
+              title: 'Plateforme',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Instagram', value: 'instagram' },
+                  { title: 'Facebook', value: 'facebook' },
+                  { title: 'Twitter / X', value: 'twitter' },
+                  { title: 'LinkedIn', value: 'linkedin' },
+                  { title: 'YouTube', value: 'youtube' },
+                  { title: 'TikTok', value: 'tiktok' },
+                  { title: 'Site Web / Autre', value: 'website' }
+                ]
+              },
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'url',
+              title: 'URL du Profil',
+              type: 'url',
+              validation: Rule => Rule.required()
+            }
+          ],
+          preview: {
+            select: {
+              title: 'platform',
+              subtitle: 'url'
+            },
+            prepare({ title, subtitle }) {
+              const platforms = {
+                instagram: 'Instagram',
+                facebook: 'Facebook',
+                twitter: 'Twitter / X',
+                linkedin: 'LinkedIn',
+                youtube: 'YouTube',
+                tiktok: 'TikTok',
+                website: 'Site Web / Autre'
+              };
+              return {
+                title: platforms[title] || title || 'Réseau Social',
+                subtitle: subtitle
+              };
+            }
+          }
+        }
+      ],
+      initialValue: [
+        { platform: 'instagram', url: 'https://www.instagram.com/alexsee.avron/' }
+      ]
+    },
+    {
       name: 'hours',
       title: "Horaires d'Ouverture",
       type: 'array',

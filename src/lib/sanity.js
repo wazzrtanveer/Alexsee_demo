@@ -91,6 +91,11 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   metro,
   phone,
   instagram,
+  socialLinks[] {
+    _key,
+    platform,
+    url
+  },
   email,
   hours[] {
     days,
