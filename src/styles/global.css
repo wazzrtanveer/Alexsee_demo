@@ -22,6 +22,28 @@
   animation: 0.5s cubic-bezier(0.76, 0, 0.24, 1) both fade-in;
 }
 
+/* Keep Header completely static and still during page transitions */
+#app-main-header {
+  view-transition-name: app-main-header;
+}
+
+::view-transition-old(app-main-header),
+::view-transition-new(app-main-header) {
+  animation: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Keep Custom Cursor completely static and still during page transitions */
+#custom-cursor {
+  view-transition-name: custom-cursor;
+}
+
+::view-transition-old(custom-cursor),
+::view-transition-new(custom-cursor) {
+  animation: none !important;
+  mix-blend-mode: normal !important;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
