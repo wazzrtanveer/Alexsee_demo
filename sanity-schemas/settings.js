@@ -278,6 +278,66 @@ export default {
       initialValue: 'Dans un monde d’écrans saturés et de production de masse, nous défendons l’histoire de chaque trait, l’élection soigneuse de la couleur, et la précision mathématique du réglage. Les lunettes de créateur écrivent une poésie que le modèle de série ignore.'
     },
     {
+      name: 'manifestoStat1Value',
+      title: 'Manifeste - Stat 1 Valeur',
+      type: 'string',
+      initialValue: '100%'
+    },
+    {
+      name: 'manifestoStat1Label',
+      title: 'Manifeste - Stat 1 Label',
+      type: 'string',
+      initialValue: 'Indépendant'
+    },
+    {
+      name: 'manifestoStat2Value',
+      title: 'Manifeste - Stat 2 Valeur',
+      type: 'string',
+      initialValue: 'Paris 20'
+    },
+    {
+      name: 'manifestoStat2Label',
+      title: 'Manifeste - Stat 2 Label',
+      type: 'string',
+      initialValue: 'Ancrage Local'
+    },
+    {
+      name: 'stat1Value',
+      title: 'Statistique 1 - Valeur',
+      type: 'string',
+      initialValue: '15+'
+    },
+    {
+      name: 'stat1Label',
+      title: 'Statistique 1 - Label',
+      type: 'string',
+      initialValue: "Ans d'expertise optique"
+    },
+    {
+      name: 'stat2Value',
+      title: 'Statistique 2 - Valeur',
+      type: 'string',
+      initialValue: '200+'
+    },
+    {
+      name: 'stat2Label',
+      title: 'Statistique 2 - Label',
+      type: 'string',
+      initialValue: 'Montures en boutique'
+    },
+    {
+      name: 'stat3Value',
+      title: 'Statistique 3 - Valeur',
+      type: 'string',
+      initialValue: '1h'
+    },
+    {
+      name: 'stat3Label',
+      title: 'Statistique 3 - Label',
+      type: 'string',
+      initialValue: 'Accompagnement personnalisé'
+    },
+    {
       name: 'servicesTitle',
       title: 'Prestations - Titre de la section',
       type: 'string',

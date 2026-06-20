@@ -367,12 +367,12 @@ const featuredFrames = tempFeatured.slice(0, 3);
         </p>
         <div class="pt-4 flex justify-center gap-8 text-left font-mono text-[10px] tracking-widest text-stone-grey uppercase">
           <div>
-            <span class="text-cobalt block text-lg font-bold">100%</span>
-            <span>Indépendant</span>
+            <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoStat1Value' }) : undefined} class="text-cobalt block text-lg font-bold">{home.manifestoStat1Value || "100%"}</span>
+            <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoStat1Label' }) : undefined}>{home.manifestoStat1Label || "Indépendant"}</span>
           </div>
           <div class="border-l border-stone-grey/20 pl-8">
-            <span class="text-cobalt block text-lg font-bold">Paris 20</span>
-            <span>Ancrage Local</span>
+            <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoStat2Value' }) : undefined} class="text-cobalt block text-lg font-bold">{home.manifestoStat2Value || "Paris 20"}</span>
+            <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'manifestoStat2Label' }) : undefined}>{home.manifestoStat2Label || "Ancrage Local"}</span>
           </div>
         </div>
       </div>
@@ -394,13 +394,34 @@ const featuredFrames = tempFeatured.slice(0, 3);
       <div class="border-t border-stone-grey/20">
 
         {services.slice(0, 3).map(service => (
-          <div data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type }) : undefined} class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
-            <div class="col-span-1 md:col-span-1 font-mono text-cobalt font-medium text-lg">{service.number}</div>
-            <div class="col-span-1 md:col-span-5">
-              <span class="font-mono text-[9px] uppercase tracking-wider text-cobalt block mb-1">{service.unconfirmedNote}</span>
-              <h3 style="font-family: var(--font-display);" class="text-2xl md:text-3xl font-light uppercase tracking-tight group-hover:translate-x-2 transition-transform duration-300">{service.title}</h3>
+          <div class="border-b border-stone-grey/20 py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center group hover:bg-stone-light/10 transition-colors duration-300">
+            <div 
+              data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'number' }) : undefined}
+              class="col-span-1 md:col-span-1 font-mono text-cobalt font-medium text-lg"
+            >
+              {service.number}
             </div>
-            <div class="col-span-1 md:col-span-4 text-xs md:text-sm text-stone-grey/90">{service.description}</div>
+            <div class="col-span-1 md:col-span-5">
+              <span 
+                data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'unconfirmedNote' }) : undefined}
+                class="font-mono text-[9px] uppercase tracking-wider text-cobalt block mb-1"
+              >
+                {service.unconfirmedNote}
+              </span>
+              <h3 
+                data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'title' }) : undefined}
+                style="font-family: var(--font-display);" 
+                class="text-2xl md:text-3xl font-light uppercase tracking-tight group-hover:translate-x-2 transition-transform duration-300"
+              >
+                {service.title}
+              </h3>
+            </div>
+            <div 
+              data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'description' }) : undefined}
+              class="col-span-1 md:col-span-4 text-xs md:text-sm text-stone-grey/90"
+            >
+              {service.description}
+            </div>
             <div class="col-span-1 md:col-span-2 text-right">
               <a href="/services" class="font-mono text-[9px] uppercase tracking-widest text-stone-grey group-hover:text-cobalt transition-colors duration-300 inline-flex items-center gap-2">
                 <span>Détails</span>
@@ -468,16 +489,18 @@ const featuredFrames = tempFeatured.slice(0, 3);
     <!-- ── Stats Strip ── -->
     <section class="px-6 md:px-12 lg:px-24 py-20 border-b border-stone-grey/10">
       <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-grey/15">
-        {[
-          { val: '15+', label: "Ans d'expertise optique" },
-          { val: '200+', label: 'Montures en boutique' },
-          { val: '1h', label: 'Accompagnement personnalisé' },
-        ].map((s) => (
-          <div class="py-12 px-8 text-center">
-            <div class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{s.val}</div>
-            <p class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{s.label}</p>
-          </div>
-        ))}
+        <div class="py-12 px-8 text-center">
+          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat1Value || "15+"}</div>
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat1Label || "Ans d'expertise optique"}</p>
+        </div>
+        <div class="py-12 px-8 text-center">
+          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat2Value || "200+"}</div>
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat2Label || "Montures en boutique"}</p>
+        </div>
+        <div class="py-12 px-8 text-center">
+          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat3Value || "1h"}</div>
+          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat3Label || "Accompagnement personnalisé"}</p>
+        </div>
       </div>
     </section>
 
