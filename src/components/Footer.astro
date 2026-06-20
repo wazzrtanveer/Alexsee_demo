@@ -64,7 +64,7 @@ const currentYear = new Date().getFullYear();
       >
         {settings.footerPagesTitle || "[ Pages ]"}
       </span>
-      <ul class="space-y-2.5">
+      <ul class="space-y-2.5" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerPagesLinks' }) : undefined}>
         {footerPagesLinks.map((link) => (
           <li data-sanity={settings._id && link._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerPagesLinks[_key == "${link._key}"]` }) : undefined}>
             <a href={link.path} class="hover:text-cobalt transition-colors text-stone-grey">{link.label}</a>
@@ -117,7 +117,7 @@ const currentYear = new Date().getFullYear();
     <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerCopyrightText' }) : undefined}>
       © {currentYear} {settings.name || "AlexSEE"}. {settings.footerCopyrightText || "Tous droits réservés."}
     </span>
-    <div class="flex gap-6">
+    <div class="flex gap-6" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerLegalLinks' }) : undefined}>
       {footerLegalLinks.map((link) => (
         <a 
           href={link.path} 

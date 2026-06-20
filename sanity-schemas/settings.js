@@ -431,6 +431,8 @@ export default {
       of: [
         {
           type: 'object',
+          name: 'footerLink',
+          title: 'Lien du Footer',
           fields: [
             { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
             { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
@@ -451,6 +453,8 @@ export default {
       of: [
         {
           type: 'object',
+          name: 'legalLink',
+          title: 'Lien Légal',
           fields: [
             { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
             { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
