@@ -31,8 +31,38 @@ const {
   <head>
     <script is:inline>
       if (window.self !== window.top) {
+        // 1. Inside Sanity Studio Presentation Iframe: Disable Google Translate to prevent preview layout shifts
         document.documentElement.classList.add('notranslate');
         document.documentElement.setAttribute('translate', 'no');
+      } else {
+        // 2. On the Public Live Site: Strip invisible visual editing metadata (stega) from text nodes.
+        // This ensures browser translators (like Google Translate) work flawlessly without layout distortion.
+        const cleanStegaFromDOM = (node) => {
+          if (node.nodeType === 3) {
+            const val = node.nodeValue;
+            if (val) {
+              const cleaned = val.replace(/[\u200B-\u200D\uFEFF]/g, '');
+              if (cleaned !== val) {
+                node.nodeValue = cleaned;
+              }
+            }
+          } else if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+            for (let i = 0; i < node.childNodes.length; i++) {
+              cleanStegaFromDOM(node.childNodes[i]);
+            }
+          }
+        };
+
+        const runClean = () => {
+          if (document.body) cleanStegaFromDOM(document.body);
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', runClean);
+        } else {
+          runClean();
+        }
+        document.addEventListener('astro:page-load', runClean);
       }
     </script>
     <meta charset="utf-8" />
