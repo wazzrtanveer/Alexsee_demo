@@ -87,19 +87,28 @@ const servicesPage = pageServices || {
               data-service-img={urlFor(service.image)}
               data-service-number={service.number}
               data-service-title={service.title}
-              data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type }) : undefined}
               class="service-accordion-row py-8 cursor-pointer group transition-all duration-300 hover:bg-stone-light/5 hover:px-2"
             >
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-6">
-                  <span class="font-mono text-sm text-cobalt tracking-wider font-semibold">
+                  <span 
+                    data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'number' }) : undefined}
+                    class="font-mono text-sm text-cobalt tracking-wider font-semibold"
+                  >
                     {service.number}
                   </span>
                   <div>
-                    <span class="font-mono text-[8px] uppercase tracking-widest text-cobalt block mb-1">
+                    <span 
+                      data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'unconfirmedNote' }) : undefined}
+                      class="font-mono text-[8px] uppercase tracking-widest text-cobalt block mb-1"
+                    >
                       {service.unconfirmedNote}
                     </span>
-                    <h3 style="font-family: var(--font-display);" class="text-xl md:text-2xl font-light uppercase tracking-tight group-hover:text-cobalt transition-colors">
+                    <h3 
+                      data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'title' }) : undefined}
+                      style="font-family: var(--font-display);" 
+                      class="text-xl md:text-2xl font-light uppercase tracking-tight group-hover:text-cobalt transition-colors"
+                    >
                       {service.title}
                     </h3>
                   </div>
@@ -112,23 +121,29 @@ const servicesPage = pageServices || {
               <!-- Collapsible Content -->
               <div class="service-row-content h-0 opacity-0 overflow-hidden transition-all duration-300 ease-out">
                 <div class="pt-6 pl-12 pr-4 space-y-4">
-                  <p class="font-sans text-stone-grey text-sm leading-relaxed max-w-xl">
+                  <p 
+                    data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'description' }) : undefined}
+                    class="font-sans text-stone-grey text-sm leading-relaxed max-w-xl"
+                  >
                     {service.description}
                   </p>
                   
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                    {service.details.map((detail) => (
+                    {service.details.map((detail, index) => (
                       <div class="flex items-start gap-2 text-xs text-optical-black font-sans">
                         <span class="text-cobalt mt-0.5">
                           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-cobalt"><polyline points="20 6 9 17 4 12"/></svg>
                         </span>
-                        <span>{detail}</span>
+                        <span data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: `details[${index}]` }) : undefined}>{detail}</span>
                       </div>
                     ))}
                   </div>
 
                   <!-- Mobile-only inline image -->
-                  <div class="block lg:hidden mt-4 aspect-video overflow-hidden border border-stone-grey/10">
+                  <div 
+                    data-sanity={service._id ? dataAttribute({ id: service._id, type: service._type, path: 'image' }) : undefined}
+                    class="block lg:hidden mt-4 aspect-video overflow-hidden border border-stone-grey/10"
+                  >
                     <img src={urlFor(service.image)} alt={service.title} referrerpolicy="no-referrer" class="w-full h-full object-cover" />
                   </div>
 
