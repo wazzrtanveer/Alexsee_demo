@@ -371,7 +371,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
       input.classList.add('border-stone-grey/25');
     };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       let hasError = false;
 
@@ -412,37 +412,78 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
         return;
       }
 
-      // Populate success fields
-      const successName = document.getElementById('success-user-name');
-      const successService = document.getElementById('success-service-name');
-      const successDate = document.getElementById('success-date');
-      const successTime = document.getElementById('success-time');
-      const successContact = document.getElementById('success-contact');
-      const successNotesWrap = document.getElementById('success-notes-wrap');
-      const successNotes = document.getElementById('success-notes');
-
-      if (successName) successName.textContent = inputName.value;
-      if (successService) successService.textContent = selectService.value;
-      if (successDate) successDate.textContent = inputDate.value;
-      if (successTime) successTime.textContent = selectedTime;
-      if (successContact) successContact.textContent = `${inputEmail.value} / ${inputPhone.value}`;
-      
-      if (txtNotes.value.trim()) {
-        if (successNotes) successNotes.textContent = txtNotes.value;
-        successNotesWrap?.classList.remove('hidden');
-      } else {
-        successNotesWrap?.classList.add('hidden');
+      // Disable submit button and show loading state
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Envoi en cours...';
       }
 
-      // Slide out form, slide in success panel
-      viewRoot.classList.add('opacity-0');
-      setTimeout(() => {
-        viewRoot.classList.add('hidden');
-        successRoot.classList.remove('hidden');
+      try {
+        const payload = {
+          name: inputName.value,
+          email: inputEmail.value,
+          phone: inputPhone.value,
+          service: selectService.value,
+          date: inputDate.value,
+          time: selectedTime,
+          notes: txtNotes.value
+        };
+
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || 'Une erreur est survenue lors de l\'envoi.');
+        }
+
+        // Populate success fields
+        const successName = document.getElementById('success-user-name');
+        const successService = document.getElementById('success-service-name');
+        const successDate = document.getElementById('success-date');
+        const successTime = document.getElementById('success-time');
+        const successContact = document.getElementById('success-contact');
+        const successNotesWrap = document.getElementById('success-notes-wrap');
+        const successNotes = document.getElementById('success-notes');
+
+        if (successName) successName.textContent = inputName.value;
+        if (successService) successService.textContent = selectService.value;
+        if (successDate) successDate.textContent = inputDate.value;
+        if (successTime) successTime.textContent = selectedTime;
+        if (successContact) successContact.textContent = `${inputEmail.value} / ${inputPhone.value}`;
+        
+        if (txtNotes.value.trim()) {
+          if (successNotes) successNotes.textContent = txtNotes.value;
+          successNotesWrap?.classList.remove('hidden');
+        } else {
+          successNotesWrap?.classList.add('hidden');
+        }
+
+        // Slide out form, slide in success panel
+        viewRoot.classList.add('opacity-0');
         setTimeout(() => {
-          successRoot.classList.remove('opacity-0');
-        }, 10);
-      }, 500);
+          viewRoot.classList.add('hidden');
+          successRoot.classList.remove('hidden');
+          setTimeout(() => {
+            successRoot.classList.remove('opacity-0');
+          }, 10);
+        }, 500);
+      } catch (err) {
+        console.error('Error submitting form:', err);
+        alert(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'envoi de votre demande.');
+        
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      }
     });
   }
 
