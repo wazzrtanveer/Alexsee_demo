@@ -28,6 +28,9 @@ const studioTheme = buildLegacyTheme({
   '--focus-color': '#2e5bff',
 })
 
+// Fallback to our live Cloudflare Pages URL if the local environment variable isn't set
+const SANITY_STUDIO_PREVIEW_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://alexis-shop.pages.dev'
+
 export default defineConfig({
   name: 'alexsee',
   title: 'AlexSEE — Studio CMS',
@@ -103,9 +106,7 @@ export default defineConfig({
     }),
     visionTool(),
     presentationTool({
-      previewUrl: {
-        initial: 'http://localhost:4321',
-      },
+      previewUrl: SANITY_STUDIO_PREVIEW_URL,
     }),
   ],
 
