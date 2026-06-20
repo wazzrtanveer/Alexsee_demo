@@ -379,6 +379,103 @@ export default {
       type: 'string',
       initialValue: 'Confirmer mon rendez-vous'
     },
+    {
+      name: 'favicon',
+      title: 'Favicon du Site',
+      type: 'image',
+      description: 'Favicon image (upload a square PNG or SVG)',
+      options: { hotspot: false }
+    },
+    {
+      name: 'logoImage',
+      title: 'Logo (Image)',
+      type: 'image',
+      description: 'Upload a custom logo image to override the default SVG logo',
+      options: { hotspot: false }
+    },
+    {
+      name: 'logoText',
+      title: 'Texte du Logo',
+      type: 'string',
+      description: 'Alternative logo text (default is "AlexSEE")',
+      initialValue: 'AlexSEE'
+    },
+    {
+      name: 'headerLinks',
+      title: 'Liens de Navigation (Header)',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'navLink',
+          title: 'Lien de navigation',
+          fields: [
+            { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
+            { name: 'path', title: 'Chemin / URL (ex: /collections)', type: 'string', validation: Rule => Rule.required() },
+            { name: 'num', title: 'Numéro (ex: 01)', type: 'string' },
+            { name: 'image', title: 'Image de survol (Preview Image)', type: 'image', options: { hotspot: true } }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'footerPagesTitle',
+      title: 'Footer — Titre Section Pages',
+      type: 'string',
+      initialValue: '[ Pages ]'
+    },
+    {
+      name: 'footerPagesLinks',
+      title: 'Footer — Liens Section Pages',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
+            { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'footerBoutiqueTitle',
+      title: 'Footer — Titre Section Boutique',
+      type: 'string',
+      initialValue: '[ Boutique ]'
+    },
+    {
+      name: 'footerLegalLinks',
+      title: 'Footer — Liens Légaux',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
+            { name: 'path', title: 'Chemin / URL', type: 'string', validation: Rule => Rule.required() }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'footerCopyrightText',
+      title: 'Footer — Texte Copyright',
+      type: 'string',
+      initialValue: 'Tous droits réservés.'
+    },
+    {
+      name: 'footerLocationText',
+      title: 'Footer — Texte Localisation',
+      type: 'string',
+      initialValue: 'Paris XX, France'
+    },
+    {
+      name: 'footerBackgroundText',
+      title: 'Footer — Grand texte de fond',
+      type: 'string',
+      initialValue: 'AlexSEE'
+    }
   ],
   preview: {
     select: { title: 'name' }

@@ -1,9 +1,24 @@
 ---
 import ClientRouter from 'astro/components/ClientRouter.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import Preloader from '../components/Preloader.astro';
+import { settings as mockSettings } from '../data/mockData.js';
+import { sanityClient, SETTINGS_QUERY, urlFor } from '../lib/sanity.js';
 import '../styles/global.css';
+
+let settings = mockSettings;
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings in Layout.astro:", e);
+}
+
+const faviconUrl = settings.favicon ? urlFor(settings.favicon) : '/favicon.svg';
 
 const { 
   title = "AlexSEE — Opticien Créateur Paris 20e", 
@@ -15,8 +30,7 @@ const {
 <html lang="fr" class="bg-ivory text-optical-black selection:bg-cobalt selection:text-ivory">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href={faviconUrl} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="generator" content={Astro.generator} />
     
@@ -65,6 +79,9 @@ const {
       >
         <slot />
       </div>
+
+      {/* Global Footer */}
+      <Footer />
     </div>
 
     <script>

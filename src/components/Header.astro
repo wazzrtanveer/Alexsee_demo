@@ -1,7 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import { settings as mockSettings } from '../data/mockData.js';
-import { sanityClient, SETTINGS_QUERY, cleanStega } from '../lib/sanity.js';
+import { sanityClient, SETTINGS_QUERY, cleanStega, dataAttribute, urlFor } from '../lib/sanity.js';
 
 let settings = mockSettings;
 try {
@@ -22,17 +22,34 @@ const isActive = (path: string) => {
   return cleanPath === cleanItemPath || cleanPath.startsWith(cleanItemPath + '/');
 };
 
-const navItems = [
-  { id: 'home', label: settings.navHomeLabel || 'Accueil Opticien', num: '01', path: '/', img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' },
-  { id: 'collections', label: settings.navCollectionsLabel || 'Lookbook & Lunettes', num: '02', path: '/collections', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' },
-  { id: 'services', label: settings.navServicesLabel || 'L’Art de l’Optique', num: '03', path: '/services', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' },
-  { id: 'boutique', label: settings.navBoutiqueLabel || 'L’Atelier Rue d’Avron', num: '04', path: '/boutique', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
-  { id: 'contact', label: settings.navContactLabel || 'Prendre rendez-vous', num: '05', path: '/contact', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80' }
-];
+const desktopLinks = settings.headerLinks && settings.headerLinks.length > 0
+  ? settings.headerLinks.filter(item => cleanStega(item.path) !== '/')
+  : [
+      { label: settings.navCollectionsLabel || 'Collection', path: '/collections' },
+      { label: settings.navServicesLabel || 'Savoir-Faire', path: '/services' },
+      { label: settings.navBoutiqueLabel || 'La Boutique', path: '/boutique' }
+    ];
 
-const isCollectionsActive = isActive('/collections') || currentPath.includes('/frame/');
-const isServicesActive = isActive('/services');
-const isBoutiqueActive = isActive('/boutique');
+const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
+  ? settings.headerLinks.map((item, index) => ({
+      label: item.label,
+      path: item.path,
+      num: item.num || String(index + 1).padStart(2, '0'),
+      img: item.image ? urlFor(item.image) : (
+        item.path === '/' ? 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' :
+        item.path.includes('collections') ? 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' :
+        item.path.includes('services') ? 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' :
+        item.path.includes('boutique') ? 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' :
+        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80'
+      )
+    }))
+  : [
+      { label: settings.navHomeLabel || 'Accueil Opticien', path: '/', num: '01', img: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80' },
+      { label: settings.navCollectionsLabel || 'Lookbook & Lunettes', path: '/collections', num: '02', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80' },
+      { label: settings.navServicesLabel || 'L’Art de l’Optique', path: '/services', num: '03', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80' },
+      { label: settings.navBoutiqueLabel || 'L’Atelier Rue d’Avron', path: '/boutique', num: '04', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
+      { label: settings.navContactLabel || 'Prendre rendez-vous', path: '/contact', num: '05', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80' }
+    ];
 ---
 
 <header id="app-main-header" transition:persist class="fixed top-0 left-0 right-0 z-50 bg-ivory/80 backdrop-blur-md border-b border-stone-grey/10 py-5 px-6 md:px-12 flex items-center justify-between transition-colors duration-300">
@@ -46,20 +63,17 @@ const isBoutiqueActive = isActive('/boutique');
     </a>
   </div>
 
-  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] tracking-widest text-optical-black">
-    <a href="/collections" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isCollectionsActive ? 'text-cobalt font-medium' : ''}`}>
-      {settings.navCollectionsLabel || "Collection"}
-      {isCollectionsActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
-    </a>
-    <a href="/services" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isServicesActive ? 'text-cobalt font-medium' : ''}`}>
-      {settings.navServicesLabel || "Savoir-Faire"}
-      {isServicesActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
-    </a>
-    <a href="/boutique" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isBoutiqueActive ? 'text-cobalt font-medium' : ''}`}>
-      {settings.navBoutiqueLabel || "La Boutique"}
-      {isBoutiqueActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
-    </a>
-    <a href="/contact" class="ml-4 bg-cobalt hover:bg-optical-black text-ivory px-5 py-2.5 transition-colors duration-300 text-[10px] tracking-widest font-semibold">
+  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] tracking-widest text-optical-black" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' }) : undefined}>
+    {desktopLinks.map((item) => {
+      const active = isActive(item.path) || (cleanStega(item.path) === '/collections' && currentPath.includes('/frame/'));
+      return (
+        <a href={item.path} class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${active ? 'text-cobalt font-medium' : ''}`}>
+          {item.label}
+          {active && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
+        </a>
+      );
+    })}
+    <a href="/contact" class="ml-4 bg-cobalt hover:bg-optical-black text-ivory px-5 py-2.5 transition-colors duration-300 text-[10px] tracking-widest font-semibold" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'navButtonText' }) : undefined}>
       {settings.navButtonText || "Rendez-vous"}
     </a>
   </nav>
@@ -85,8 +99,8 @@ const isBoutiqueActive = isActive('/boutique');
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center justify-center my-auto relative z-10">
     <div class="col-span-1 lg:col-span-7 flex flex-col gap-6 md:gap-10">
       <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-stone-grey block border-b border-stone-grey/25 pb-3">Navigation</span>
-      <nav id="overlay-menu-nav" class="flex flex-col gap-4 md:gap-6">
-        {navItems.map((item) => {
+      <nav id="overlay-menu-nav" class="flex flex-col gap-4 md:gap-6" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' }) : undefined}>
+        {overlayLinks.map((item) => {
           const active = currentPath === item.path || (item.path !== '/' && currentPath.startsWith(item.path));
           return (
             <div class="group overlay-link-wrap animate-fade-in" data-img={item.img}>

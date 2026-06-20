@@ -1,4 +1,17 @@
 ---
+import { sanityClient, SETTINGS_QUERY, urlFor, dataAttribute } from '../lib/sanity.js';
+import { settings as mockSettings } from '../data/mockData.js';
+
+let settings = mockSettings;
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings in Logo component:", e);
+}
+
 const { size = "md", width, showText = true, inverse = false, class: className = "" } = Astro.props;
 
 const sizes = {
@@ -22,97 +35,119 @@ const accentColor = inverse ? accentDarkColor : lightColor;
 // Detect override positioning
 const hasAlign = className.includes('items-') || className.includes('text-') || className.includes('justify-');
 const defaultFlexClasses = hasAlign ? '' : 'items-center justify-center text-center';
+
+const logoTextValue = settings.logoText || "ALEXSEE";
+const logoTextPart1 = logoTextValue.substring(0, Math.ceil(logoTextValue.length / 2));
+const logoTextPart2 = logoTextValue.substring(Math.ceil(logoTextValue.length / 2));
 ---
-<div class={`flex flex-col select-none ${defaultFlexClasses} ${className}`}>
-  {size === "target" ? (
-    <svg
-      viewBox="0 0 500 280"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+<div 
+  data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: settings.logoImage ? 'logoImage' : 'logoText' }) : undefined}
+  class={`flex flex-col select-none ${defaultFlexClasses} ${className}`}
+>
+  {settings.logoImage ? (
+    <img
+      src={urlFor(settings.logoImage)}
+      alt={logoTextValue}
       class="transition-transform duration-500 hover:scale-[1.03]"
-      aria-label="AlexSEE Logo"
       style={{
-        width: "clamp(7.2rem, 11vw, 11.5rem)",
+        width: size === "target" ? "clamp(7.2rem, 11vw, 11.5rem)" : `${w}px`,
         height: "auto",
         display: "block"
       }}
-    >
-      <path
-        d="M250,87 C234,85 214,76 184,76 C154,76 146,82 140,84 C137,85 135,87 135,91 C135,109 143,136 178,136 C202,136 218,122 236,108 C242,103 246,97 250,97 C254,97 258,103 264,108 C282,122 298,136 322,136 C357,136 365,109 365,91 C365,87 363,85 360,84 C354,82 346,76 316,76 C286,76 266,85 250,87 Z"
-        fill={mainColor}
-      />
-      <path
-        d="M164,129 L190,83 L216,129"
-        stroke={accentColor}
-        stroke-width="11"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M326,91 C324,82 306,82 296,89 C284,96 288,107 306,111 C324,115 330,121 328,130 C326,139 308,140 294,131"
-        stroke={accentColor}
-        stroke-width="11"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      {showText && (
-        <text
-          x="250"
-          y="215"
-          font-family="System-UI, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif"
-          font-size="42"
-          font-weight="300"
-          letter-spacing="18"
-          fill={mainColor}
-          text-anchor="middle"
-          dx="9"
-        >
-          ALEXSEE
-        </text>
-      )}
-    </svg>
+      referrerpolicy="no-referrer"
+    />
   ) : (
-    <svg
-      viewBox="0 0 240 128"
-      width={w}
-      height={h}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      class="transition-transform duration-500 hover:scale-[1.03]"
-    >
-      {/* Eyeglasses Frame Outline */}
-      <path
-        d="M120,32 C104,30 84,21 54,21 C24,21 16,27 10,29 C7,30 5,32 5,36 C5,54 13,81 48,81 C72,81 88,67 106,53 C112,48 116,42 120,42 C124,42 128,48 134,53 C152,67 168,81 192,81 C227,81 235,54 235,36 C235,32 233,30 230,29 C224,27 216,21 186,21 C156,21 136,30 120,32 Z"
-        fill={mainColor}
-      />
-      {/* Left lens detailing (Letter A) */}
-      <path
-        d="M38,71 L60,33 L82,71"
-        stroke={accentColor}
-        stroke-width="8.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      {/* Right lens detailing (Letter S) */}
-      <path
-        d="M194,38 C192,31 178,31 168,36 C158,41 160,51 174,55 C188,59 196,64 194,72 C192,80 178,82 166,74"
-        stroke={accentColor}
-        stroke-width="8.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+    size === "target" ? (
+      <svg
+        viewBox="0 0 500 280"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="transition-transform duration-500 hover:scale-[1.03]"
+        aria-label="AlexSEE Logo"
+        style={{
+          width: "clamp(7.2rem, 11vw, 11.5rem)",
+          height: "auto",
+          display: "block"
+        }}
+      >
+        <path
+          d="M250,87 C234,85 214,76 184,76 C154,76 146,82 140,84 C137,85 135,87 135,91 C135,109 143,136 178,136 C202,136 218,122 236,108 C242,103 246,97 250,97 C254,97 258,103 264,108 C282,122 298,136 322,136 C357,136 365,109 365,91 C365,87 363,85 360,84 C354,82 346,76 316,76 C286,76 266,85 250,87 Z"
+          fill={mainColor}
+        />
+        <path
+          d="M164,129 L190,83 L216,129"
+          stroke={accentColor}
+          stroke-width="11"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M326,91 C324,82 306,82 296,89 C284,96 288,107 306,111 C324,115 330,121 328,130 C326,139 308,140 294,131"
+          stroke={accentColor}
+          stroke-width="11"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        {showText && (
+          <text
+            x="250"
+            y="215"
+            font-family="System-UI, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif"
+            font-size="42"
+            font-weight="300"
+            letter-spacing="18"
+            fill={mainColor}
+            text-anchor="middle"
+            dx="9"
+          >
+            {logoTextValue}
+          </text>
+        )}
+      </svg>
+    ) : (
+      <svg
+        viewBox="0 0 240 128"
+        width={w}
+        height={h}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="transition-transform duration-500 hover:scale-[1.03]"
+      >
+        {/* Eyeglasses Frame Outline */}
+        <path
+          d="M120,32 C104,30 84,21 54,21 C24,21 16,27 10,29 C7,30 5,32 5,36 C5,54 13,81 48,81 C72,81 88,67 106,53 C112,48 116,42 120,42 C124,42 128,48 134,53 C152,67 168,81 192,81 C227,81 235,54 235,36 C235,32 233,30 230,29 C224,27 216,21 186,21 C156,21 136,30 120,32 Z"
+          fill={mainColor}
+        />
+        {/* Left lens detailing (Letter A) */}
+        <path
+          d="M38,71 L60,33 L82,71"
+          stroke={accentColor}
+          stroke-width="8.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        {/* Right lens detailing (Letter S) */}
+        <path
+          d="M194,38 C192,31 178,31 168,36 C158,41 160,51 174,55 C188,59 196,64 194,72 C192,80 178,82 166,74"
+          stroke={accentColor}
+          stroke-width="8.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    )
   )}
-  {size !== "target" && showText && (
-    <div 
+  
+  {!settings.logoImage && size !== "target" && showText && (
+    <div
       class={`flex items-center font-sans tracking-[0.45em] mt-2 pl-[0.45em] ${hasAlign ? 'justify-start text-left' : 'justify-center text-center'}`}
-      style={{ 
-        color: mainColor, 
-        fontSize: size === "sm" ? "10px" : size === "md" ? "14px" : size === "lg" ? "18px" : size === "custom" ? Math.round((width || 80) * 0.2) + "px" : "22px" 
+      style={{
+        color: mainColor,
+        fontSize: size === "sm" ? "10px" : size === "md" ? "14px" : size === "lg" ? "18px" : size === "custom" ? Math.round((width || 80) * 0.2) + "px" : "22px"
       }}
     >
-      <span class="font-light uppercase">ALEX</span>
-      <span class="font-extrabold uppercase">SEE</span>
+      <span class="font-light uppercase">{logoTextPart1}</span>
+      <span class="font-extrabold uppercase">{logoTextPart2}</span>
     </div>
   )}
 </div>

@@ -34,7 +34,17 @@ const collectionsPage = pageCollections || {
   subtext: "Une sélection rigoureuse de montures de créateurs haut de gamme. Chaque pièce est choisie pour l'excellence de son façonnage et sa force graphique."
 };
 
-const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'Nouveautés'];
+const filters = collectionsPage.filters && collectionsPage.filters.length > 0
+  ? collectionsPage.filters
+  : [
+      { label: 'Tous', filterType: 'all', value: '' },
+      { label: 'Optique', filterType: 'type', value: 'Optique' },
+      { label: 'Solaire', filterType: 'type', value: 'Solaire' },
+      { label: 'Femme', filterType: 'gender', value: 'Femme' },
+      { label: 'Homme', filterType: 'gender', value: 'Homme' },
+      { label: 'Créateur', filterType: 'brand', value: 'alexsee,nackymade' },
+      { label: 'Nouveautés', filterType: 'new', value: '' }
+    ];
 ---
 
 
@@ -63,15 +73,17 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
     </div>
 
     <!-- Filters -->
-    <div class="mb-12">
+    <div class="mb-12" data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'filters' }) : undefined}>
       <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">Filtrer par type ou créateur :</span>
       <div class="flex flex-wrap gap-2.5" id="filter-buttons">
-        {FILTERS.map(f => (
+        {filters.map((f, idx) => (
           <button
-            data-filter={f}
-            class={`filter-btn font-mono text-[10px] uppercase tracking-widest px-4 py-2 border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-cobalt ${f === 'Tous' ? 'bg-optical-black text-ivory border-optical-black' : 'bg-transparent text-stone-grey border-stone-grey/20 hover:border-optical-black hover:text-optical-black'}`}
+            data-filter={f.label}
+            data-filter-type={f.filterType}
+            data-filter-value={f.value || ''}
+            class={`filter-btn font-mono text-[10px] uppercase tracking-widest px-4 py-2 border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-cobalt ${idx === 0 ? 'bg-optical-black text-ivory border-optical-black' : 'bg-transparent text-stone-grey border-stone-grey/20 hover:border-optical-black hover:text-optical-black'}`}
           >
-            {f}
+            {f.label}
           </button>
         ))}
       </div>
@@ -85,7 +97,9 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
           data-type={frame.type}
           data-gender={frame.gender}
           data-brand={frame.brand}
+          data-material={frame.material}
           data-isnew={frame.isNew ? 'true' : 'false'}
+          data-isfeatured={frame.isFeatured ? 'true' : 'false'}
           data-cursor-label="DÉCOUVRIR"
           data-sanity={frame._id ? dataAttribute({ id: frame._id, type: frame._type }) : undefined}
           class="frame-card flex flex-col justify-between group cursor-pointer focus:outline-none focus:ring-1 focus:ring-cobalt"
@@ -148,39 +162,49 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
     const emptyState = document.getElementById('empty-state');
     if (!filterBtns.length) return;
 
-    let activeFilter = 'Tous';
-
-    const applyFilter = (filter) => {
-      activeFilter = filter;
-      let visible = 0;
+    const applyFilter = (btn) => {
+      const filterType = btn.getAttribute('data-filter-type');
+      const filterVal = (btn.getAttribute('data-filter-value') || '').toLowerCase().trim();
 
       // Update button styles
-      filterBtns.forEach(btn => {
-        const f = btn.getAttribute('data-filter');
-        if (f === filter) {
-          btn.classList.add('bg-optical-black', 'text-ivory', 'border-optical-black');
-          btn.classList.remove('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
+      filterBtns.forEach(b => {
+        if (b === btn) {
+          b.classList.add('bg-optical-black', 'text-ivory', 'border-optical-black');
+          b.classList.remove('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
         } else {
-          btn.classList.remove('bg-optical-black', 'text-ivory', 'border-optical-black');
-          btn.classList.add('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
+          b.classList.remove('bg-optical-black', 'text-ivory', 'border-optical-black');
+          b.classList.add('bg-transparent', 'text-stone-grey', 'border-stone-grey/20');
         }
       });
 
-      // Filter cards
+      let visible = 0;
+
       cards.forEach(card => {
-        const type = card.getAttribute('data-type');
-        const gender = card.getAttribute('data-gender');
-        const brand = card.getAttribute('data-brand') || '';
+        const type = (card.getAttribute('data-type') || '').toLowerCase().trim();
+        const gender = (card.getAttribute('data-gender') || '').toLowerCase().trim();
+        const brand = (card.getAttribute('data-brand') || '').toLowerCase().trim();
+        const material = (card.getAttribute('data-material') || '').toLowerCase().trim();
         const isNew = card.getAttribute('data-isnew') === 'true';
+        const isFeatured = card.getAttribute('data-isfeatured') === 'true';
 
         let show = false;
-        if (filter === 'Tous') show = true;
-        else if (filter === 'Optique') show = type === 'Optique';
-        else if (filter === 'Solaire') show = type === 'Solaire';
-        else if (filter === 'Femme') show = gender === 'Femme' || gender === 'Unisex';
-        else if (filter === 'Homme') show = gender === 'Homme' || gender === 'Unisex';
-        else if (filter === 'Créateur') show = brand.toLowerCase().includes('alexsee') || brand.toLowerCase().includes('nackymade');
-        else if (filter === 'Nouveautés') show = isNew;
+
+        if (filterType === 'all') {
+          show = true;
+        } else if (filterType === 'type') {
+          show = type === filterVal;
+        } else if (filterType === 'gender') {
+          show = gender === filterVal || gender === 'unisex';
+        } else if (filterType === 'brand') {
+          const brands = filterVal.split(',').map(b => b.trim());
+          show = brands.some(b => brand.includes(b));
+        } else if (filterType === 'material') {
+          show = material.includes(filterVal);
+        } else if (filterType === 'new') {
+          show = isNew;
+        } else if (filterType === 'featured') {
+          show = isFeatured;
+        }
 
         if (show) {
           card.style.display = '';
@@ -198,8 +222,7 @@ const FILTERS = ['Tous', 'Optique', 'Solaire', 'Femme', 'Homme', 'Créateur', 'N
 
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter') || 'Tous';
-        applyFilter(filter);
+        applyFilter(btn);
       });
     });
   }

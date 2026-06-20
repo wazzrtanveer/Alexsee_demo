@@ -1,0 +1,132 @@
+---
+import Logo from './Logo.astro';
+import { settings as mockSettings } from '../data/mockData.js';
+import { sanityClient, SETTINGS_QUERY, dataAttribute, cleanStega } from '../lib/sanity.js';
+
+let settings = mockSettings;
+try {
+  const sanitySettings = await sanityClient.fetch(SETTINGS_QUERY);
+  if (sanitySettings) {
+    settings = { ...mockSettings, ...sanitySettings };
+  }
+} catch (e) {
+  console.error("Error fetching settings in Footer component:", e);
+}
+
+const footerPagesLinks = settings.footerPagesLinks && settings.footerPagesLinks.length > 0
+  ? settings.footerPagesLinks
+  : [
+      { label: 'Accueil Optique', path: '/' },
+      { label: 'Les Collections', path: '/collections' },
+      { label: 'Prestations & Savoir', path: '/services' },
+      { label: 'Atelier & Plan', path: '/boutique' },
+      { label: 'Contacter / RDV', path: '/contact' }
+    ];
+
+const footerLegalLinks = settings.footerLegalLinks && settings.footerLegalLinks.length > 0
+  ? settings.footerLegalLinks
+  : [
+      { label: 'Mentions Légales', path: '#' },
+      { label: 'Politique de Confidentialité', path: '#' }
+    ];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer id="app-global-footer" class="bg-optical-black text-ivory pt-24 pb-12 px-6 md:px-12 lg:px-24 border-t border-stone-grey/20 relative w-full overflow-hidden">
+  <div 
+    data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerBackgroundText' }) : undefined}
+    class="opacity-5 font-bold tracking-widest uppercase text-[15vw] leading-none select-none pointer-events-none absolute bottom-0 left-0 right-0 text-center font-display"
+  >
+    {settings.footerBackgroundText || "AlexSEE"}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 mb-16 border-b border-stone-grey/15 pb-16">
+    <div class="col-span-1 md:col-span-4 space-y-4">
+      <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
+      <p 
+        data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerDescription' }) : undefined} 
+        class="text-stone-grey max-w-xs text-xs font-light leading-relaxed"
+      >
+        {settings.footerDescription || "Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie."}
+      </p>
+      <div class="pt-2 flex gap-4">
+        <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-span-1 md:col-span-3 space-y-4 font-mono text-xs uppercase tracking-widest">
+      <span 
+        data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerPagesTitle' }) : undefined}
+        class="text-stone-grey text-[10px] block font-semibold mb-2"
+      >
+        {settings.footerPagesTitle || "[ Pages ]"}
+      </span>
+      <ul class="space-y-2.5">
+        {footerPagesLinks.map((link) => (
+          <li>
+            <a href={link.path} class="hover:text-cobalt transition-colors text-stone-grey">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="col-span-1 md:col-span-5 space-y-4 font-mono text-xs uppercase tracking-widest">
+      <span 
+        data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerBoutiqueTitle' }) : undefined}
+        class="text-stone-grey text-[10px] block font-semibold mb-2"
+      >
+        {settings.footerBoutiqueTitle || "[ Boutique ]"}
+      </span>
+      <ul class="space-y-2.5 text-stone-grey font-light">
+        <li class="normal-case">
+          <span class="text-ivory">Adresse :</span> 
+          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined}>
+            {settings.address || "28 Rue d’Avron"}, {settings.postalCode || "75020"} {settings.city || "Paris"}
+          </span>
+        </li>
+        <li>
+          <span class="text-ivory">Métro :</span> 
+          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'metro' }) : undefined}>
+            {settings.metro || "Buzenval (M9), Avron (M2)"}
+          </span>
+        </li>
+        <li class="normal-case">
+          <span class="text-ivory">Téléphone :</span> 
+          <a 
+            href={`tel:${cleanStega(settings.phone)}`} 
+            data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined}
+            class="hover:text-cobalt transition-colors font-bold text-ivory"
+          >
+            {settings.phone}
+          </a>
+        </li>
+        <li class="normal-case">
+          <span class="text-ivory">Email :</span> 
+          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'email' }) : undefined}>
+            {settings.email}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row items-center justify-between font-mono text-[9px] text-stone-grey uppercase tracking-widest relative z-10 gap-4">
+    <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerCopyrightText' }) : undefined}>
+      © {currentYear} {settings.name || "AlexSEE"}. {settings.footerCopyrightText || "Tous droits réservés."}
+    </span>
+    <div class="flex gap-6">
+      {footerLegalLinks.map((link) => (
+        <a href={link.path} class="hover:text-cobalt transition-colors cursor-pointer">{link.label}</a>
+      ))}
+      <span 
+        data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'footerLocationText' }) : undefined}
+        class="text-stone-grey/50"
+      >
+        {settings.footerLocationText || "Paris XX, France"}
+      </span>
+    </div>
+  </div>
+</footer>

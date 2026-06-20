@@ -139,7 +139,29 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   contactPageAccessSubtext,
   contactFormTitle,
   contactFormSubtitle,
-  contactFormButtonText
+  contactFormButtonText,
+  favicon,
+  logoImage,
+  logoText,
+  headerLinks[] {
+    label,
+    path,
+    num,
+    image
+  },
+  footerPagesTitle,
+  footerPagesLinks[] {
+    label,
+    path
+  },
+  footerBoutiqueTitle,
+  footerLegalLinks[] {
+    label,
+    path
+  },
+  footerCopyrightText,
+  footerLocationText,
+  footerBackgroundText
 }`;
 
 export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
@@ -171,7 +193,12 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
   _id,
   _type,
   title,
-  subtext
+  subtext,
+  filters[] {
+    label,
+    filterType,
+    value
+  }
 }`;
 
 export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {

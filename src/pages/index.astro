@@ -495,51 +495,6 @@ const featuredFrames = tempFeatured.slice(0, 3);
         </div>
       </div>
     </section>
-
-    <!-- ── Footer ── -->
-    <footer id="homepage-footer" class="bg-optical-black text-ivory pt-24 pb-12 px-6 md:px-12 lg:px-24 border-t border-stone-grey/20 relative">
-      <div class="opacity-5 font-bold tracking-widest uppercase text-[15vw] leading-none select-none pointer-events-none absolute bottom-0 left-0 right-0 text-center">AlexSEE</div>
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 mb-16 border-b border-stone-grey/15 pb-16">
-        <div class="col-span-1 md:col-span-4 space-y-4">
-          <Logo size="md" showText={true} inverse={true} class="items-start text-left" />
-          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'footerDescription' }) : undefined} class="text-stone-grey max-w-xs text-xs font-light leading-relaxed">
-            {home.footerDescription || "Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie."}
-          </p>
-          <div class="pt-2 flex gap-4">
-            <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full border border-stone-grey/30 flex items-center justify-center text-stone-grey hover:text-cobalt hover:border-cobalt transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="col-span-1 md:col-span-3 space-y-4 font-mono text-xs uppercase tracking-widest">
-          <span class="text-stone-grey text-[10px] block font-semibold mb-2">[ Pages ]</span>
-          <ul class="space-y-2.5">
-            <li><a href="/" class="hover:text-cobalt transition-colors text-stone-grey">Accueil Optique</a></li>
-            <li><a href="/collections" class="hover:text-cobalt transition-colors text-stone-grey">Les Collections</a></li>
-            <li><a href="/services" class="hover:text-cobalt transition-colors text-stone-grey">Prestations & Savoir</a></li>
-            <li><a href="/boutique" class="hover:text-cobalt transition-colors text-stone-grey">Atelier & Plan</a></li>
-            <li><a href="/contact" class="hover:text-cobalt transition-colors text-stone-grey">Contacter / RDV</a></li>
-          </ul>
-        </div>
-        <div class="col-span-1 md:col-span-5 space-y-4 font-mono text-xs uppercase tracking-widest">
-          <span class="text-stone-grey text-[10px] block font-semibold mb-2">[ Boutique ]</span>
-          <ul class="space-y-2.5 text-stone-grey font-light">
-            <li class="normal-case"><span class="text-ivory">Adresse :</span> 28 Rue d’Avron, 75020 Paris</li>
-            <li><span class="text-ivory">Métro :</span> Buzenval (M9), Avron (M2)</li>
-            <li class="normal-case"><span class="text-ivory">Téléphone :</span> <a href={`tel:${cleanStega(settings.phone)}`} class="hover:text-cobalt transition-colors font-bold text-ivory">{settings.phone}</a></li>
-            <li class="normal-case"><span class="text-ivory">Email :</span> {settings.email}</li>
-          </ul>
-        </div>
-      </div>
-      <div class="flex flex-col md:flex-row items-center justify-between font-mono text-[9px] text-stone-grey uppercase tracking-widest relative z-10 gap-4">
-        <span>© {new Date().getFullYear()} AlexSEE. Tous droits réservés.</span>
-        <div class="flex gap-6">
-          <span class="hover:text-cobalt transition-colors cursor-pointer">Mentions Légales</span>
-          <span class="hover:text-cobalt transition-colors cursor-pointer">Politique de Confidentialité</span>
-          <span class="text-stone-grey/50">Paris XX, France</span>
-        </div>
-      </div>
-    </footer>
   </div>
 </Layout>
 
