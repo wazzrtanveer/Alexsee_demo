@@ -61,7 +61,7 @@ const boutiquePage = pageBoutique || {
           src={urlFor(src)}
           alt="Intérieur AlexSEE"
           referrerpolicy="no-referrer"
-          class={`boutique-slide w-full h-full object-cover absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${i === 0 ? 'opacity-85' : 'opacity-0'}`}
+          class={`boutique-slide w-full h-full object-cover absolute inset-0 grayscale brightness-90 ${i === 0 ? 'active' : ''}`}
           data-slide-idx={i}
         />
       ))}
@@ -191,18 +191,38 @@ const boutiquePage = pageBoutique || {
 
     let current = 0;
     let timer;
+    let transitionTimeout;
 
     const goTo = (idx) => {
-      slides.forEach((s, i) => {
-        (s as HTMLElement).style.opacity = i === idx ? '0.85' : '0';
-      });
-      current = idx;
+      const currentSlide = slides[current] as HTMLElement;
+      const nextSlide = slides[idx] as HTMLElement;
+
+      if (!currentSlide || !nextSlide) return;
+
+      // 1. Exit current slide
+      currentSlide.classList.remove('active');
+      currentSlide.classList.add('exiting');
+
+      // 2. Wait for exit duration (1.2s = 1200ms)
+      transitionTimeout = setTimeout(() => {
+        // Clean up current slide classes
+        currentSlide.classList.remove('exiting');
+        
+        // 3. Enter next slide
+        nextSlide.classList.remove('exiting');
+        nextSlide.classList.add('active');
+        
+        current = idx;
+      }, 1200);
     };
 
     const next = () => goTo((current + 1) % slides.length);
 
     const startTimer = () => { timer = setInterval(next, 6000); };
-    const stopTimer = () => clearInterval(timer);
+    const stopTimer = () => {
+      clearInterval(timer);
+      clearTimeout(transitionTimeout);
+    };
 
     startTimer();
 

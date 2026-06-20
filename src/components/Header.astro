@@ -46,7 +46,7 @@ const isBoutiqueActive = isActive('/boutique');
     </a>
   </div>
 
-  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] uppercase tracking-widest text-optical-black">
+  <nav id="header-desktop-nav" class="hidden lg:flex items-center gap-8 font-mono text-[11px] tracking-widest text-optical-black">
     <a href="/collections" class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${isCollectionsActive ? 'text-cobalt font-medium' : ''}`}>
       {settings.navCollectionsLabel || "Collection"}
       {isCollectionsActive && <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-cobalt"></span>}
