@@ -531,16 +531,9 @@ export default {
           type: 'object',
           name: 'navLink',
           title: 'Lien de navigation',
-          fieldsets: [
-            {
-              name: 'editGroup',
-              title: 'Éléments principaux',
-              options: { columns: 2 }
-            }
-          ],
           fields: [
-            { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required(), fieldset: 'editGroup' },
-            { name: 'image', title: 'Image de survol (Preview Image)', type: 'image', options: { hotspot: true }, fieldset: 'editGroup' },
+            { name: 'label', title: 'Label', type: 'string', validation: Rule => Rule.required() },
+            { name: 'image', title: 'Image de survol (Preview Image)', type: 'image', options: { hotspot: true } },
             { name: 'path', title: 'Chemin / URL (ex: /collections)', type: 'string', validation: Rule => Rule.required() },
             { name: 'num', title: 'Numéro (ex: 01)', type: 'string' }
           ]
