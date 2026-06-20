@@ -31,7 +31,7 @@ export const sanityClient = createClient({
   perspective: 'published', // Will be dynamically overridden to drafts inside the Presentation Tool
   stega: {
     enabled: true, // Enabled for both local and deployed environments to support visual editing
-    studioUrl: '/studio',
+    studioUrl: '/admin',
     filter: (props) => {
       const path = props.sourcePath || props.source?.path;
       if (path && path.length > 0) {
@@ -230,6 +230,7 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
   _type,
   title,
   subtext,
+  filterLabel,
   filters[] {
     _key,
     label,

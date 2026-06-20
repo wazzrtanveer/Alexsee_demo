@@ -54,7 +54,7 @@ const filters = collectionsPage.filters && collectionsPage.filters.length > 0
   title="Le Catalogue — AlexSEE Opticien Paris 20e"
   description="Lookbook et catalogue de montures de créateurs. Filtrez par type, genre et marque pour trouver votre prochaine signature visuelle."
 >
-  <div id="collections-view-root" data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type }) : undefined} class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
+  <div id="collections-view-root" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
 
     <!-- Header -->
     <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
@@ -75,8 +75,10 @@ const filters = collectionsPage.filters && collectionsPage.filters.length > 0
     </div>
 
     <!-- Filters -->
-    <div class="mb-12" data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'filters' }) : undefined}>
-      <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">Filtrer par type ou créateur :</span>
+    <div class="mb-12">
+      <span data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'filterLabel' }) : undefined} class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block mb-3">
+        {collectionsPage.filterLabel || 'Filtrer par type ou créateur :'}
+      </span>
       <div class="flex flex-wrap gap-2.5" id="filter-buttons">
         {filters.map((f, idx) => (
           <button
