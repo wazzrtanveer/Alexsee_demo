@@ -4,7 +4,7 @@
 import {buildLegacyTheme, defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import {presentationTool} from 'sanity/presentation'
+import {presentationTool, defineDocuments} from 'sanity/presentation'
 import {schemaTypes} from './sanity-schemas/schema'
 
 const studioTheme = buildLegacyTheme({
@@ -108,6 +108,34 @@ export default defineConfig({
     presentationTool({
       previewUrl: SANITY_STUDIO_PREVIEW_URL,
       allowedOrigins: ['http://localhost:4321', 'https://alexis-shop.pages.dev'],
+      resolve: {
+        mainDocuments: defineDocuments([
+          {
+            route: '/',
+            type: 'pageHome',
+          },
+          {
+            route: '/boutique',
+            type: 'pageBoutique',
+          },
+          {
+            route: '/collections',
+            type: 'pageCollections',
+          },
+          {
+            route: '/services',
+            type: 'pageServices',
+          },
+          {
+            route: '/contact',
+            type: 'pageContact',
+          },
+          {
+            route: '/frame/:slug',
+            filter: '_type == "frame" && slug.current == $slug',
+          },
+        ]),
+      },
     }),
   ],
 
