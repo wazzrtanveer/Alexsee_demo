@@ -32,6 +32,7 @@ const desktopLinks = settings.headerLinks && settings.headerLinks.length > 0
 
 const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
   ? settings.headerLinks.map((item, index) => ({
+      _key: item._key,
       label: item.label,
       path: item.path,
       num: item.num || String(index + 1).padStart(2, '0'),
@@ -110,12 +111,13 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
     <div class="col-span-1 lg:col-span-7 flex flex-col gap-6 md:gap-10">
       <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-stone-grey block border-b border-stone-grey/25 pb-3">Navigation</span>
       <nav id="overlay-menu-nav" class="flex flex-col gap-4 md:gap-6" data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' }) : undefined}>
-        {overlayLinks.map((item) => {
+        {overlayLinks.map((item, index) => {
           const active = currentPath === (item.path || "#") || (item.path && item.path !== '/' && currentPath.startsWith(item.path));
           return (
             <div 
               class="group overlay-link-wrap animate-fade-in" 
               data-img={item.img}
+              data-index={index}
               data-sanity={settings._id ? (item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : dataAttribute({ id: settings._id, type: settings._type, path: 'headerLinks' })) : undefined}
             >
               <a href={item.path || "#"} class="text-left flex items-baseline gap-4 md:gap-8 group">
@@ -133,7 +135,16 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
     <div class="col-span-1 lg:col-span-5 hidden lg:flex flex-col gap-8 relative items-center justify-center">
       <div class="w-full max-w-sm aspect-[4/5] bg-stone-grey/10 relative overflow-hidden flex items-center justify-center">
         <div id="overlay-preview-container" class="absolute inset-0">
-          <img id="overlay-preview-img" src="" alt="Aperçu visuel AlexSEE" class="w-full h-full object-cover opacity-80" referrerpolicy="no-referrer" />
+          {overlayLinks.map((item, idx) => (
+            <img 
+              data-img-index={idx}
+              src={item.img} 
+              alt={`Aperçu ${item.label}`} 
+              class="overlay-preview-img-layer absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" 
+              data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"].image` }) : undefined}
+              referrerpolicy="no-referrer" 
+            />
+          ))}
         </div>
         <div id="overlay-placeholder" class="p-8 text-center flex flex-col items-center justify-center h-full relative transition-opacity duration-300">
           <div class="w-32 h-32 rounded-full border border-stone-grey/25 mb-6 flex items-center justify-center animate-lens-pulse">
@@ -280,11 +291,10 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
     // Hover image logic
     const linkWraps = document.querySelectorAll('.overlay-link-wrap');
     const previewContainer = document.getElementById('overlay-preview-container');
-    const previewImg = document.getElementById('overlay-preview-img') as HTMLImageElement | null;
+    const previewImgLayers = document.querySelectorAll('.overlay-preview-img-layer');
     const placeholder = document.getElementById('overlay-placeholder');
 
     let placeholderTimeout = null;
-    let transitionTimeout = null;
 
     linkWraps.forEach(wrap => {
       wrap.addEventListener('mouseenter', () => {
@@ -292,49 +302,34 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
           clearTimeout(placeholderTimeout);
           placeholderTimeout = null;
         }
-        if (transitionTimeout) {
-          clearTimeout(transitionTimeout);
-          transitionTimeout = null;
-        }
 
-        const imgUrl = wrap.getAttribute('data-img');
-        if (imgUrl && previewImg && previewContainer && placeholder) {
-          const isCurrentlyActive = previewContainer.classList.contains('active');
-          const currentSrc = previewImg.src;
+        const index = wrap.getAttribute('data-index');
+        if (previewContainer && placeholder) {
+          previewContainer.classList.add('active');
+          placeholder.classList.add('opacity-0');
 
-          if (isCurrentlyActive && currentSrc && !currentSrc.includes(imgUrl)) {
-            // Fade out the old image first (exit transition)
-            previewContainer.classList.remove('active');
-            previewContainer.classList.add('exiting');
-            
-            transitionTimeout = setTimeout(() => {
-              previewImg.src = imgUrl;
-              previewContainer.classList.remove('exiting');
-              previewContainer.classList.add('active');
-              placeholder.classList.add('opacity-0');
-              transitionTimeout = null;
-            }, 250); // wait for exit transition (250ms)
-          } else {
-            // First time fade in from placeholder
-            previewImg.src = imgUrl;
-            previewContainer.classList.remove('exiting');
-            previewContainer.classList.add('active');
-            placeholder.classList.add('opacity-0');
-          }
+          previewImgLayers.forEach(layer => {
+            if (layer.getAttribute('data-img-index') === index) {
+              layer.classList.remove('opacity-0', 'pointer-events-none');
+              layer.classList.add('opacity-80', 'pointer-events-auto');
+            } else {
+              layer.classList.remove('opacity-80', 'pointer-events-auto');
+              layer.classList.add('opacity-0', 'pointer-events-none');
+            }
+          });
         }
       });
 
       wrap.addEventListener('mouseleave', () => {
         placeholderTimeout = setTimeout(() => {
           if (previewContainer && placeholder) {
-            previewContainer.classList.remove('active', 'exiting');
+            previewContainer.classList.remove('active');
             placeholder.classList.remove('opacity-0');
             
-            setTimeout(() => {
-              if (!previewContainer.classList.contains('active') && previewImg) {
-                previewImg.src = '';
-              }
-            }, 300);
+            previewImgLayers.forEach(layer => {
+              layer.classList.remove('opacity-80', 'pointer-events-auto');
+              layer.classList.add('opacity-0', 'pointer-events-none');
+            });
           }
           placeholderTimeout = null;
         }, 50); // small delay to allow override by next enter
@@ -350,7 +345,6 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
       hamburgerBtn.removeEventListener('click', toggleMenu);
       document.body.style.overflow = '';
       if (placeholderTimeout) clearTimeout(placeholderTimeout);
-      if (transitionTimeout) clearTimeout(transitionTimeout);
     };
   }
 
@@ -362,6 +356,9 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
 </script>
 
 <style>
+  .overlay-preview-img-layer {
+    transition: opacity 0.3s ease-in-out;
+  }
   #overlay-preview-container {
     transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
                 transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
@@ -375,11 +372,6 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
     opacity: 1;
     transform: scale(1);
     filter: blur(0px);
-  }
-  #overlay-preview-container.exiting {
-    opacity: 0;
-    transform: scale(0.95);
-    filter: blur(5px);
   }
 
   /* Menu Open Header Styles to completely hide header details */
