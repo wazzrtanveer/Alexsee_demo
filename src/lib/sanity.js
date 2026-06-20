@@ -32,6 +32,16 @@ export const sanityClient = createClient({
   stega: {
     enabled: true, // Enabled for both local and deployed environments to support visual editing
     studioUrl: '/studio',
+    filter: (props) => {
+      const path = props.sourcePath || props.source?.path;
+      if (path && path.length > 0) {
+        const last = path[path.length - 1];
+        if (last === 'number' || last === 'num') {
+          return false;
+        }
+      }
+      return props.filterDefault ? props.filterDefault(props) : true;
+    }
   },
 });
 
