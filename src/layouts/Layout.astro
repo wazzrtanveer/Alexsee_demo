@@ -3,15 +3,12 @@ import ClientRouter from 'astro/components/ClientRouter.astro';
 import Header from '../components/Header.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import Preloader from '../components/Preloader.astro';
-import { VisualEditing } from '@sanity/astro/visual-editing';
 import '../styles/global.css';
 
 const { 
   title = "AlexSEE — Opticien Créateur Paris 20e", 
   description = "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure."
 } = Astro.props;
-
-const isVisualEditingEnabled = import.meta.env.DEV;
 ---
 
 <!DOCTYPE html>
@@ -70,11 +67,41 @@ const isVisualEditingEnabled = import.meta.env.DEV;
       </div>
     </div>
 
-    <VisualEditing enabled={isVisualEditingEnabled} zIndex={9999} />
-
     <script>
-      // Block native link navigation, button clicks, and form submissions inside the Sanity iframe when visual edit mode is active.
+      import { enableVisualEditing } from '@sanity/visual-editing';
+
+      // Always initialize visual editing when loaded within the Sanity Presentation iframe
       if (window.self !== window.top) {
+        enableVisualEditing({
+          zIndex: 9999,
+          history: {
+            subscribe: (navigate) => {
+              const syncCurrentUrl = () => {
+                navigate({
+                  type: 'push',
+                  url: window.location.pathname + window.location.search + window.location.hash,
+                });
+              };
+
+              syncCurrentUrl();
+              window.addEventListener('popstate', syncCurrentUrl);
+              window.addEventListener('hashchange', syncCurrentUrl);
+              return () => {
+                window.removeEventListener('popstate', syncCurrentUrl);
+                window.removeEventListener('hashchange', syncCurrentUrl);
+              };
+            },
+            update: (update) => {
+              if (update.type === 'push' || update.type === 'replace') {
+                window.location.assign(update.url);
+              } else if (update.type === 'pop') {
+                window.history.back();
+              }
+            }
+          }
+        });
+
+        // Block native link navigation, button clicks, and form submissions inside the Sanity iframe when visual edit mode is active.
         // Track the current edit mode state. Persist via sessionStorage so it survives page reloads inside the iframe.
         let isEditModeActive = sessionStorage.getItem('sanity-edit-mode') === 'true';
 

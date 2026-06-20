@@ -25,13 +25,13 @@ export const dataAttribute = ({ id, type, path }) => {
 export const sanityClient = createClient({
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
   dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
-  useCdn: !isDev, // Disable CDN during development/preview for instant draft updates
+  useCdn: false, // Disable CDN to ensure fresh updates
   apiVersion: '2024-06-01',
   token: import.meta.env.SANITY_API_READ_TOKEN || import.meta.env.PUBLIC_SANITY_READ_TOKEN || '',
-  perspective: isDev ? 'drafts' : 'published',
+  perspective: 'published', // Will be dynamically overridden to drafts inside the Presentation Tool
   stega: {
-    enabled: isDev, // Only enable stega in development — encodes content source maps into strings
-    studioUrl: '/admin',
+    enabled: true, // Enabled for both local and deployed environments to support visual editing
+    studioUrl: '/studio',
   },
 });
 

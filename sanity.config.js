@@ -107,6 +107,7 @@ export default defineConfig({
     visionTool(),
     presentationTool({
       previewUrl: SANITY_STUDIO_PREVIEW_URL,
+      allowedOrigins: ['http://localhost:4321', 'https://alexis-shop.pages.dev'],
     }),
   ],
 
