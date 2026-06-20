@@ -39,6 +39,8 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
 ---
 
 <Layout
+  seoTitle={frame.seo?.seoTitle}
+  seoDescription={frame.seo?.seoDescription}
   title={`${frame.brand} — ${frame.model} | AlexSEE Paris`}
   description={frame.description}
 >

@@ -39,6 +39,8 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 
 
 <Layout
+  seoTitle={contactPage.seo?.seoTitle}
+  seoDescription={contactPage.seo?.seoDescription}
   title="Prendre Rendez-vous — AlexSEE Paris 20e"
   description="Prenez rendez-vous pour votre heure de conseil personnalisé en montures créateur, examen de vue ou essayage dans notre atelier Paris 20e."
 >

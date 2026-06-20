@@ -76,7 +76,11 @@ export const FRAMES_QUERY = `*[_type == "frame"] {
   isFeatured,
   designerPhilosophy,
   specs,
-  availability
+  availability,
+  seo {
+    seoTitle,
+    seoDescription
+  }
 }`;
 
 export const SERVICES_QUERY = `*[_type == "service"] | order(number asc) {
@@ -214,7 +218,11 @@ export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
   ctaSubtext,
   ctaButton1Text,
   ctaButton2Text,
-  footerDescription
+  footerDescription,
+  seo {
+    seoTitle,
+    seoDescription
+  }
 }`;
 
 export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
@@ -227,6 +235,10 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
     label,
     filterType,
     value
+  },
+  seo {
+    seoTitle,
+    seoDescription
   }
 }`;
 
@@ -236,7 +248,11 @@ export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {
   title,
   subtext,
   metroTitle,
-  metroDetails
+  metroDetails,
+  seo {
+    seoTitle,
+    seoDescription
+  }
 }`;
 
 export const PAGE_SERVICES_QUERY = `*[_type == "pageServices"][0] {
@@ -245,7 +261,11 @@ export const PAGE_SERVICES_QUERY = `*[_type == "pageServices"][0] {
   title,
   subtext,
   noteTitle,
-  noteSubtext
+  noteSubtext,
+  seo {
+    seoTitle,
+    seoDescription
+  }
 }`;
 
 export const PAGE_CONTACT_QUERY = `*[_type == "pageContact"][0] {
@@ -255,6 +275,10 @@ export const PAGE_CONTACT_QUERY = `*[_type == "pageContact"][0] {
   subtext,
   contactSubtext,
   accessSubtext,
-  formButtonText
+  formButtonText,
+  seo {
+    seoTitle,
+    seoDescription
+  }
 }`;
 

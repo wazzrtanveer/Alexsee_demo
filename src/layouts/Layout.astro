@@ -21,9 +21,14 @@ try {
 const faviconUrl = settings.favicon ? urlFor(settings.favicon) : '/favicon.svg';
 
 const { 
+  seoTitle,
+  seoDescription,
   title = "AlexSEE — Opticien Créateur Paris 20e", 
   description = "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure."
 } = Astro.props;
+
+const finalTitle = seoTitle || title || "AlexSEE — Opticien Créateur Paris 20e";
+const finalDescription = seoDescription || description || "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure.";
 ---
 
 <!DOCTYPE html>
@@ -71,22 +76,22 @@ const {
     <meta name="generator" content={Astro.generator} />
     
     <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
+    <title>{finalTitle}</title>
+    <meta name="title" content={finalTitle} />
+    <meta name="description" content={finalDescription} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDescription} />
     <meta property="og:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url.href} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
+    <meta property="twitter:title" content={finalTitle} />
+    <meta property="twitter:description" content={finalDescription} />
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
 
     <!-- Preconnect to fonts and images -->

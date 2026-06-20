@@ -6,6 +6,7 @@ import pageCollectionsSchema from './pageCollections'
 import pageBoutiqueSchema from './pageBoutique'
 import pageServicesSchema from './pageServices'
 import pageContactSchema from './pageContact'
+import seoSchema from './seo'
 
 export const schemaTypes = [
   frameSchema,
@@ -15,5 +16,6 @@ export const schemaTypes = [
   pageCollectionsSchema,
   pageBoutiqueSchema,
   pageServicesSchema,
-  pageContactSchema
+  pageContactSchema,
+  seoSchema
 ]

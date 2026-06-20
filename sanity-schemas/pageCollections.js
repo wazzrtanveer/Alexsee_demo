@@ -44,6 +44,11 @@ export default {
           ]
         }
       ]
+    },
+    {
+      name: 'seo',
+      title: 'Référencement (SEO)',
+      type: 'seo'
     }
   ]
 }

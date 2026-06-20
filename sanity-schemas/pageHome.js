@@ -23,6 +23,11 @@ export default {
     { name: 'ctaSubtext', title: 'CTA Fin - Descriptif', type: 'text', rows: 2, initialValue: 'Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement.' },
     { name: 'ctaButton1Text', title: 'CTA Fin - Bouton 1', type: 'string', initialValue: 'Prendre rendez-vous en ligne' },
     { name: 'ctaButton2Text', title: 'CTA Fin - Bouton 2', type: 'string', initialValue: 'Découvrir les créateurs' },
-    { name: 'footerDescription', title: 'Pied de page - Descriptif', type: 'text', rows: 2, initialValue: 'Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.' }
+    { name: 'footerDescription', title: 'Pied de page - Descriptif', type: 'text', rows: 2, initialValue: 'Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.' },
+    {
+      name: 'seo',
+      title: 'Référencement (SEO)',
+      type: 'seo'
+    }
   ]
 }
