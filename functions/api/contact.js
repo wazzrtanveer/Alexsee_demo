@@ -1,10 +1,6 @@
-import { env } from 'cloudflare:workers';
-
-export const prerender = false;
-
-export async function POST({ request }) {
+export async function onRequestPost(context) {
   try {
-    const data = await request.json();
+    const data = await context.request.json();
     const { name, email, phone, service, date, time, notes } = data;
 
     // Validate required fields
@@ -15,13 +11,8 @@ export async function POST({ request }) {
       );
     }
 
-    // Dynamic resolution of environment variables for Cloudflare Worker & local dev environments
-    const apiKey = env?.RESEND_API_KEY || process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
-    const toEmail = env?.RESEND_TO_EMAIL || process.env.RESEND_TO_EMAIL || import.meta.env.RESEND_TO_EMAIL;
-
-    console.log(`[API contact] Attempting to send email via Resend:`);
-    console.log(`- To: ${toEmail}`);
-    console.log(`- API Key configured: ${apiKey ? "YES (length " + apiKey.length + ")" : "NO"}`);
+    const apiKey = context.env.RESEND_API_KEY;
+    const toEmail = context.env.RESEND_TO_EMAIL;
 
     if (!apiKey) {
       return new Response(
