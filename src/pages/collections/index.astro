@@ -81,7 +81,6 @@ const filters = collectionsPage.filters && collectionsPage.filters.length > 0
             data-filter={f.label}
             data-filter-type={f.filterType}
             data-filter-value={f.value || ''}
-            data-sanity={collectionsPage._id && f._key ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: `filters[_key=="${f._key}"]` }) : undefined}
             class={`filter-btn font-mono text-[10px] uppercase tracking-widest px-4 py-2 border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-cobalt ${idx === 0 ? 'bg-optical-black text-ivory border-optical-black' : 'bg-transparent text-stone-grey border-stone-grey/20 hover:border-optical-black hover:text-optical-black'}`}
           >
             {f.label}

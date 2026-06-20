@@ -69,7 +69,7 @@ const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
       return (
         <a 
           href={item.path} 
-          data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key=="${item._key}"]` }) : undefined}
+          data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : undefined}
           class={`hover:text-cobalt transition-colors duration-300 relative py-1 ${active ? 'text-cobalt font-medium' : ''}`}
         >
           {item.label}
@@ -110,7 +110,7 @@ const overlayLinks = settings.headerLinks && settings.headerLinks.length > 0
             <div 
               class="group overlay-link-wrap animate-fade-in" 
               data-img={item.img}
-              data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key=="${item._key}"]` }) : undefined}
+              data-sanity={settings._id && item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `headerLinks[_key == "${item._key}"]` }) : undefined}
             >
               <a href={item.path} class="text-left flex items-baseline gap-4 md:gap-8 group">
                 <span class="font-mono text-xs md:text-sm text-cobalt opacity-70 group-hover:opacity-100 transition-opacity">{item.num}</span>
