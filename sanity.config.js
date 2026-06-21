@@ -29,7 +29,7 @@ const studioTheme = buildLegacyTheme({
 })
 
 // Fallback to our live Cloudflare Pages URL if the local environment variable isn't set
-const SANITY_STUDIO_PREVIEW_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://alexis-shop.pages.dev'
+const SANITY_STUDIO_PREVIEW_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'https://alexsee-demo.pages.dev'
 
 export default defineConfig({
   name: 'alexsee',
@@ -107,7 +107,7 @@ export default defineConfig({
     visionTool(),
     presentationTool({
       previewUrl: SANITY_STUDIO_PREVIEW_URL,
-      allowedOrigins: ['http://localhost:4321', 'https://alexis-shop.pages.dev'],
+      allowedOrigins: ['http://localhost:4321', 'https://alexsee-demo.pages.dev'],
       resolve: {
         mainDocuments: defineDocuments([
           {
