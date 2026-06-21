@@ -35,7 +35,7 @@ export default defineConfig({
   name: 'alexsee',
   title: 'AlexSEE — Studio CMS',
 
-  projectId: '4bz7y7k4',
+  projectId: 'np6apqtr',
   dataset: 'production',
 
   plugins: [
