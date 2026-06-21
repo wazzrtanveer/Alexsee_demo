@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     react(),
     sanity({
-      projectId: process.env.PUBLIC_SANITY_PROJECT_ID || '4bz7y7k4',
+      projectId: process.env.PUBLIC_SANITY_PROJECT_ID || 'np6apqtr',
       dataset: process.env.PUBLIC_SANITY_DATASET || 'production',
       useCdn: false,
       studioBasePath: '/admin',
