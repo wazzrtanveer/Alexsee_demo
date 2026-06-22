@@ -314,6 +314,12 @@ export default {
       initialValue: 'Ancrage Local'
     },
     {
+      name: 'showStats',
+      title: 'Afficher la section statistiques (Show Stats Section)',
+      type: 'boolean',
+      initialValue: true
+    },
+    {
       name: 'stat1Value',
       title: 'Statistique 1 - Valeur',
       type: 'string',

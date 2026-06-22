@@ -39,6 +39,7 @@ const finalDescription = seoDescription || description || "Boutique d'optique in
         // 1. Inside Sanity Studio Presentation Iframe: Disable Google Translate to prevent preview layout shifts
         document.documentElement.classList.add('notranslate');
         document.documentElement.setAttribute('translate', 'no');
+        document.documentElement.classList.add('sanity-preview-mode');
       } else {
         // 2. On the Public Live Site: Strip invisible visual editing metadata (stega) from text nodes.
         // This ensures browser translators (like Google Translate) work flawlessly without layout distortion.
@@ -178,4 +179,15 @@ const finalDescription = seoDescription || description || "Boutique d'optique in
       document.addEventListener('astro:page-load', initVisualEditing);
     </script>
   </body>
+  <style is:global>
+    /* In regular site view, hide stats placeholder */
+    .stats-placeholder {
+      display: none !important;
+    }
+    
+    /* In Sanity CMS Presentation iframe view, display stats placeholder */
+    html.sanity-preview-mode .stats-placeholder {
+      display: block !important;
+    }
+  </style>
 </html>

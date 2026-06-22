@@ -29,6 +29,48 @@ export default {
     { name: 'ctaButton2Text', title: 'CTA Fin - Bouton 2', type: 'string', initialValue: 'Découvrir les créateurs' },
     { name: 'footerDescription', title: 'Pied de page - Descriptif', type: 'text', rows: 2, initialValue: 'Opticien créateur indépendant au cœur du 20e arrondissement parisien. Un regard différent sur la lunetterie.' },
     {
+      name: 'showStats',
+      title: 'Afficher la section statistiques (Show Stats Section)',
+      type: 'boolean',
+      initialValue: true
+    },
+    {
+      name: 'stat1Value',
+      title: 'Statistique 1 - Valeur',
+      type: 'string',
+      initialValue: '15+'
+    },
+    {
+      name: 'stat1Label',
+      title: 'Statistique 1 - Label',
+      type: 'string',
+      initialValue: "Ans d'expertise optique"
+    },
+    {
+      name: 'stat2Value',
+      title: 'Statistique 2 - Valeur',
+      type: 'string',
+      initialValue: '200+'
+    },
+    {
+      name: 'stat2Label',
+      title: 'Statistique 2 - Label',
+      type: 'string',
+      initialValue: 'Montures en boutique'
+    },
+    {
+      name: 'stat3Value',
+      title: 'Statistique 3 - Valeur',
+      type: 'string',
+      initialValue: '1h'
+    },
+    {
+      name: 'stat3Label',
+      title: 'Statistique 3 - Label',
+      type: 'string',
+      initialValue: 'Accompagnement personnalisé'
+    },
+    {
       name: 'seo',
       title: 'Référencement (SEO)',
       type: 'seo'

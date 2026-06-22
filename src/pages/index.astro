@@ -489,22 +489,36 @@ const featuredFrames = tempFeatured.slice(0, 3);
     </section>
 
     <!-- ── Stats Strip ── -->
-    <section class="px-6 md:px-12 lg:px-24 py-20 border-b border-stone-grey/10">
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-grey/15">
-        <div class="py-12 px-8 text-center">
-          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat1Value || "15+"}</div>
-          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat1Label || "Ans d'expertise optique"}</p>
+    {home.showStats === false ? (
+      <section 
+        data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'showStats' }) : undefined} 
+        class="stats-placeholder border-y border-dashed border-cobalt/25 bg-cobalt/[0.02] py-12 text-center"
+      >
+        <p class="font-mono text-xs uppercase tracking-widest text-cobalt hover:underline cursor-pointer">
+          [ Section Masquée : Statistiques — Cliquez ici pour éditer / réactiver la section ]
+        </p>
+      </section>
+    ) : (
+      <section 
+        data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'showStats' }) : undefined} 
+        class="px-6 md:px-12 lg:px-24 py-20 border-b border-stone-grey/10"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-grey/15">
+          <div class="py-12 px-8 text-center">
+            <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat1Value || "15+"}</div>
+            <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat1Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat1Label || "Ans d'expertise optique"}</p>
+          </div>
+          <div class="py-12 px-8 text-center">
+            <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat2Value || "200+"}</div>
+            <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat2Label || "Montures en boutique"}</p>
+          </div>
+          <div class="py-12 px-8 text-center">
+            <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat3Value || "1h"}</div>
+            <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat3Label || "Accompagnement personnalisé"}</p>
+          </div>
         </div>
-        <div class="py-12 px-8 text-center">
-          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat2Value || "200+"}</div>
-          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat2Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat2Label || "Montures en boutique"}</p>
-        </div>
-        <div class="py-12 px-8 text-center">
-          <div data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Value' }) : undefined} class="text-5xl md:text-6xl font-light text-cobalt mb-3" style="font-family: var(--font-display);">{home.stat3Value || "1h"}</div>
-          <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'stat3Label' }) : undefined} class="font-mono text-[11px] uppercase tracking-widest text-stone-grey">{home.stat3Label || "Accompagnement personnalisé"}</p>
-        </div>
-      </div>
-    </section>
+      </section>
+    )}
 
     <!-- ── CTA Strip ── -->
     <section id="cta-end-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory text-center relative overflow-hidden">

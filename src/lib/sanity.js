@@ -140,6 +140,7 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   manifestoStat1Label,
   manifestoStat2Value,
   manifestoStat2Label,
+  showStats,
   stat1Value,
   stat1Label,
   stat2Value,
@@ -227,6 +228,13 @@ export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
   ctaButton1Text,
   ctaButton2Text,
   footerDescription,
+  showStats,
+  stat1Value,
+  stat1Label,
+  stat2Value,
+  stat2Label,
+  stat3Value,
+  stat3Label,
   seo {
     seoTitle,
     seoDescription
