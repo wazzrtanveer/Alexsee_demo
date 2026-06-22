@@ -233,6 +233,12 @@ export default {
     },
     // New fields for Landing page and other sections editability
     {
+      name: 'philosophySectionHeader',
+      title: 'Philosophie - En-tête de section',
+      type: 'string',
+      initialValue: '[ 01 / Notre Philosophie ]'
+    },
+    {
       name: 'philosophyQuote',
       title: 'Philosophie - Citation',
       type: 'text',
@@ -251,6 +257,12 @@ export default {
       title: 'Philosophie - Texte du lien',
       type: 'string',
       initialValue: 'Visiter notre atelier rue d’Avron'
+    },
+    {
+      name: 'featuredSectionHeader',
+      title: 'Collection - En-tête de section',
+      type: 'string',
+      initialValue: '[ 02 / Créations phares ]'
     },
     {
       name: 'featuredTitle',
@@ -338,6 +350,12 @@ export default {
       initialValue: 'Accompagnement personnalisé'
     },
     {
+      name: 'servicesSectionHeader',
+      title: 'Prestations - En-tête de section',
+      type: 'string',
+      initialValue: '[ 03 / Prestations d’exception ]'
+    },
+    {
       name: 'servicesTitle',
       title: 'Prestations - Titre de la section',
       type: 'string',
@@ -350,6 +368,12 @@ export default {
       rows: 2,
       initialValue: 'De l’examen technique de votre réfraction par nos opticiens diplômés jusqu’au cambrage à chaud personnalisé de vos branches d’acétate, nous assurons un suivi irréprochable et minutieux. Explorez un panel complet et sur mesure.'
     },
+      {
+        name: 'boutiqueSectionHeader',
+        title: 'Boutique - En-tête de section',
+        type: 'string',
+        initialValue: '[ 04 / L’Œil de Buzenval ]'
+      },
     {
       name: 'boutiqueTitle',
       title: 'Boutique (Index) - Titre',

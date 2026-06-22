@@ -279,7 +279,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
     <section id="intro-philosophy-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-optical-black text-ivory relative">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="col-span-1 lg:col-span-8">
-          <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-stone-grey block mb-6">[ 01 / Notre Philosophie ]</span>
+          <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'philosophySectionHeader' }) : undefined} class="font-mono text-[10px] tracking-[0.3em] uppercase text-stone-grey block mb-6">{home.philosophySectionHeader || "[ 01 / Notre Philosophie ]"}</span>
           <p data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'philosophyQuote' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light tracking-tight leading-tight">
             {home.philosophyQuote ? (
               home.philosophyQuote.includes('\n') ? (
@@ -320,7 +320,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
     <section id="featured-eyewear-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-stone-grey/20 pb-8">
         <div>
-          <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 02 / Créations phares ]</span>
+          <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'featuredSectionHeader' }) : undefined} class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">{home.featuredSectionHeader || "[ 02 / Créations phares ]"}</span>
           <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'featuredTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{home.featuredTitle || "Le regard dessiné"}</h2>
         </div>
         <a href="/collections" data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'featuredLinkText' }) : undefined} data-cursor-label="LOOKBOOK" class="mt-6 md:mt-0 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#0D0D0E] hover:text-cobalt font-medium transition-colors">
@@ -384,7 +384,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
     <section id="services-highlight" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
         <div class="col-span-1 lg:col-span-6">
-          <span class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 03 / Prestations d’exception ]</span>
+          <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'servicesSectionHeader' }) : undefined} class="font-mono text-[10px] tracking-[0.25em] text-stone-grey uppercase block mb-3">{home.servicesSectionHeader || "[ 03 / Prestations d’exception ]"}</span>
           <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'servicesTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-5xl font-light tracking-tight uppercase">{home.servicesTitle || "Savoir-faire et garanties"}</h2>
         </div>
         <div class="col-span-1 lg:col-span-6">
@@ -442,7 +442,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
       </div>
       <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         <div class="col-span-1 lg:col-span-5 space-y-8">
-          <span class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase block mb-3">[ 04 / L’Œil de Buzenval ]</span>
+          <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'boutiqueSectionHeader' }) : undefined} class="font-mono text-[9px] tracking-[0.25em] text-stone-grey uppercase block mb-3">{home.boutiqueSectionHeader || "[ 04 / L’Œil de Buzenval ]"}</span>
           <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'boutiqueTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-6xl font-light uppercase tracking-tight leading-tight">
             {home.boutiqueTitle ? (
               home.boutiqueTitle.includes('\n') ? (
