@@ -146,6 +146,12 @@ export default {
       ]
     },
     {
+      name: 'heroHoursText',
+      title: "Horaires d'Ouverture simplifiés (Hero/En-tête)",
+      type: 'string',
+      initialValue: '9h30 - 13h00, 14h00 - 19h30 (Mar-Sam)'
+    },
+    {
       name: 'heroHeadline',
       title: 'Accroche principale (Hero Headline)',
       type: 'string',
@@ -275,6 +281,12 @@ export default {
       title: 'Collection - Texte du lien',
       type: 'string',
       initialValue: 'Voir toute la collection'
+    },
+    {
+      name: 'manifestoSectionHeader',
+      title: 'Manifeste - En-tête de section',
+      type: 'string',
+      initialValue: '[ Manifeste AlexSEE ]'
     },
     {
       name: 'manifestoHeadline',
