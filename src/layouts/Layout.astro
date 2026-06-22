@@ -23,12 +23,19 @@ const faviconUrl = settings.favicon ? urlFor(settings.favicon) : '/favicon.svg';
 const { 
   seoTitle,
   seoDescription,
+  seoImage,
   title = "AlexSEE — Opticien Créateur Paris 20e", 
   description = "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure."
 } = Astro.props;
 
-const finalTitle = seoTitle || title || "AlexSEE — Opticien Créateur Paris 20e";
-const finalDescription = seoDescription || description || "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure.";
+const finalTitle = seoTitle || settings.metaTitle || title || "AlexSEE — Opticien Créateur Paris 20e";
+const finalDescription = seoDescription || settings.metaDescription || description || "Boutique d'optique indépendante à Paris 20e (Charonne - Nation). Découvrez notre vestiaire de lunettes de créateurs et profitez d'un accompagnement personnalisé d'une heure.";
+
+const defaultImage = "/assets/alexsee_hero_man_1781887423927-Daa6PeCv.jpg";
+const resolvedSeoImage = seoImage ? urlFor(seoImage) : defaultImage;
+const finalSeoImage = resolvedSeoImage.startsWith('http') 
+  ? resolvedSeoImage 
+  : new URL(resolvedSeoImage, Astro.site || 'https://alexsee-demo.pages.dev').href;
 ---
 
 <!DOCTYPE html>
@@ -86,14 +93,14 @@ const finalDescription = seoDescription || description || "Boutique d'optique in
     <meta property="og:url" content={Astro.url.href} />
     <meta property="og:title" content={finalTitle} />
     <meta property="og:description" content={finalDescription} />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
+    <meta property="og:image" content={finalSeoImage} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url.href} />
     <meta property="twitter:title" content={finalTitle} />
     <meta property="twitter:description" content={finalDescription} />
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1200&q=80" />
+    <meta property="twitter:image" content={finalSeoImage} />
 
     <!-- Preconnect to fonts and images -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

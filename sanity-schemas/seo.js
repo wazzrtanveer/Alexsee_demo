@@ -6,18 +6,27 @@ export default {
   fields: [
     {
       name: 'seoTitle',
-      title: 'SEO Page Title',
+      title: 'Meta Title',
       type: 'string',
-      description: 'The meta title tag. Keep it between 50-60 characters for optimal display on search engines.',
+      description: 'The meta title tag. Advising a length of 50-60 characters.',
       validation: Rule => Rule.max(60).warning('Keep it under 60 characters to avoid truncation in Google results.')
     },
     {
       name: 'seoDescription',
-      title: 'SEO Page Description',
+      title: 'Meta Description',
       type: 'text',
       rows: 3,
-      description: 'The meta description tag. Keep it between 150-160 characters to optimize click-through rate.',
+      description: 'The meta description tag. Advising a length of 150-160 characters.',
       validation: Rule => Rule.max(160).warning('Keep it under 160 characters to avoid truncation in Google results.')
+    },
+    {
+      name: 'seoImage',
+      title: 'Social Share Image',
+      type: 'image',
+      description: 'Acts as the preview when links are shared on social media apps like WhatsApp and Facebook.',
+      options: {
+        hotspot: true
+      }
     }
   ]
 }

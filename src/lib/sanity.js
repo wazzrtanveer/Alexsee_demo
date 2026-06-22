@@ -79,7 +79,8 @@ export const FRAMES_QUERY = `*[_type == "frame"] {
   availability,
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
@@ -258,7 +259,8 @@ export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
   stat3Label,
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
@@ -278,7 +280,8 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
   footerButtonText,
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
@@ -311,7 +314,8 @@ export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {
   },
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
@@ -324,7 +328,8 @@ export const PAGE_SERVICES_QUERY = `*[_type == "pageServices"][0] {
   noteSubtext,
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
@@ -359,7 +364,8 @@ export const PAGE_CONTACT_QUERY = `*[_type == "pageContact"][0] {
   accessSubtext,
   seo {
     seoTitle,
-    seoDescription
+    seoDescription,
+    seoImage
   }
 }`;
 
