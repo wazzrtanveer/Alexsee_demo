@@ -4,6 +4,7 @@ export default {
   type: 'document',
   icon: () => '🏠',
   fields: [
+    { name: 'heroBadgeText', title: 'Badge Hero (Sous-titre badge)', type: 'string', initialValue: 'Boutique indépendante de créateurs' },
     { name: 'heroHeadline', title: 'Accroche principale (Hero Headline)', type: 'string', initialValue: 'Voir autrement.' },
     { name: 'heroSubtext', title: 'Sous-titre Hero', type: 'text', rows: 2, initialValue: 'Montures de caractère, conseils personnalisés et savoir-faire optique au cœur du 20ème arrondissement. Une signature visuelle authentique.' },
     { name: 'heroImage', title: 'Image Hero Principale', type: 'image', options: { hotspot: true } },

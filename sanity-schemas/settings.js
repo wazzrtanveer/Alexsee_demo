@@ -152,6 +152,12 @@ export default {
       initialValue: '9h30 - 13h00, 14h00 - 19h30 (Mar-Sam)'
     },
     {
+      name: 'heroBadgeText',
+      title: 'Badge Hero (Sous-titre badge)',
+      type: 'string',
+      initialValue: 'Boutique indépendante de créateurs'
+    },
+    {
       name: 'heroHeadline',
       title: 'Accroche principale (Hero Headline)',
       type: 'string',
@@ -230,6 +236,24 @@ export default {
       title: 'Menu - Label Contact',
       type: 'string',
       initialValue: 'Prendre rendez-vous'
+    },
+    {
+      name: 'navBoutiqueTitle',
+      title: 'Menu - Titre Section Boutique',
+      type: 'string',
+      initialValue: 'Atelier Paris 20'
+    },
+    {
+      name: 'navHoursTitle',
+      title: 'Menu - Titre Section Horaires',
+      type: 'string',
+      initialValue: 'Heures d’ouverture'
+    },
+    {
+      name: 'navContactTitle',
+      title: 'Menu - Titre Section Contact',
+      type: 'string',
+      initialValue: 'Aide & Contact'
     },
     {
       name: 'navButtonText',
