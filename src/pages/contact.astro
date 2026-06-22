@@ -46,7 +46,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 >
   <div id="contact-view-root-container">
     <!-- Success screen (hidden by default) -->
-    <div id="appointment-success-viewport" class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24 flex items-center justify-center hidden opacity-0 transition-opacity duration-500">
+    <div id="appointment-success-viewport" class="pt-36 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24 flex items-center justify-center hidden opacity-0 transition-opacity duration-500">
       <div class="max-w-xl w-full bg-stone-light/25 p-8 md:p-12 border border-stone-grey/20 text-center space-y-8 relative">
         <div class="absolute top-0 left-0 right-0 h-1.5 bg-cobalt"></div>
         <div class="w-16 h-16 rounded-full bg-cobalt/10 flex items-center justify-center text-cobalt mx-auto">
@@ -97,7 +97,7 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
     </div>
 
     <!-- Active view root -->
-    <div id="contact-view-root" data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type }) : undefined} class="pt-28 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
+    <div id="contact-view-root" data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type }) : undefined} class="pt-36 pb-24 bg-ivory text-optical-black min-h-screen px-6 md:px-12 lg:px-24">
       <!-- Header -->
       <div class="flex flex-col gap-4 border-b border-stone-grey/25 pb-10 mb-12">
         <span class="font-mono text-[9px] uppercase tracking-widest text-stone-grey block">
