@@ -24,18 +24,30 @@ export default {
       name: 'googleMapsLink',
       title: 'Lien Google Maps',
       type: 'object',
+      fieldsets: [
+        {
+          name: 'linkFields',
+          options: { columns: 2 }
+        }
+      ],
       fields: [
-        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Ouvrir dans Google Maps' },
-        { name: 'url', title: 'URL de la carte', type: 'string', initialValue: 'https://maps.google.com/?q=28+Rue+d’Avron,+75020+Paris' }
+        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Ouvrir dans Google Maps', fieldset: 'linkFields' },
+        { name: 'url', title: 'URL de la carte', type: 'string', initialValue: 'https://maps.google.com/?q=28+Rue+d’Avron,+75020+Paris', fieldset: 'linkFields' }
       ]
     },
     {
       name: 'callAtelierLink',
       title: 'Lien Téléphone',
       type: 'object',
+      fieldsets: [
+        {
+          name: 'linkFields',
+          options: { columns: 2 }
+        }
+      ],
       fields: [
-        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Appeler l’Atelier' },
-        { name: 'phone', title: 'Numéro de Téléphone', type: 'string', initialValue: '+33 (0)1 43 73 12 12' }
+        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Appeler l’Atelier', fieldset: 'linkFields' },
+        { name: 'phone', title: 'Numéro de Téléphone', type: 'string', initialValue: '+33 (0)1 43 73 12 12', fieldset: 'linkFields' }
       ]
     },
     {
