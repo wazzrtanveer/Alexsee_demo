@@ -29,10 +29,48 @@ const contactPage = pageContact || {
   _type: 'pageContact',
   title: "Prendre Rendez-vous",
   subtext: "Sollicitez un créneau pour essayer notre vestiaire de créateurs ou contrôler votre acuité sous une heure d’attention exclusive.",
+  nameLabel: "Votre Nom et Prénom *",
+  namePlaceholder: "Ex. Alexandre de Paris",
+  emailLabel: "Adresse Courriel *",
+  emailPlaceholder: "Ex. mail@exemple.fr",
+  phoneLabel: "Numéro de Téléphone *",
+  phonePlaceholder: "Ex. 01 43 73 12 12",
+  reasonLabel: "Sélection du motif",
+  reasonOptions: [
+    { value: "Conseil en montures créateur", label: "Conseil en montures créateur (1h)" },
+    { value: "Examen de vue & Contrôle", label: "Examen de vue & Contrôle (45min)" },
+    { value: "Ajustage technique ou entretien", label: "Ajustage technique ou entretien (30min)" },
+    { value: "Sélection verres de haute technologie", label: "Sélection verres de haute technologie (30min)" },
+    { value: "Espace Enfant & Solaire libre", label: "Espace Enfant & Solaire libre" }
+  ],
+  dateLabel: "Date souhaitée *",
+  timeLabel: "Créneau horaire estimé :",
+  timeSlots: ["10:30", "11:00", "14:30", "15:30", "16:30", "17:30", "18:30"],
+  notesLabel: "Notes ou demandes spéciales",
+  notesPlaceholder: "Ex. Précisions de prescription, montures aperçues, etc.",
+  formButtonText: "Réserver mon créneau à l’atelier",
+  contactAltTitle: "[ Contact Alternatif ]",
   contactSubtext: "Pour des demandes immédiates ou l’annulation d’un rendez-vous planifié, n’hésitez pas à appeler notre équipe directement aux heures d'ouverture régulières de notre atelier parisien.",
-  accessSubtext: "Situé à l’angle de la rue d’Avron, proche Buzenval. Stationnement possible dans les rues adjacentes.",
-  formButtonText: "Réserver mon créneau à l’atelier"
+  phoneDirectLabel: "Téléphone direct :",
+  emailAtelierLabel: "Email d'atelier :",
+  instagramLabel: "Instagram :",
+  accessTitle: "Accès & Localisation",
+  accessSubtext: "Situé à l’angle de la rue d’Avron, proche Buzenval. Stationnement possible dans les rues adjacentes."
 };
+
+const reasonOptions = contactPage.reasonOptions && contactPage.reasonOptions.length > 0
+  ? contactPage.reasonOptions
+  : [
+      { value: "Conseil en montures créateur", label: "Conseil en montures créateur (1h)" },
+      { value: "Examen de vue & Contrôle", label: "Examen de vue & Contrôle (45min)" },
+      { value: "Ajustage technique ou entretien", label: "Ajustage technique ou entretien (30min)" },
+      { value: "Sélection verres de haute technologie", label: "Sélection verres de haute technologie (30min)" },
+      { value: "Espace Enfant & Solaire libre", label: "Espace Enfant & Solaire libre" }
+    ];
+
+const timeSlots = contactPage.timeSlots && contactPage.timeSlots.length > 0
+  ? contactPage.timeSlots
+  : ["10:30", "11:00", "14:30", "15:30", "16:30", "17:30", "18:30"];
 
 const requestedFrame = Astro.url.searchParams.get('frame') || '';
 ---
@@ -137,13 +175,15 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               <!-- Name -->
               <div class="space-y-1.5">
                 <label for="user-name" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
-                  <span>Votre Nom et Prénom *</span>
+                  <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'nameLabel' }) : undefined}>
+                    {contactPage.nameLabel || "Votre Nom et Prénom *"}
+                  </span>
                   <span id="error-name" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
                 </label>
                 <input
                   id="user-name"
                   type="text"
-                  placeholder="Ex. Alexandre de Paris"
+                  placeholder={cleanStega(contactPage.namePlaceholder) || "Ex. Alexandre de Paris"}
                   required
                   class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
                 />
@@ -152,13 +192,15 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               <!-- Email -->
               <div class="space-y-1.5">
                 <label for="user-email" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
-                  <span>Adresse Courriel *</span>
+                  <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'emailLabel' }) : undefined}>
+                    {contactPage.emailLabel || "Adresse Courriel *"}
+                  </span>
                   <span id="error-email" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
                 </label>
                 <input
                   id="user-email"
                   type="email"
-                  placeholder="Ex. mail@exemple.fr"
+                  placeholder={cleanStega(contactPage.emailPlaceholder) || "Ex. mail@exemple.fr"}
                   required
                   class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
                 />
@@ -169,13 +211,15 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               <!-- Phone -->
               <div class="space-y-1.5">
                 <label for="user-phone" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
-                  <span>Numéro de Téléphone *</span>
+                  <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'phoneLabel' }) : undefined}>
+                    {contactPage.phoneLabel || "Numéro de Téléphone *"}
+                  </span>
                   <span id="error-phone" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
                 </label>
                 <input
                   id="user-phone"
                   type="tel"
-                  placeholder="Ex. 01 43 73 12 12"
+                  placeholder={cleanStega(contactPage.phonePlaceholder) || "Ex. 01 43 73 12 12"}
                   required
                   class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors"
                 />
@@ -183,15 +227,13 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 
               <!-- Service selection -->
               <div class="space-y-1.5">
-                <label for="user-service" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
-                  Sélection du motif
+                <label for="user-service" data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'reasonLabel' }) : undefined} class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                  {contactPage.reasonLabel || "Sélection du motif"}
                 </label>
-                <select id="user-service" class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors cursor-pointer text-optical-black">
-                  <option value="Conseil en montures créateur">Conseil en montures créateur (1h)</option>
-                  <option value="Examen de vue & Contrôle">Examen de vue & Contrôle (45min)</option>
-                  <option value="Ajustage technique ou entretien">Ajustage technique ou entretien (30min)</option>
-                  <option value="Sélection verres de haute technologie">Sélection verres de haute technologie (30min)</option>
-                  <option value="Espace Enfant & Solaire libre">Espace Enfant & Solaire libre</option>
+                <select id="user-service" data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'reasonOptions' }) : undefined} class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors cursor-pointer text-optical-black">
+                  {reasonOptions.map((opt) => (
+                    <option value={cleanStega(opt.value)}>{opt.label}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -200,7 +242,9 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="space-y-1.5">
                 <label for="user-pref-date" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold flex items-center justify-between">
-                  <span>Date souhaitée *</span>
+                  <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'dateLabel' }) : undefined}>
+                    {contactPage.dateLabel || "Date souhaitée *"}
+                  </span>
                   <span id="error-date" class="text-rose-600 font-bold tracking-tight lowercase hidden"></span>
                 </label>
                 <input
@@ -212,15 +256,15 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
               </div>
 
               <div class="space-y-1.5">
-                <span class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
-                  Créneau horaire estimé :
+                <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'timeLabel' }) : undefined} class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                  {contactPage.timeLabel || "Créneau horaire estimé :"}
                 </span>
-                <div class="flex flex-wrap gap-1.5" id="time-slots-container">
-                  {["10:30", "11:00", "14:30", "15:30", "16:30", "17:30", "18:30"].map((time) => (
+                <div data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'timeSlots' }) : undefined} class="flex flex-wrap gap-1.5" id="time-slots-container">
+                  {timeSlots.map((time, idx) => (
                     <button
                       type="button"
-                      data-time={time}
-                      class={`time-slot-btn font-mono text-[10px] tracking-tight px-3 py-2.5 border transition-all ${time === '11:00' ? 'bg-cobalt text-ivory border-cobalt font-semibold' : 'bg-stone-light/20 text-[#0D0D0E] border-stone-grey/15 hover:border-[#0D0D0E]'}`}
+                      data-time={cleanStega(time)}
+                      class={`time-slot-btn font-mono text-[10px] tracking-tight px-3 py-2.5 border transition-all ${idx === 1 ? 'bg-cobalt text-ivory border-cobalt font-semibold' : 'bg-stone-light/20 text-[#0D0D0E] border-stone-grey/15 hover:border-[#0D0D0E]'}`}
                     >
                       {time}
                     </button>
@@ -231,13 +275,13 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 
             <!-- Notes -->
             <div class="space-y-1.5">
-              <label for="user-notes" class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
-                Notes ou demandes spéciales
+              <label for="user-notes" data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'notesLabel' }) : undefined} class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] font-semibold block">
+                {contactPage.notesLabel || "Notes ou demandes spéciales"}
               </label>
               <textarea
                 id="user-notes"
                 rows="3"
-                placeholder="Ex. Précisions de prescription, montures aperçues, etc."
+                placeholder={cleanStega(contactPage.notesPlaceholder) || "Ex. Précisions de prescription, montures aperçues, etc."}
                 class="w-full bg-stone-light/20 border border-stone-grey/25 p-3 font-sans text-sm focus:border-cobalt focus:outline-none transition-colors resize-y"
               >{requestedFrame ? `Souhaite essayer le modèle : ${requestedFrame}` : ''}</textarea>
             </div>
@@ -258,39 +302,45 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
         <div class="col-span-1 lg:col-span-5 space-y-8">
           <!-- Card 1: Contact info -->
           <div class="p-6 bg-stone-light/25 border border-stone-grey/20 space-y-6">
-            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[#7B7973] block">
-              [ Contact Alternatif ]
+            <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'contactAltTitle' }) : undefined} class="font-mono text-[9px] uppercase tracking-[0.2em] text-[#7B7973] block">
+              {contactPage.contactAltTitle || "[ Contact Alternatif ]"}
             </span>
             <p data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'contactSubtext' }) : undefined} class="font-sans text-xs md:text-sm text-stone-grey leading-relaxed">
               {contactPage.contactSubtext}
             </p>
-            <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined} class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
-              <div class="flex justify-between items-center py-1">
-                <span class="text-stone-grey normal-case">Téléphone direct :</span>
-                <a href={`tel:${cleanStega(settings.phone).replace(/\s+/g,'')}`} class="font-bold text-cobalt hover:underline">
+            <div class="space-y-4 font-mono text-[11px] uppercase tracking-wider text-[#0D0D0E]">
+              <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined} class="flex justify-between items-center py-1">
+                <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'phoneDirectLabel' }) : undefined} class="text-stone-grey normal-case">
+                  {contactPage.phoneDirectLabel || "Téléphone direct :"}
+                </span>
+                <a href={`tel:${cleanStega(settings.phone).replace(/[^0-9+]/g,'')}`} class="font-bold text-cobalt hover:underline">
                   {settings.phone}
                 </a>
               </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-stone-grey">Email d'atelier :</span>
+              <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'email' }) : undefined} class="flex justify-between items-center py-1">
+                <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'emailAtelierLabel' }) : undefined} class="text-stone-grey">
+                  {contactPage.emailAtelierLabel || "Email d'atelier :"}
+                </span>
                 <span class="lowercase font-semibold">{settings.email}</span>
               </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-stone-grey">Instagram :</span>
+              <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'instagram' }) : undefined} class="flex justify-between items-center py-1">
+                <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'instagramLabel' }) : undefined} class="text-stone-grey">
+                  {contactPage.instagramLabel || "Instagram :"}
+                </span>
                 <a href={cleanStega(settings.instagram)} target="_blank" rel="noopener noreferrer" class="text-cobalt hover:underline text-xs">
-                  @alexsee.avron
+                  {settings.instagram ? `@${cleanStega(settings.instagram).replace(/.*instagram\.com\//, '').replace(/\/$/, '')}` : '@alexsee.avron'}
                 </a>
               </div>
             </div>
           </div>
 
           <!-- Card 2: Access & location -->
-          <div data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'accessSubtext' }) : undefined} class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
-            <span class="font-mono text-[9px] uppercase text-stone-grey tracking-widest flex items-center gap-1.5">
+          <div class="p-6 bg-[#0D0D0E] text-ivory border border-stone-grey/15 space-y-4">
+            <span data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'accessTitle' }) : undefined} class="font-mono text-[9px] uppercase text-stone-grey tracking-widest flex items-center gap-1.5">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              Accès & Localisation
+              {contactPage.accessTitle || "Accès & Localisation"}
             </span>
-            <p class="font-sans text-xs text-stone-grey leading-relaxed">
+            <p data-sanity={contactPage._id ? dataAttribute({ id: contactPage._id, type: contactPage._type, path: 'accessSubtext' }) : undefined} class="font-sans text-xs text-stone-grey leading-relaxed">
               {contactPage.accessSubtext}
             </p>
           </div>
@@ -312,7 +362,8 @@ const requestedFrame = Astro.url.searchParams.get('frame') || '';
 
     if (!form || !viewRoot || !successRoot) return;
 
-    let selectedTime = '11:00';
+    const activeBtn = document.querySelector('#time-slots-container .time-slot-btn.bg-cobalt');
+    let selectedTime = activeBtn ? activeBtn.getAttribute('data-time') || '11:00' : '11:00';
 
     // Clear frame selection banner
     if (clearFrameBtn && banner) {
