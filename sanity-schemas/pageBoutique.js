@@ -20,8 +20,24 @@ export default {
     { name: 'mapMetroLine', title: 'Carte - Ligne de métro', type: 'string', initialValue: '9' },
     { name: 'mapMetroLabel', title: 'Carte - Station de métro', type: 'string', initialValue: 'Buzenval' },
     { name: 'mapStoreLabel', title: 'Carte - Nom du magasin', type: 'string', initialValue: 'AlexSEE (28 Rue d’Avron)' },
-    { name: 'googleMapsLabel', title: 'Label bouton Google Maps', type: 'string', initialValue: 'Ouvrir dans Google Maps' },
-    { name: 'callAtelierLabel', title: 'Label bouton Téléphone', type: 'string', initialValue: 'Appeler l’Atelier' },
+    {
+      name: 'googleMapsLink',
+      title: 'Lien Google Maps',
+      type: 'object',
+      fields: [
+        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Ouvrir dans Google Maps' },
+        { name: 'url', title: 'URL de la carte', type: 'string', initialValue: 'https://maps.google.com/?q=28+Rue+d’Avron,+75020+Paris' }
+      ]
+    },
+    {
+      name: 'callAtelierLink',
+      title: 'Lien Téléphone',
+      type: 'object',
+      fields: [
+        { name: 'label', title: 'Texte du bouton', type: 'string', initialValue: 'Appeler l’Atelier' },
+        { name: 'phone', title: 'Numéro de Téléphone', type: 'string', initialValue: '+33 (0)1 43 73 12 12' }
+      ]
+    },
     {
       name: 'seo',
       title: 'Référencement (SEO)',

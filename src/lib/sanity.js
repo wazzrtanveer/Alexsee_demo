@@ -301,8 +301,14 @@ export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {
   mapMetroLine,
   mapMetroLabel,
   mapStoreLabel,
-  googleMapsLabel,
-  callAtelierLabel,
+  googleMapsLink {
+    label,
+    url
+  },
+  callAtelierLink {
+    label,
+    phone
+  },
   seo {
     seoTitle,
     seoDescription
