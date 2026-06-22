@@ -69,12 +69,24 @@ const boutiquePage = pageBoutique || {
       ))}
       <div class="absolute inset-0 flex flex-col justify-between p-8 md:p-12 z-10 bg-gradient-to-t from-optical-black/60 via-transparent to-optical-black/30 text-ivory">
         <div class="flex justify-between items-start font-mono text-[10px] uppercase tracking-widest">
-          <span>[ 28 RUE D’AVRON ]</span>
-          <span>PARIS XXe ARRONDISSEMENT</span>
+          <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'imageTag1' }) : undefined}>
+            {boutiquePage.imageTag1 || "[ 28 RUE D’AVRON ]"}
+          </span>
+          <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'imageTag2' }) : undefined}>
+            {boutiquePage.imageTag2 || "PARIS XXe ARRONDISSEMENT"}
+          </span>
         </div>
         <div>
-          <h2 class="text-4xl md:text-8xl font-light tracking-tighter uppercase leading-[0.85] text-stroke-white text-ivory" style="font-family: var(--font-display);">
-            AlexSEE<br />Atelier
+          <h2 data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'imageTitle' }) : undefined} class="text-4xl md:text-8xl font-light tracking-tighter uppercase leading-[0.85] text-stroke-white text-ivory" style="font-family: var(--font-display);">
+            {boutiquePage.imageTitle ? (
+              boutiquePage.imageTitle.includes('\n') ? (
+                <Fragment set:html={boutiquePage.imageTitle.replace(/\n/g, '<br />')} />
+              ) : (
+                boutiquePage.imageTitle
+              )
+            ) : (
+              <>AlexSEE<br />Atelier</>
+            )}
           </h2>
           <p class="font-mono text-[10px] tracking-widest uppercase mt-4 text-stone-grey text-left">
             * {settings.unconfirmedNote}
@@ -88,7 +100,9 @@ const boutiquePage = pageBoutique || {
       <!-- Left Column: Opening Hours -->
       <div class="col-span-1 lg:col-span-5 space-y-8">
         <div class="space-y-4">
-          <h3 class="font-mono text-[10px] uppercase tracking-widest text-stone-grey block border-b border-stone-grey/25 pb-3">Heures d’ouverture</h3>
+          <h3 data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'hoursTitle' }) : undefined} class="font-mono text-[10px] uppercase tracking-widest text-stone-grey block border-b border-stone-grey/25 pb-3">
+            {boutiquePage.hoursTitle || "Heures d’ouverture"}
+          </h3>
           <div data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'hours' }) : undefined} class="divide-y divide-stone-grey/15 font-mono text-xs text-optical-black">
             {settings.hours.map(row => (
               <div class="flex justify-between py-3.5 items-baseline">
@@ -107,29 +121,37 @@ const boutiquePage = pageBoutique || {
       <!-- Right Column: Map & Transport Details -->
       <div class="col-span-1 lg:col-span-7 flex flex-col justify-between space-y-8">
         <div class="space-y-6">
-          <h3 class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] block border-b border-stone-grey/25 pb-3">Venir à la Boutique</h3>
+          <h3 data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'directionsTitle' }) : undefined} class="font-mono text-[10px] uppercase tracking-widest text-[#7B7973] block border-b border-stone-grey/25 pb-3">
+            {boutiquePage.directionsTitle || "Venir à la Boutique"}
+          </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 font-sans">
             <div class="space-y-3">
-              <span class="font-mono text-[9px] uppercase tracking-wider text-cobalt flex items-center gap-1.5">
+              <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'locationLabel' }) : undefined} class="font-mono text-[9px] uppercase tracking-wider text-cobalt flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Localisation
+                {boutiquePage.locationLabel || "Localisation"}
               </span>
-              <p class="text-sm font-semibold text-optical-black">AlexSEE Opticien Créateur</p>
-              <p class="text-sm text-stone-grey leading-relaxed">
-                {settings.address}, {settings.postalCode} {settings.city}<br />
-                Quartier Charonne - Nation
+              <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'locationTitle' }) : undefined} class="text-sm font-semibold text-optical-black">
+                {boutiquePage.locationTitle || "AlexSEE Opticien Créateur"}
               </p>
+              <div class="text-sm text-stone-grey leading-relaxed">
+                <p data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined}>
+                  {settings.address}, {settings.postalCode} {settings.city}
+                </p>
+                <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'locationSubtitle' }) : undefined}>
+                  {boutiquePage.locationSubtitle || "Quartier Charonne - Nation"}
+                </p>
+              </div>
             </div>
             <div class="space-y-3">
-              <span class="font-mono text-[9px] uppercase tracking-wider text-cobalt flex items-center gap-1.5">
+              <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'metroLabel' }) : undefined} class="font-mono text-[9px] uppercase tracking-wider text-cobalt flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                Transports Métro
+                {boutiquePage.metroLabel || "Transports Métro"}
               </span>
               <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'metroTitle' }) : undefined} class="text-sm font-semibold text-optical-black">{boutiquePage.metroTitle}</p>
               <p data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'metroDetails' }) : undefined} class="text-sm text-stone-grey leading-relaxed">
                 {boutiquePage.metroDetails ? (
                   boutiquePage.metroDetails.includes('\n') ? (
-                    <Fragment set:html={boutiquePage.metroDetails.replace('\n', '<br />')} />
+                    <Fragment set:html={boutiquePage.metroDetails.replace(/\n/g, '<br />')} />
                   ) : (
                     boutiquePage.metroDetails
                   )
@@ -153,8 +175,12 @@ const boutiquePage = pageBoutique || {
               
               <!-- Metro stations -->
               <div class="absolute left-[20%] top-[20%] flex flex-col items-center">
-                <div class="w-4 h-4 rounded-full bg-emerald-600 flex items-center justify-center text-[8px] text-ivory font-bold font-mono">9</div>
-                <span class="font-mono text-[7px] text-stone-grey uppercase tracking-widest mt-0.5">Buzenval</span>
+                <div data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'mapMetroLine' }) : undefined} class="w-4 h-4 rounded-full bg-emerald-600 flex items-center justify-center text-[8px] text-ivory font-bold font-mono">
+                  {boutiquePage.mapMetroLine || "9"}
+                </div>
+                <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'mapMetroLabel' }) : undefined} class="font-mono text-[7px] text-stone-grey uppercase tracking-widest mt-0.5">
+                  {boutiquePage.mapMetroLabel || "Buzenval"}
+                </span>
               </div>
               
               <!-- Store marker -->
@@ -162,8 +188,8 @@ const boutiquePage = pageBoutique || {
                 <div class="w-6 h-6 rounded-full bg-cobalt flex items-center justify-center text-ivory animate-bounce shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 </div>
-                <span class="font-mono text-[8px] text-optical-black font-semibold uppercase tracking-wider mt-1 bg-ivory py-0.5 px-2 border border-stone-grey/25 whitespace-nowrap">
-                  AlexSEE (28 Rue d’Avron)
+                <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'mapStoreLabel' }) : undefined} class="font-mono text-[8px] text-optical-black font-semibold uppercase tracking-wider mt-1 bg-ivory py-0.5 px-2 border border-stone-grey/25 whitespace-nowrap">
+                  {boutiquePage.mapStoreLabel || "AlexSEE (28 Rue d’Avron)"}
                 </span>
               </div>
             </div>
@@ -172,13 +198,17 @@ const boutiquePage = pageBoutique || {
 
         <!-- Action Links -->
         <div class="flex flex-wrap gap-4 pt-4 border-t border-stone-grey/20">
-          <a href={`https://maps.google.com/?q=${encodeURIComponent("28 Rue d’Avron, 75020 Paris")}`} target="_blank" rel="noopener noreferrer" class="bg-optical-black hover:bg-cobalt text-ivory font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2">
+          <a href={`https://maps.google.com/?q=${encodeURIComponent(`${cleanStega(settings.address)}, ${cleanStega(settings.postalCode)} ${cleanStega(settings.city)}`)}`} target="_blank" rel="noopener noreferrer" class="bg-optical-black hover:bg-cobalt text-ivory font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Ouvrir dans Google Maps</span>
+            <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'googleMapsLabel' }) : undefined}>
+              {boutiquePage.googleMapsLabel || "Ouvrir dans Google Maps"}
+            </span>
           </a>
-          <a href={`tel:${cleanStega(settings.phone)}`} class="border border-optical-black/25 hover:border-cobalt text-optical-black hover:text-cobalt font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2 bg-transparent">
+          <a href={`tel:${cleanStega(settings.phone).replace(/[^0-9+]/g, '')}`} class="border border-optical-black/25 hover:border-cobalt text-optical-black hover:text-cobalt font-mono text-xs uppercase tracking-widest py-3.5 px-6 transition-colors duration-300 inline-flex items-center gap-2 bg-transparent">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.72-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <span>Appeler l’Atelier ({settings.phone})</span>
+            <span data-sanity={boutiquePage._id ? dataAttribute({ id: boutiquePage._id, type: boutiquePage._type, path: 'callAtelierLabel' }) : undefined}>
+              {boutiquePage.callAtelierLabel || "Appeler l’Atelier"} ({settings.phone})
+            </span>
           </a>
         </div>
       </div>

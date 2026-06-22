@@ -149,7 +149,7 @@ const currentYear = new Date().getFullYear();
           <li class="normal-case">
             <span class="text-ivory">Téléphone :</span> 
             <a 
-              href={`tel:${cleanStega(settings.phone)}`} 
+              href={`tel:${cleanStega(settings.phone).replace(/[^0-9+]/g, '')}`} 
               data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined}
               class="hover:text-cobalt transition-colors font-bold text-ivory"
             >

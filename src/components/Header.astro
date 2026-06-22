@@ -197,7 +197,7 @@ const socialLinks = settings.socialLinks && settings.socialLinks.length > 0
           {settings.navContactTitle || "Aide & Contact"}
         </span>
         <a 
-          href={`tel:${cleanStega(settings.phone)}`} 
+          href={`tel:${cleanStega(settings.phone).replace(/[^0-9+]/g, '')}`} 
           data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined}
           class="hover:text-cobalt transition-colors inline-flex items-center gap-1.5 font-bold text-ivory"
         >

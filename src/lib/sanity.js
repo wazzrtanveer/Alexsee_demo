@@ -211,7 +211,11 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   },
   footerCopyrightText,
   footerLocationText,
-  footerBackgroundText
+  footerBackgroundText,
+  photoDisclaimer,
+  boutiqueInfoTitle,
+  boutiqueInfoAddress,
+  boutiqueInfoSubtext
 }`;
 
 export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
@@ -270,6 +274,8 @@ export const PAGE_COLLECTIONS_QUERY = `*[_type == "pageCollections"][0] {
     filterType,
     value
   },
+  footerLabel,
+  footerButtonText,
   seo {
     seoTitle,
     seoDescription
@@ -283,6 +289,20 @@ export const PAGE_BOUTIQUE_QUERY = `*[_type == "pageBoutique"][0] {
   subtext,
   metroTitle,
   metroDetails,
+  imageTag1,
+  imageTag2,
+  imageTitle,
+  hoursTitle,
+  directionsTitle,
+  locationLabel,
+  locationTitle,
+  locationSubtitle,
+  metroLabel,
+  mapMetroLine,
+  mapMetroLabel,
+  mapStoreLabel,
+  googleMapsLabel,
+  callAtelierLabel,
   seo {
     seoTitle,
     seoDescription

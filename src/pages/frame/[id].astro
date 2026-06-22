@@ -81,8 +81,11 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
             </button>
           </div>
         </div>
-        <p class="font-mono text-[9px] text-[#7B7973] uppercase tracking-wider text-center">
-          * Photos non contractuelles. Essayages recommandés directement en boutique.
+        <p 
+          data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'photoDisclaimer' }) : undefined}
+          class="font-mono text-[9px] text-[#7B7973] uppercase tracking-wider text-center"
+        >
+          {settings.photoDisclaimer || "* Photos non contractuelles. Essayages recommandés directement en boutique."}
         </p>
       </div>
 
@@ -153,13 +156,24 @@ const others = frames.filter(f => f.id !== frame.id).slice(0, 2);
 
         <!-- Info box -->
         <div class="bg-stone-light/40 p-4 border border-stone-grey/10 text-xs text-stone-grey space-y-1">
-          <p class="font-mono text-[9px] uppercase text-stone-grey tracking-wider flex items-center gap-1.5">
+          <p 
+            data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueInfoTitle' }) : undefined}
+            class="font-mono text-[9px] uppercase text-stone-grey tracking-wider flex items-center gap-1.5"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cobalt"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            Atelier AlexSEE Paris
+            {settings.boutiqueInfoTitle || "Atelier AlexSEE Paris"}
           </p>
-          <p class="font-sans">28 Rue d’Avron, 75020 Paris. Métro Buzenval (M9).</p>
-          <p class="font-sans text-[11px] text-stone-grey/80 font-light">
-            Notre équipe d’opticiens procède à l’essayage personnalisé et à la prise de vos mesures de centrage d’art.
+          <p 
+            data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueInfoAddress' }) : undefined}
+            class="font-sans"
+          >
+            {settings.boutiqueInfoAddress || "28 Rue d’Avron, 75020 Paris. Métro Buzenval (M9)."}
+          </p>
+          <p 
+            data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'boutiqueInfoSubtext' }) : undefined}
+            class="font-sans text-[11px] text-stone-grey/80 font-light"
+          >
+            {settings.boutiqueInfoSubtext || "Notre équipe d’opticiens procède à l’essayage personnalisé et à la prise de vos mesures de centrage d’art."}
           </p>
         </div>
       </div>

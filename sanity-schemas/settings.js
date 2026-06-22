@@ -721,6 +721,31 @@ export default {
       title: 'Footer — Grand texte de fond',
       type: 'string',
       initialValue: 'AlexSEE'
+    },
+    {
+      name: 'photoDisclaimer',
+      title: 'Disclaimer Photos (Détail produit)',
+      type: 'string',
+      initialValue: '* Photos non contractuelles. Essayages recommandés directement en boutique.'
+    },
+    {
+      name: 'boutiqueInfoTitle',
+      title: 'Infos Atelier - Titre (Détail produit)',
+      type: 'string',
+      initialValue: 'Atelier AlexSEE Paris'
+    },
+    {
+      name: 'boutiqueInfoAddress',
+      title: 'Infos Atelier - Adresse & Métro (Détail produit)',
+      type: 'string',
+      initialValue: '28 Rue d’Avron, 75020 Paris. Métro Buzenval (M9).'
+    },
+    {
+      name: 'boutiqueInfoSubtext',
+      title: 'Infos Atelier - Descriptif d’essayage (Détail produit)',
+      type: 'text',
+      rows: 2,
+      initialValue: 'Notre équipe d’opticiens procède à l’essayage personnalisé et à la prise de vos mesures de centrage d’art.'
     }
   ],
   preview: {

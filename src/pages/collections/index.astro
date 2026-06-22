@@ -151,9 +151,9 @@ const filters = collectionsPage.filters && collectionsPage.filters.length > 0
 
     <!-- Footer CTA -->
     <div class="mt-28 border-t border-stone-grey/25 pt-12 flex flex-col md:flex-row items-center justify-between gap-6 font-mono text-[10px] text-stone-grey uppercase tracking-widest">
-      <span>AlexSEE Paris — Eyewear character collection</span>
-      <a href="/contact" class="bg-cobalt text-ivory hover:bg-optical-black px-6 py-3 transition-colors duration-300 font-semibold text-[9px] tracking-widest">
-        Essayer à l'atelier du 20e
+      <span data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'footerLabel' }) : undefined}>{collectionsPage.footerLabel || "AlexSEE Paris — Eyewear character collection"}</span>
+      <a href="/contact" data-sanity={collectionsPage._id ? dataAttribute({ id: collectionsPage._id, type: collectionsPage._type, path: 'footerButtonText' }) : undefined} class="bg-cobalt text-ivory hover:bg-optical-black px-6 py-3 transition-colors duration-300 font-semibold text-[9px] tracking-widest">
+        {collectionsPage.footerButtonText || "Essayer à l'atelier du 20e"}
       </a>
     </div>
   </div>
