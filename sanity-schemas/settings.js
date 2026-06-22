@@ -400,6 +400,12 @@ export default {
       options: { hotspot: true }
     },
     {
+      name: 'ctaSectionHeader',
+      title: 'CTA Fin - En-tête de section',
+      type: 'string',
+      initialValue: '[ Trouver votre monture de caractère ]'
+    },
+    {
       name: 'ctaTitle',
       title: 'CTA Fin - Titre',
       type: 'string',
@@ -611,6 +617,36 @@ export default {
       title: 'Footer — Titre Section Boutique',
       type: 'string',
       initialValue: '[ Boutique ]'
+    },
+    {
+      name: 'footerContactDetails',
+      title: 'Footer — Détails de Contact (Boutique)',
+      description: 'Permet d’éditer, ajouter, supprimer ou réordonner les informations de contact de la section [ Boutique ] du pied de page.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'contactItem',
+          title: 'Information de Contact',
+          fields: [
+            { name: 'label', title: 'Label (ex: Adresse, Métro, Téléphone, Email)', type: 'string', validation: Rule => Rule.required() },
+            { name: 'value', title: 'Valeur', type: 'string', validation: Rule => Rule.required() },
+            { name: 'linkUrl', title: 'URL du lien (ex: tel:+33143731212, mailto:info@example.com - Optionnel)', type: 'string' }
+          ],
+          preview: {
+            select: {
+              title: 'label',
+              subtitle: 'value'
+            }
+          }
+        }
+      ],
+      initialValue: [
+        { label: 'Adresse', value: '28 Rue d’Avron, 75020 Paris' },
+        { label: 'Métro', value: 'Station Buzenval (Ligne 9) ou Avron (Ligne 2)' },
+        { label: 'Téléphone', value: '+33 (0)1 43 73 12 12', linkUrl: 'tel:+33143731212' },
+        { label: 'Email', value: 'contact@alexsee.fr', linkUrl: 'mailto:contact@alexsee.fr' }
+      ]
     },
     {
       name: 'footerLegalLinks',

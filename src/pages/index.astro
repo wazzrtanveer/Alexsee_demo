@@ -523,7 +523,7 @@ const featuredFrames = tempFeatured.slice(0, 3);
     <!-- ── CTA Strip ── -->
     <section id="cta-end-section" class="py-24 md:py-36 px-6 md:px-12 lg:px-24 bg-ivory text-center relative overflow-hidden">
       <div class="max-w-3xl mx-auto space-y-8 relative z-10">
-        <span class="font-mono text-[10px] tracking-[0.25em] text-cobalt uppercase">[ Trouver votre monture de caractère ]</span>
+        <span data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaSectionHeader' }) : undefined} class="font-mono text-[10px] tracking-[0.25em] text-cobalt uppercase">{home.ctaSectionHeader || "[ Trouver votre monture de caractère ]"}</span>
         <h2 data-sanity={home._id ? dataAttribute({ id: home._id, type: home._type, path: 'ctaTitle' }) : undefined} style="font-family: var(--font-display);" class="text-4xl md:text-7xl font-light uppercase tracking-tight text-optical-black">
           {home.ctaTitle ? (
             home.ctaTitle.includes('\n') ? (

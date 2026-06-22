@@ -23,6 +23,7 @@ export default {
     { name: 'boutiqueTitle', title: 'Boutique (Index) - Titre', type: 'string', initialValue: 'L’Atelier\nRue d’Avron' },
     { name: 'boutiqueSubtext', title: 'Boutique (Index) - Descriptif', type: 'text', rows: 3, initialValue: 'Une alcôve de design au milieu du 20e arrondissement parisien. Un cadre de bois brut et de laiton suspendu où l’on prend le temps de dialoguer, d’essayer et d’ajuster. À deux pas du métro Buzenval.' },
     { name: 'boutiqueImage', title: 'Boutique (Index) - Image', type: 'image', options: { hotspot: true } },
+    { name: 'ctaSectionHeader', title: 'CTA Fin - En-tête de section', type: 'string', initialValue: '[ Trouver votre monture de caractère ]' },
     { name: 'ctaTitle', title: 'CTA Fin - Titre', type: 'string', initialValue: 'Venez dénicher\nla vôtre.' },
     { name: 'ctaSubtext', title: 'CTA Fin - Descriptif', type: 'text', rows: 2, initialValue: 'Consultez notre lookbook ou prenez rendez-vous pour un accompagnement d’une heure privilégiée en boutique, sans engagement.' },
     { name: 'ctaButton1Text', title: 'CTA Fin - Bouton 1', type: 'string', initialValue: 'Prendre rendez-vous en ligne' },

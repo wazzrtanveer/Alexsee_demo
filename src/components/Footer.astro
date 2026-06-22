@@ -120,34 +120,49 @@ const currentYear = new Date().getFullYear();
         {settings.footerBoutiqueTitle || "[ Boutique ]"}
       </span>
       <ul class="space-y-2.5 text-stone-grey font-light">
-        <li class="normal-case">
-          <span class="text-ivory">Adresse :</span> 
-          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined}>
-            {settings.address || "28 Rue d’Avron"}, {settings.postalCode || "75020"} {settings.city || "Paris"}
-          </span>
-        </li>
-        <li>
-          <span class="text-ivory">Métro :</span> 
-          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'metro' }) : undefined}>
-            {settings.metro || "Buzenval (M9), Avron (M2)"}
-          </span>
-        </li>
-        <li class="normal-case">
-          <span class="text-ivory">Téléphone :</span> 
-          <a 
-            href={`tel:${cleanStega(settings.phone)}`} 
-            data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined}
-            class="hover:text-cobalt transition-colors font-bold text-ivory"
-          >
-            {settings.phone}
-          </a>
-        </li>
-        <li class="normal-case">
-          <span class="text-ivory">Email :</span> 
-          <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'email' }) : undefined}>
-            {settings.email}
-          </span>
-        </li>
+        {settings.footerContactDetails && settings.footerContactDetails.length > 0 ? (
+          settings.footerContactDetails.map((item) => (
+            <li class="normal-case" data-sanity={settings._id ? (item._key ? dataAttribute({ id: settings._id, type: settings._type, path: `footerContactDetails[_key == "${item._key}"]` }) : dataAttribute({ id: settings._id, type: settings._type, path: 'footerContactDetails' })) : undefined}>
+              <span class="text-ivory">{item.label} :</span>{" "}
+              {item.linkUrl ? (
+                <a href={item.linkUrl} class="hover:text-cobalt transition-colors font-bold text-ivory">
+                  {item.value}
+                </a>
+              ) : (
+                <span>{item.value}</span>
+              )}
+            </li>
+          ))
+        ) : (
+          <li class="normal-case">
+            <span class="text-ivory">Adresse :</span> 
+            <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'address' }) : undefined}>
+              {settings.address || "28 Rue d’Avron"}, {settings.postalCode || "75020"} {settings.city || "Paris"}
+            </span>
+          </li>
+          <li>
+            <span class="text-ivory">Métro :</span> 
+            <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'metro' }) : undefined}>
+              {settings.metro || "Buzenval (M9), Avron (M2)"}
+            </span>
+          </li>
+          <li class="normal-case">
+            <span class="text-ivory">Téléphone :</span> 
+            <a 
+              href={`tel:${cleanStega(settings.phone)}`} 
+              data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'phone' }) : undefined}
+              class="hover:text-cobalt transition-colors font-bold text-ivory"
+            >
+              {settings.phone}
+            </a>
+          </li>
+          <li class="normal-case">
+            <span class="text-ivory">Email :</span> 
+            <span data-sanity={settings._id ? dataAttribute({ id: settings._id, type: settings._type, path: 'email' }) : undefined}>
+              {settings.email}
+            </span>
+          </li>
+        )}
       </ul>
     </div>
   </div>

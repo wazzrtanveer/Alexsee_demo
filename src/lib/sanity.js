@@ -154,6 +154,7 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
   boutiqueTitle,
   boutiqueSubtext,
   boutiqueImage,
+  ctaSectionHeader,
   ctaTitle,
   ctaSubtext,
   ctaButton1Text,
@@ -191,6 +192,12 @@ export const SETTINGS_QUERY = `*[_type == "settings"][0] {
     path
   },
   footerBoutiqueTitle,
+  footerContactDetails[] {
+    _key,
+    label,
+    value,
+    linkUrl
+  },
   footerLegalLinks[] {
     _key,
     label,
@@ -223,6 +230,7 @@ export const PAGE_HOME_QUERY = `*[_type == "pageHome"][0] {
   boutiqueTitle,
   boutiqueSubtext,
   boutiqueImage,
+  ctaSectionHeader,
   ctaTitle,
   ctaSubtext,
   ctaButton1Text,
