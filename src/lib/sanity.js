@@ -13,7 +13,7 @@ export const dataAttribute = ({ id, type, path }) => {
   if (!id || !type) return undefined;
   const targetPath = path || '_id';
   const attr = createDataAttribute({
-    projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'np6apqtr',
+    projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'rnzk7qyr',
     dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
     baseUrl: '/admin',
     id,
@@ -23,7 +23,7 @@ export const dataAttribute = ({ id, type, path }) => {
 };
 
 export const sanityClient = createClient({
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'np6apqtr',
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'rnzk7qyr',
   dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   useCdn: false, // Disable CDN to ensure fresh updates
   apiVersion: '2024-06-01',
